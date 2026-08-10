@@ -1,0 +1,4 @@
+﻿# 统一行尾：入库使用 LF，检出按平台处理
+* text=auto
+*.md text
+*.gitattributes text
