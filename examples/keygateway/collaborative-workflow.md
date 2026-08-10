@@ -1,0 +1,223 @@
+# 多人 / 多 Agent 协同 Git 工作流
+
+> 适用场景：一个仓库内同时有多名人类开发者和多个 AI Agent 参与协作。本文在 [AGENTS.md](../../AGENTS.md) 第 8 节与 [git-workflow.md](git-workflow.md) 之上，补充**协作层面**的规则：角色权限、分支所有权、PR 与 Review、冲突协调、合并与发布。
+
+## 1. 目标与核心原则
+
+团队协作的目标是：**master 永远可构建、可运行，任何一次变更都可追溯、可回退**。
+
+核心原则：
+
+1. **所有变更走分支 + PR**：任何人（包括维护者）都不直接向默认分支推送。
+2. **一个分支 = 一个任务 = 一个 owner**：同一时间只有一个开发者或 Agent 向该分支写入。
+3. **机器检查前置，人类审批兜底**：CI（lint / test / build）把关机械问题，人类对合并负责。
+4. **AI Agent 可以开发，不能自审自合**：Agent 提交 PR、响应反馈，但最终 approve 必须来自人类。
+5. **冲突不可怕，可怕的是单方面覆盖**：解决冲突要保留双方意图，涉及取舍先沟通。
+
+## 2. 角色与权限
+
+| 角色 | 职责 | git 权限 |
+|------|------|----------|
+| 维护者 | 制定规则、合并最终决策、打 tag、发布 | 合并 PR、管理分支保护、打 tag |
+| 人类开发者 | 开发功能、修复，Review Agent 的 PR | 创建/推送分支、发起 PR、approve |
+| AI Agent | 执行有界任务、提交 PR、根据反馈修改 | 创建/推送分支、发起 PR、评论；无 approve 权 |
+| Reviewer | 审查 diff、验证改动 | review、请求修改、approve |
+
+工具层面建议（GitHub / GitLab / Gitea 均可配置）：
+
+- 默认分支开启**分支保护**：禁止直接推送、要求 CI 通过、要求至少 1 个 approve；
+- Agent 使用的账号不授予默认分支直接推送权限；
+- 合并与打 tag 只授予维护者。
+
+## 3. 分支模型
+
+### 3.1 推荐：Trunk-based + 短期功能分支
+
+- 长期分支：`master`（或 `main`）；
+- 短期分支：功能 / 修复分支，存活时间以天计，合并后立即删除；
+- 需要固定版本时：`release/vX.Y.Z`（只收 bugfix）；
+- 线上紧急修复：`hotfix/<主题>`，从 master 或最近 tag 创建。
+
+### 3.2 分支命名
+
+单人任务：
+
+```text
+codex/feat/sse-streaming
+codex/fix/auth-timeout
+```
+
+多人 / 多 Agent 场景（推荐带任务编号或 owner，避免认领冲突）：
+
+```text
+codex/<任务编号>-<type>-<主题>       # 例：codex/42-feat-rate-limit
+codex/<owner>/<type>/<主题>         # 例：codex/alice/feat/rate-limit
+```
+
+命名规则由团队固定为**一套**，并写入仓库文档；建议带任务编号，便于 PR、issue 与 commit 之间追溯。
+
+## 4. 任务认领与分支所有权
+
+git 本身没有「锁」机制，多 Agent 并行协作靠纪律与命名约定：
+
+1. 任务在 issue / 看板登记，**必须标明 owner**（人类或某个 Agent）；
+2. 分支与任务一一对应，分支名体现任务编号或 owner；
+3. 同一分支同一时间**只允许一个写入者**；
+4. 需要多人改同一批文件时：拆成子任务串行合并，或在同一分支上明确先后顺序，不要并行修改同一文件；
+5. 开工前 `git fetch`，确保基于最新默认分支；
+6. 若发现某分支已有他人近期提交，先沟通再动手，不要直接覆盖。
+
+## 5. 日常协作循环（多 Agent 版本）
+
+```text
+认领任务 → 登记分支 → 同步 master → 开发提交 → 本地验证
+→ rebase 最新 → push → 创建 PR → CI 检查 → Review → 修改反馈
+→ 人类 approve → 合并 → 删除分支 → 全员同步
+```
+
+### 5.1 同步与开发
+
+```powershell
+git fetch origin
+git switch -c codex/42-feat-rate-limit origin/master
+# 开发…小步提交，每个提交独立可验证
+```
+
+### 5.2 推送前
+
+```powershell
+# 先把最新 master 变基进来，解决冲突（未共享分支用 rebase）
+git fetch origin
+git rebase origin/master
+
+# 完整验证（以本项目为例；其他项目替换为对应命令）
+cargo fmt --check
+cargo clippy -- -D warnings
+cargo test
+cargo build
+
+git push -u origin codex/42-feat-rate-limit
+```
+
+### 5.3 创建 PR
+
+PR 描述必须包含：关联任务、改动概述、验证结果、影响范围、安全声明（见第 6 节模板）。
+
+### 5.4 Review 与修改
+
+- Reviewer（另一个 Agent 或人类）按清单审查；
+- 反馈通过 PR 评论提出，尽量带行号与可执行建议；
+- 被 Review 的 Agent **在分支上新增提交**回应修改，不用 `--amend`，不 force push 已推送分支；
+- 回复每条意见的处置结果，避免「改了就消失，reviewer 不知道」；
+- Agent 之间可以互审机械问题，但**最终 approve 必须来自人类**。
+
+## 6. PR 描述模板
+
+```text
+## 关联任务
+closes #42
+
+## 改动概述
+实现按用户维度的限流：内存滑动窗口 + 429 响应。
+
+## 验证结果
+- [ ] cargo fmt --check
+- [ ] cargo clippy -- -D warnings
+- [ ] cargo test
+- [ ] cargo build
+- [ ] CI 通过
+
+## 影响范围
+- 新增 src/rate_limit.rs；修改 src/main.rs、src/state.rs
+- 新增配置字段 server.rate_limit；无数据库迁移
+
+## 文档同步
+- [ ] 已更新：docs/design/config-spec.md、docs/implementation/routing.md
+- [ ] 无需更新（说明理由）
+
+## 安全声明
+- 不涉及密钥、日志脱敏不变、无权限模型变更
+
+## 请 reviewer 重点看
+- 滑动窗口的并发安全；429 的错误格式是否与 OpenAI 兼容
+```
+
+## 7. Review 检查清单
+
+通用（任何项目）：
+
+- [ ] 逻辑正确，边界与异常路径已处理
+- [ ] 关键路径有测试覆盖
+- [ ] 无密钥、凭据、`.env`、大文件等敏感内容
+- [ ] 命名与代码风格一致，无 `dbg!` / 调试残留
+- [ ] 文档（README / AGENTS / docs）已同步且与代码一致
+- [ ] 无夹带与任务无关的改动
+- [ ] 错误处理与可观测性（日志、错误码）合理
+
+多 Agent 场景额外要求：
+
+- [ ] 改动文件与分支声明一致，未覆盖他人正在改的模块
+- [ ] Agent 回复了每条 review 意见
+- [ ] 合并前由人类做了最终 review
+
+## 8. 合并策略
+
+- 默认 **Squash and merge**：master 历史线性，每个 PR 对应一条可读提交；
+- 需要保留协作分支完整历史（大型 feature、多人联调分支）时，由维护者决定使用普通 merge commit；
+- 禁止在 master 上直接提交、禁止对已推送分支 force push；
+- 合并后立即删除远程分支，并定期清理本地过期分支：
+
+```powershell
+git fetch --prune
+git branch -d codex/42-feat-rate-limit
+```
+
+## 9. 冲突处理（多人 / 多 Agent 版）
+
+冲突本身正常，重点是**不覆盖他人意图**：
+
+1. 每次 push 前 `git fetch`，未共享分支用 `git rebase origin/master`，共享分支用 `git merge`；
+2. 冲突时先看对方分支的提交信息与 PR 上下文，理解对方为什么改；
+3. 解决原则是**同时保留双方意图**，而不是简单选一边；
+4. 涉及逻辑取舍（例如删除对方刚加的功能）时，先在 PR 评论或群里确认，不单方面决定；
+5. 解决后重新跑完整验证再 push；
+6. 如果同一区域频繁冲突，说明任务拆分或模块边界有问题，先停下来调整分工，而不是硬顶。
+
+禁止：`git reset --hard`、`git checkout --`、`git clean -fdx`、`git push --force`（除非用户明确要求）。
+
+## 10. 紧急修复（hotfix）流程
+
+1. 从 master（或最近 tag）创建 `hotfix/<主题>`；
+2. 修复 + 补测试 + 完整验证；
+3. 快速 Review（仍需至少一个人类 approve）；
+4. 合并回 master，打新 tag `vX.Y.Z+1`（patch 递增）；
+5. 把修复 `cherry-pick` 到仍在进行的功能分支，避免后续合并时把问题带回来。
+
+## 11. 版本发布
+
+- 语义化版本：`v<major>.<minor>.<patch>`；
+- 发布 = 打 tag + release notes（新功能、破坏性变更、已知问题）；
+- 破坏性变更必须升级 major（或按团队约定处理）；
+- 需要并行维护多个版本时使用 `release/vX.Y.Z` 分支：只收 bugfix，不收新功能，修复后同步回 master。
+
+## 12. 每次 push 前检查清单（多 Agent）
+
+- [ ] 分支名符合约定，且只有我在写入
+- [ ] 已 `git fetch` 并基于最新 master
+- [ ] 本地 lint / test / build 全部通过
+- [ ] 提交只包含本任务改动
+- [ ] 无密钥、大文件、无关文件
+- [ ] PR 描述完整，关联任务已登记
+- [ ] CI 通过
+- [ ] 人类 review 已 approve
+- [ ] 合并后删除分支并同步 master
+
+## 13. 与文档集的关系
+
+| 文档 | 回答的问题 |
+|------|------------|
+| [git-workflow.md](git-workflow.md) | 个人按规范操作 git 的具体命令（本项目 Rust 专用） |
+| 本文 | 多人 / 多 Agent 如何分工、Review、合并、发布 |
+| [git-workflow-template.md](git-workflow-template.md) | 复制到任意新项目的通用模板 |
+| [collaborative-workflow-template.md](collaborative-workflow-template.md) | 复制到任意新项目的多人/多 Agent 协作模板 |
+| [docs-communication.md](docs-communication.md) | 如何让 Git 工作流与项目文档互相配合、实现更好通信 |

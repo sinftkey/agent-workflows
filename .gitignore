@@ -1,0 +1,17 @@
+# 通用
+.DS_Store
+Thumbs.db
+*.tmp
+*.log
+
+# 编辑器
+.idea/
+.vscode/
+*.code-workspace
+
+# 操作系统
+Desktop.ini
+
+# 仓库维护产生的临时内容
+*.bak
+*~
