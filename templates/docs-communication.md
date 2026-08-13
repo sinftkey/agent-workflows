@@ -47,7 +47,7 @@ Git 天然只能回答三个问题：**改了什么、谁改的、什么时候�
 - 文档怎么同步（列出更新的文档路径，或明确声明「无需文档变更」并说明理由）；
 - 验证证据（检查命令 + CI 结果）。
 
-PR 模板里放一个「文档同步」字段（已在 [collaborative-workflow.md](collaborative-workflow.md) 的模板中落地）。行为、接口、配置变更如果没带文档变更，review 不通过就不合并。
+PR 模板里放一个「文档同步」字段（模板见 [git-workflow-template.md](git-workflow-template.md) 第 7 节，多人场景补充见 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 6 节）。行为、接口、配置变更如果没带文档变更，review 不通过就不合并。
 
 ### 4.2 文档先行（doc-first）
 
@@ -107,39 +107,43 @@ Review 清单中加入：
 - AGENTS.md 本身的修改也要走 PR，让所有 Agent 通过阅读同一份文件保持一致；
 - Agent 的 PR 描述中注明「依据的文档」，reviewer 可以检查 Agent 是否读对了上下文。
 
-## 5. 落地方案（KeyGateway 示例）
+## 5. 落地步骤（供新项目适配）
 
-### 5.1 变更 ↔ 文档映射矩阵
+本节把前四节的机制变成可执行的落地步骤；所有路径用 `<...>` 占位符表示，按项目实际填写。
+
+### 5.1 建立「变更 ↔ 文档」映射矩阵
+
+先定义本项目的对应关系：哪类变更必须同步哪份文档。通用骨架如下：
 
 | 变更类型 | 必须同步的文档 |
 |----------|----------------|
-| 配置字段 / 格式 | [config-spec.md](../design/config-spec.md) |
-| HTTP 端点 / 协议 / 错误码 | [endpoints.md](../api/endpoints.md)、[error-handling.md](../implementation/error-handling.md) |
-| 路由 / 协议匹配 | [routing.md](../implementation/routing.md) |
-| 认证 / KeyVault / 加密 | [authentication.md](../implementation/authentication.md)、[key-vault.md](../implementation/key-vault.md) |
-| 审计字段 | [audit-logging.md](../implementation/audit-logging.md) |
-| SSE / 流式转发 | [sse-streaming.md](../implementation/sse-streaming.md) |
-| 新模块 / 架构变化 | [architecture.md](../design/architecture.md) + 对应实现文档 |
-| 构建 / 命令 / 协作规则 | [AGENTS.md](../../AGENTS.md)、README |
+| 配置字段 / 格式 | `<配置规范文档>` |
+| 接口 / 协议 / 错误码 | `<接口文档>`、`<错误处理文档>` |
+| 核心业务模块改动 | `<对应模块的实现文档>` |
+| 认证 / 密钥 / 加密 | `<认证与密钥文档>` |
+| 新模块 / 架构变化 | `<架构文档>` + 对应实现文档 |
+| 构建 / 命令 / 协作规则 | `<项目根 AGENTS.md / CONTRIBUTING.md>`、README |
 
-### 5.2 已落地
+矩阵只需覆盖「会影响他人或跨模块」的变更面，无需面面俱到。
 
-- AGENTS.md 第 8 节已链接整套文档集；
-- 协作工作流的 PR 模板已加入「文档同步」字段；
-- Review 清单已加入文档一致性检查。
+### 5.2 三步落地
 
-### 5.3 建议后续（可选）
+1. 在项目的 `<AGENTS.md>` 中链接整套文档集；
+2. 在 PR 模板中加入「文档同步」字段（见 [git-workflow-template.md](git-workflow-template.md) 第 7 节）；
+3. 在 Review 清单中加入文档一致性检查（见 [git-workflow-template.md](git-workflow-template.md) 第 8 节）。
 
-- 在 docs/ 根目录加一份总索引 README；
+### 5.3 可选增强
+
+- 在 `<文档目录>` 根下加一份总索引 README；
 - 每个文档头部标注「状态：生效 / 草稿 / 已废弃」与维护者；
 - CI 增加 markdown 链接检查；
 - 正式发布后启用 changelog 自动生成。
 
 ## 6. 推行步骤（渐进，不一步到位）
 
-1. 规则写进 AGENTS.md（已完成）；
-2. PR 模板加入「文档同步」字段（已完成）；
-3. Review 清单加入文档一致性检查（已完成）；
+1. 规则写进 AGENTS.md；
+2. PR 模板加入「文档同步」字段；
+3. Review 清单加入文档一致性检查；
 4. 行为变更强制要求同步文档（从下一个 PR 开始执行）；
 5. CI 增加链接检查（文档规模变大后）；
 6. changelog 自动化（有正式发布后）；

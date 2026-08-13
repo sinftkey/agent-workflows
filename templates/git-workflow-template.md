@@ -14,6 +14,14 @@
 
 常用占位符：`<仓库名>`、`<默认分支>`、`<分支前缀>`、`<包管理器>`、`<CI 名称>`、`<维护者>`、`<Review 人数>`。
 
+本模板与同目录其他模板的分工：
+
+| 模板 | 维护内容 |
+|------|----------|
+| 本模板 | 提交规范、命令级操作、本地检查、回退；PR 模板与基础 Review 清单 |
+| [collaborative-workflow-template.md](collaborative-workflow-template.md) | 角色权限、任务认领、多人 / 多 Agent 并行、冲突协调、发布节奏 |
+| [docs-communication.md](docs-communication.md) | 文档如何与代码同步（通信设计） |
+
 ## 1. 核心原则（语言无关，可直接保留）
 
 1. 默认分支永远可构建、可运行、可部署；
@@ -60,9 +68,7 @@
 <分支前缀>/<任务编号>-<type>-<主题>       # 例：<分支前缀>/42-fix-timeout
 ```
 
-`type` 与提交规范一致：`feat` / `fix` / `docs` / `refactor` / `test` / `chore`；`hotfix`、`release` 作为特殊前缀单独使用。
-
-多人 / 多 Agent 场景建议**带任务编号**，并约定同一分支同时只允许一个写入者。
+`type` 与提交规范一致：`feat` / `fix` / `docs` / `refactor` / `test` / `chore`；`hotfix`、`release` 作为特殊前缀单独使用。多人 / 多 Agent 场景的分支所有权与命名约定（任务编号、owner）见 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 3.2 节。
 
 ## 4. 提交规范（语言无关）
 
@@ -172,6 +178,8 @@ closes #<任务编号>
 - [ ] 无夹带无关改动
 - [ ] 错误处理与日志合理
 
+> 多人 / 多 Agent 场景的 Review 补充检查与 approve 规则见 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 7 节。
+
 ## 9. 合并策略
 
 - 默认 **Squash and merge**，保持 `<默认分支>` 历史线性；
@@ -201,15 +209,16 @@ closes #<任务编号>
 
 ## 12. 多 Agent 协作（无 AI 参与时删除本节）
 
+多人 / 多 Agent 协作规则由 [collaborative-workflow-template.md](collaborative-workflow-template.md) 统一维护，本节只留要点：
+
 - 任务必须有 owner（人类或 Agent），分支名带任务编号；
-- 同一分支同一时间只允许一个写入者；
-- Agent 之间可互审机械问题，**最终 approve 必须来自人类**；
-- Agent 账号不授予默认分支直接推送权限；
-- 冲突时保留双方意图，涉及取舍先沟通，不单方面覆盖；
-- 每个 Agent 的 PR 都必须有完整描述与验证结果；
-- 更完整的多人 / 多 Agent 协作模板见 [collaborative-workflow-template.md](collaborative-workflow-template.md)。
+- 同一分支同一时间只允许一个写入者，冲突时先沟通、不单方面覆盖；
+- Agent 之间可互审机械问题，**最终 approve 与合并必须来自人类**；
+- Agent 账号不授予默认分支直接推送权限。
 
 ## 13. 按项目类型的适配示例
+
+> 以下仅为适配**示例**，展示模板如何落到具体语言 / 项目类型；复制到新项目后必须替换为项目实际的命令与约定，不直接照抄。
 
 ### Rust 二进制项目
 

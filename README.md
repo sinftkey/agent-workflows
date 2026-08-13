@@ -23,11 +23,11 @@
 | [AGENTS.template.md](templates/AGENTS.template.md) | 新项目的 `AGENTS.md` 模板：项目规则、命令、安全红线、Git 流程入口 |
 | [git-workflow-template.md](templates/git-workflow-template.md) | 个人级 Git 工作流模板：提交规范、命令级操作、回退 |
 | [collaborative-workflow-template.md](templates/collaborative-workflow-template.md) | 多人 / 多 Agent 协作模板：角色权限、分支所有权、PR/Review、冲突协调 |
-| [docs-communication.md](templates/docs-communication.md) | 设计指南：如何让 Git 工作流与项目文档结合，改善人 × Agent 通信 |
+| [docs-communication.md](templates/docs-communication.md) | 通用设计指南：让 Git 工作流与项目文档结合，改善人 × Agent 通信（含占位符式落地步骤） |
 
 ### examples/keygateway/
 
-KeyGateway（Rust AI API 网关）中完整落地的版本，作为「模板在真实项目里长什么样」的参考：`AGENTS.md`、`git-workflow.md`、`collaborative-workflow.md`。
+KeyGateway（Rust AI API 网关）中完整落地的版本，作为「模板在真实项目里长什么样」的参考：`AGENTS.md`、`git-workflow.md`、`collaborative-workflow.md`、`docs-communication-example.md`。
 
 ## 快速开始（新项目使用）
 
@@ -43,7 +43,7 @@ Copy-Item -Recurse templates/* <新项目>/docs/development/
 5. 有多个协作者或 AI Agent 时，同时保留 `collaborative-workflow-template.md` 与 `docs-communication.md`；
 6. 在 `AGENTS.md` 中链接这些文档，并让第一个 PR 落实「文档同步」字段。
 
-注意：`docs-communication.md` 第 5 节的示例假设目标项目使用 `docs/design`、`docs/implementation`、`docs/api` 目录结构；新项目目录不同时，修正其中的相对链接即可。
+注意：`docs-communication.md` 第 5 节用 `<占位符>` 表示各类文档路径，新项目请按实际目录结构填写，并建立自己的「变更 ↔ 文档」映射矩阵；真实示例见 [examples/keygateway/docs-communication-example.md](examples/keygateway/docs-communication-example.md)。
 
 ## 维护方式
 
