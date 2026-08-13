@@ -12,6 +12,6 @@
 - 项目特有内容放 `examples/`；
 - 改动模板必须同步更新 `README.md` 中的说明（文档同步）；
 - 提交前检查：Markdown 链接有效、占位符格式一致（`<...>`）、无密钥；
-- Git 流程：新分支使用 `codex/` 前缀；提交信息用 Conventional Commits；合并默认 squash；
+- Git 流程：新分支使用 `<Agent 工具名/角色/身份>/` 前缀（Agent 以自身工具名或角色作为前缀）；提交信息用 Conventional Commits；合并默认 squash；
 - 本仓库内容会被其他项目复制，模板改动影响面大，因此必须经过 review 后再合并；
 - 用户明确指令优先于本文档。

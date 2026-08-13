@@ -12,7 +12,7 @@
 4. 与项目已有规则冲突时，保留更具体、更严格的一条，并注明冲突时以哪份为准；
 5. 模板假设默认分支为 `main`/`master` 且采用 trunk-based；团队使用 GitFlow 时按 3.2 调整。
 
-常用占位符：`<仓库名>`、`<默认分支>`、`<分支前缀>`、`<包管理器>`、`<CI 名称>`、`<维护者>`、`<Review 人数>`。
+常用占位符：`<仓库名>`、`<默认分支>`、`<Agent 工具名/角色/身份>`、`<包管理器>`、`<CI 名称>`、`<维护者>`、`<Review 人数>`。
 
 本模板与同目录其他模板的分工：
 
@@ -64,8 +64,8 @@
 ### 3.3 分支命名
 
 ```text
-<分支前缀>/<type>/<主题>                  # 例：<分支前缀>/feat/login
-<分支前缀>/<任务编号>-<type>-<主题>       # 例：<分支前缀>/42-fix-timeout
+<Agent 工具名/角色/身份>/<type>/<主题>                  # 例：<Agent 工具名>/feat/login
+<Agent 工具名/角色/身份>/<任务编号>-<type>-<主题>       # 例：<Agent 工具名>/42-fix-timeout
 ```
 
 `type` 与提交规范一致：`feat` / `fix` / `docs` / `refactor` / `test` / `chore`；`hotfix`、`release` 作为特殊前缀单独使用。多人 / 多 Agent 场景的分支所有权与命名约定（任务编号、owner）见 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 3.2 节。
@@ -266,7 +266,7 @@ closes #<任务编号>
 ## 14. 提交 / 合并检查清单（最终版）
 
 - [ ] 格式化、静态检查、测试、构建全部通过
-- [ ] PR 描述完整（任务、概述、验证、影响、安全声明）
+- [ ] PR 描述完整（任务、概述、验证、影响、文档同步、安全声明、请 reviewer 重点看）
 - [ ] CI 通过
 - [ ] Review approve 数达到 `<Review 人数>`
 - [ ] 无密钥与无关文件

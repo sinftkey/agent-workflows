@@ -43,15 +43,15 @@
 单人任务：
 
 ```text
-codex/feat/sse-streaming
-codex/fix/auth-timeout
+<Agent 工具名/角色/身份>/feat/sse-streaming
+<Agent 工具名/角色/身份>/fix/auth-timeout
 ```
 
 多人 / 多 Agent 场景（推荐带任务编号或 owner，避免认领冲突）：
 
 ```text
-codex/<任务编号>-<type>-<主题>       # 例：codex/42-feat-rate-limit
-codex/<owner>/<type>/<主题>         # 例：codex/alice/feat/rate-limit
+<Agent 工具名/角色/身份>/<任务编号>-<type>-<主题>       # 例：<Agent 工具名>/42-feat-rate-limit
+<Agent 工具名/角色/身份>/<owner>/<type>/<主题>         # 例：<Agent 工具名>/alice/feat/rate-limit
 ```
 
 命名规则由团队固定为**一套**，并写入仓库文档；建议带任务编号，便于 PR、issue 与 commit 之间追溯。
@@ -79,7 +79,7 @@ git 本身没有「锁」机制，多 Agent 并行协作靠纪律与命名约定
 
 ```powershell
 git fetch origin
-git switch -c codex/42-feat-rate-limit origin/master
+git switch -c <Agent 工具名>/42-feat-rate-limit origin/master
 # 开发…小步提交，每个提交独立可验证
 ```
 
@@ -96,7 +96,7 @@ cargo clippy -- -D warnings
 cargo test
 cargo build
 
-git push -u origin codex/42-feat-rate-limit
+git push -u origin <Agent 工具名>/42-feat-rate-limit
 ```
 
 ### 5.3 创建 PR
@@ -169,7 +169,7 @@ closes #42
 
 ```powershell
 git fetch --prune
-git branch -d codex/42-feat-rate-limit
+git branch -d <Agent 工具名>/42-feat-rate-limit
 ```
 
 ## 9. 冲突处理（多人 / 多 Agent 版）

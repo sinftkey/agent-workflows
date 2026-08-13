@@ -38,7 +38,7 @@ Copy-Item -Recurse templates/* <新项目>/docs/development/
 ```
 
 2. 把 `AGENTS.template.md` 放到新项目根目录并改名为 `AGENTS.md`；
-3. 按模板第 0 节替换 `<占位符>`（项目名、技术栈、命令、分支前缀、维护者）；
+3. 按模板第 0 节替换 `<占位符>`（项目名、技术栈、命令、Agent 工具名/角色/身份、维护者）；
 4. 把「提交前检查」的命令换成项目实际命令（模板自带 Rust / Node / Python / Go 等对照表）；
 5. 有多个协作者或 AI Agent 时，同时保留 `collaborative-workflow-template.md` 与 `docs-communication.md`；
 6. 在 `AGENTS.md` 中链接这些文档，并让第一个 PR 落实「文档同步」字段。

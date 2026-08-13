@@ -4,7 +4,7 @@
 
 ## 0. 使用说明
 
-常用占位符：`<默认分支>`、`<分支前缀>`、`<CI 名称>`、`<维护者>`、`<Review 人数>`、`<Agent 账号>`、`<任务系统>`。
+常用占位符：`<默认分支>`、`<Agent 工具名/角色/身份>`、`<CI 名称>`、`<维护者>`、`<Review 人数>`、`<Agent 账号>`、`<任务系统>`。
 
 适配步骤：
 
@@ -60,8 +60,8 @@
 基础格式见 [git-workflow-template.md](git-workflow-template.md) 第 3.3 节；多人 / 多 Agent 场景在基础格式上统一带任务编号或 owner：
 
 ```text
-<分支前缀>/<任务编号>-<type>-<主题>        # 例：<分支前缀>/42-feat-rate-limit
-<分支前缀>/<owner>/<type>/<主题>          # 例：<分支前缀>/alice/feat/rate-limit
+<Agent 工具名/角色/身份>/<任务编号>-<type>-<主题>        # 例：<Agent 工具名>/42-feat-rate-limit
+<Agent 工具名/角色/身份>/<owner>/<type>/<主题>          # 例：<Agent 工具名>/alice/feat/rate-limit
 ```
 
 推荐带任务编号：PR、commit、issue 之间可互相追溯。**同一分支同一时间只允许一个写入者**。
@@ -88,7 +88,7 @@ git 没有「锁」，多 Agent 并行靠纪律：
 
 ```shell
 git fetch origin
-git switch -c <分支前缀>/42-feat-rate-limit origin/<默认分支>
+git switch -c <Agent 工具名/角色/身份>/42-feat-rate-limit origin/<默认分支>
 # 小步提交，每个提交独立可验证
 ```
 
@@ -100,7 +100,7 @@ git rebase origin/<默认分支>
 
 # 项目规定的完整检查（格式化 / 静态检查 / 测试 / 构建，见 git-workflow-template.md 第 5 节）
 
-git push -u origin <分支前缀>/42-feat-rate-limit
+git push -u origin <Agent 工具名/角色/身份>/42-feat-rate-limit
 ```
 
 ### 5.3 PR 与 Review
@@ -182,7 +182,7 @@ PR 模板正文（关联任务、改动概述、验证结果、影响范围、�
 
 ### 合并前
 
-- [ ] PR 描述完整（任务、概述、验证、影响、文档同步、安全声明）
+- [ ] PR 描述完整（任务、概述、验证、影响、文档同步、安全声明、请 reviewer 重点看）
 - [ ] CI 通过
 - [ ] 人类 approve（至少 `<Review 人数>` 个）
 - [ ] 文档与代码一致

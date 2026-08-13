@@ -6,7 +6,7 @@
 
 ## 1. 核心原则
 
-1. **一个任务一个分支**：新分支统一使用 `codex/` 前缀。
+1. **一个任务一个分支**：新分支统一使用 `<Agent 工具名/角色/身份>/` 前缀。
 2. **提交前必须验证**：`cargo fmt --check`、`cargo clippy -- -D warnings`、`cargo test`、`cargo build` 全部通过。
 3. **提交保持聚焦**：一次提交只包含一个可独立描述的功能或修复，不夹带无关改动。
 4. **密钥绝不进版本库**：真实 API Key、代理 Key 全文、master key、`config.json`、`.keygateway/` 均不得提交。
@@ -71,11 +71,11 @@ git log --oneline -5
 
 ## 4. 创建分支
 
-分支命名建议 `codex/<类型>/<简短主题>`，类型可选 `feat`、`fix`、`docs`、`refactor`、`test`、`chore`：
+分支命名建议 `<Agent 工具名/角色/身份>/<类型>/<简短主题>`，类型可选 `feat`、`fix`、`docs`、`refactor`、`test`、`chore`：
 
 ```powershell
-git switch -c codex/docs/git-workflow
-git switch -c codex/feat/sse-streaming
+git switch -c <Agent 工具名>/docs/git-workflow
+git switch -c <Agent 工具名>/feat/sse-streaming
 ```
 
 分支应基于最新的 `master` 创建。分支生命周期：任务完成、合并后即删除，不长期保留。
@@ -181,7 +181,7 @@ feat: 实现 SSE 流式转发
 ### 7.1 推送分支
 
 ```powershell
-git push -u origin codex/feat/sse-streaming
+git push -u origin <Agent 工具名>/feat/sse-streaming
 ```
 
 ### 7.2 创建 PR
@@ -201,7 +201,7 @@ gh pr create --title "feat: 实现 SSE 流式转发" --body "说明改动内容�
 ```powershell
 git switch master
 git pull
-git branch -d codex/feat/sse-streaming
+git branch -d <Agent 工具名>/feat/sse-streaming
 ```
 
 ## 8. 冲突处理
