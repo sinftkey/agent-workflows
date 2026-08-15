@@ -1,6 +1,6 @@
 # Git 工作流模板（适用于任意项目类型）
 
-> 这是一份**模板**，不是某个仓库的既定规则。复制到新项目（作为 `AGENTS.md`、`CONTRIBUTING.md` 或团队 Wiki 的基底）后，按「0. 使用说明」完成适配。
+> 这是一份**模板**，不是某个仓库的既定规则。整套模板面向**多人 / 多 Agent 协作**设计，本模板与 [collaborative-workflow-template.md](collaborative-workflow-template.md) 配套使用，不单独覆盖单人场景。复制到新项目（作为 `CONTRIBUTING.md` 或团队 Wiki 的基底；新项目的 `AGENTS.md` 用 [AGENTS.template.md](AGENTS.template.md)）后，按「0. 使用说明」完成适配。
 
 ## 0. 使用说明
 
@@ -12,12 +12,13 @@
 4. 与项目已有规则冲突时，保留更具体、更严格的一条，并注明冲突时以哪份为准；
 5. 模板假设默认分支为 `main`/`master` 且采用 trunk-based；团队使用 GitFlow 时按 3.2 调整。
 
-常用占位符：`<仓库名>`、`<默认分支>`、`<Agent 工具名/角色/身份>`、`<包管理器>`、`<CI 名称>`、`<维护者>`、`<Review 人数>`。
+常用占位符：`<默认分支>`、`<Agent 工具名/角色/身份>`、`<包管理器>`、`<CI 名称>`、`<维护者>`、`<Review 人数>`。
 
 本模板与同目录其他模板的分工：
 
 | 模板 | 维护内容 |
 |------|----------|
+| [AGENTS.template.md](AGENTS.template.md) | 项目规则、常用命令、安全红线；作为新项目的 `AGENTS.md` |
 | 本模板 | 提交规范、命令级操作、本地检查、回退；PR 模板与基础 Review 清单 |
 | [collaborative-workflow-template.md](collaborative-workflow-template.md) | 角色权限、任务认领、多人 / 多 Agent 并行、冲突协调、发布节奏 |
 | [docs-communication.md](docs-communication.md) | 文档如何与代码同步（通信设计） |
@@ -33,14 +34,7 @@
 
 ## 2. 角色与权限
 
-| 角色 | 职责 | git 权限 |
-|------|------|----------|
-| 维护者 `<维护者>` | 合并决策、发布、规则制定 | 合并 PR、打 tag、管理分支保护 |
-| 开发者 | 功能开发、修复、Review | 创建/推送分支、PR、approve |
-| AI Agent（可选） | 有界任务、PR、按反馈修改 | 推送分支、PR、评论；无 approve |
-| Reviewer | 审查 diff | review、approve |
-
-建议在托管平台开启默认分支保护：禁止直接推送、CI 必须通过、至少 `<Review 人数>` 个 approve。
+角色职责与 git 权限表（含分支保护建议）由 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 2 节统一维护，本模板不重复。要点：维护者负责合并决策与发布；有 AI Agent 参与时，Agent 无 approve 权限，人类对最终合并负责。
 
 ## 3. 分支模型
 
@@ -122,6 +116,7 @@ feat: 新增登录接口
 | Go | `gofmt -l .` | `go vet ./...`（+ `golangci-lint run`） | `go test ./...` | `go build ./...` |
 | Java / Kotlin | `spotlessCheck` / `ktlintCheck` | `gradle checkstyleMain` / `ktlint` | `gradle test` | `gradle build` |
 | 文档站点 | `markdownlint .` | `vale .`（可选） | — | `npm run build`（如需要） |
+| 基础设施 / 配置仓库（IaC） | `terraform fmt -check` | `terraform validate` | `pytest`（可选，测 plan 逻辑） | `terraform plan`（合并前审核） |
 
 > 使用 `<包管理器>` 的项目把 `npm` 替换为 `pnpm` / `yarn` 等；新项目类型在此表追加。
 
@@ -132,9 +127,9 @@ feat: 新增登录接口
 3. 推送前同步最新 `<默认分支>`（未共享分支用 rebase）并跑完整检查；
 4. `git push -u origin <分支>`；
 5. 创建 PR，填写 PR 模板（见第 7 节）；
-6. CI 自动检查；
+6. `<CI 名称>` 自动检查；
 7. Reviewer 审查，作者在分支上新增提交回应反馈（不 force push 已推送分支）；
-8. 满足保护规则后由维护者合并；
+8. 满足保护规则后由 `<维护者>` 合并；
 9. 合并后删除分支；
 10. 全员 `git fetch --prune` 同步。
 
@@ -152,7 +147,7 @@ closes #<任务编号>
 - [ ] 静态检查通过
 - [ ] 测试通过
 - [ ] 构建通过
-- [ ] CI 通过
+- [ ] `<CI 名称>` 通过
 
 ## 影响范围
 <改动的文件/模块、接口变化、是否需要迁移>
@@ -183,7 +178,7 @@ closes #<任务编号>
 ## 9. 合并策略
 
 - 默认 **Squash and merge**，保持 `<默认分支>` 历史线性；
-- 需要保留协作分支历史时用普通 merge commit（由维护者决定）；
+- 需要保留协作分支历史时用普通 merge commit（由 `<维护者>` 决定）；
 - 禁止直接向 `<默认分支>` 提交；禁止对已推送分支 force push；
 - 合并后删除远程与本地分支。
 
@@ -216,58 +211,11 @@ closes #<任务编号>
 - Agent 之间可互审机械问题，**最终 approve 与合并必须来自人类**；
 - Agent 账号不授予默认分支直接推送权限。
 
-## 13. 按项目类型的适配示例
-
-> 以下仅为适配**示例**，展示模板如何落到具体语言 / 项目类型；复制到新项目后必须替换为项目实际的命令与约定，不直接照抄。
-
-### Rust 二进制项目
-
-```text
-构建：cargo build
-测试：cargo test
-检查：cargo fmt --check + cargo clippy -- -D warnings
-提交前检查清单：以上全部通过
-```
-
-### Web 前端 / Node.js
-
-```text
-构建：npm run build（构建产物不入库）
-测试：vitest / jest
-检查：prettier + eslint + tsc --noEmit
-额外约定：package-lock.json 提交，node_modules 忽略
-```
-
-### Python 库 / 服务
-
-```text
-测试：pytest
-检查：ruff format --check + ruff check + mypy
-构建：pyproject.toml 打包（可选）
-额外约定：虚拟环境与依赖锁文件按团队约定处理
-```
-
-### 文档仓库
-
-```text
-检查：markdownlint + 链接检查
-预览：本地构建站点 / CI 预览
-合并：通常可放宽到 1 个 approve，但涉及规范类改动需维护者 review
-```
-
-### 基础设施 / 配置仓库（IaC）
-
-```text
-检查：terraform fmt -check + validate / plan
-测试：pytest 等测试 plan 逻辑（可选）
-合并：默认要求 2 个 approve + 维护者执行 apply
-```
-
-## 14. 提交 / 合并检查清单（最终版）
+## 13. 提交 / 合并检查清单（最终版）
 
 - [ ] 格式化、静态检查、测试、构建全部通过
 - [ ] PR 描述完整（任务、概述、验证、影响、文档同步、安全声明、请 reviewer 重点看）
-- [ ] CI 通过
+- [ ] `<CI 名称>` 通过
 - [ ] Review approve 数达到 `<Review 人数>`
 - [ ] 无密钥与无关文件
 - [ ] 合并策略符合约定（默认 squash）

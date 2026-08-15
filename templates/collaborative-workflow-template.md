@@ -11,7 +11,7 @@
 1. 替换所有占位符；
 2. 确定分支模型（默认 trunk-based，见第 3 节）；
 3. 决定是否启用 AI Agent：不启用就删除第 10、11 节；
-4. 与 [git-workflow-template.md](git-workflow-template.md) 组合使用，分工如下；
+4. 与 [git-workflow-template.md](git-workflow-template.md) 配套使用，分工如下；
 5. 复制时相关的模板文件一起带走，并修正相对链接。
 
 | 场景 | 使用 |
@@ -48,12 +48,7 @@
 
 ### 3.1 分支模型
 
-默认 trunk-based：
-
-- 长期分支：`<默认分支>`；
-- 短期功能分支：数天内合并，合并后删除；
-- 需要固定版本：`release/vX.Y.Z`（只收 bugfix）；
-- 线上紧急修复：`hotfix/<主题>`，从 `<默认分支>` 或最近 tag 创建。
+默认 trunk-based；分支模型（长期分支、功能分支、`release/`、`hotfix/`）见 [git-workflow-template.md](git-workflow-template.md) 第 3.1 节。
 
 ### 3.2 分支命名（多人场景约定）
 
@@ -146,9 +141,8 @@ PR 模板正文（关联任务、改动概述、验证结果、影响范围、�
 
 ## 9. 合并与发布
 
-- 默认 **Squash and merge**，保持 `<默认分支>` 历史线性；
-- 需要保留协作分支历史时由维护者决定普通 merge；
-- 合并后立即删除分支，定期 `git fetch --prune`；
+合并策略（默认 squash、历史线性、合并后删分支等）由 [git-workflow-template.md](git-workflow-template.md) 第 9 节统一维护，本模板不重复。本节只补充发布节奏：
+
 - 发布 = 打 tag `vX.Y.Z` + release notes；破坏性变更升级 major；
 - hotfix：从 `<默认分支>`/tag 创建 → 修复验证 → 人类快速 approve → 合并打新 tag → cherry-pick 回功能分支。
 
@@ -183,13 +177,7 @@ PR 模板正文（关联任务、改动概述、验证结果、影响范围、�
 ### 合并前
 
 - [ ] PR 描述完整（任务、概述、验证、影响、文档同步、安全声明、请 reviewer 重点看）
-- [ ] CI 通过
+- [ ] `<CI 名称>` 通过
 - [ ] 人类 approve（至少 `<Review 人数>` 个）
 - [ ] 文档与代码一致
 - [ ] 合并策略符合约定
-
-## 13. 与 git-workflow-template.md 的组合
-
-分工见第 0 节表格：提交与命令级操作、PR 模板、基础 Review 清单由 git-workflow-template.md 维护；本模板只负责协作层规则。
-
-两个模板一起复制到新项目，保留相对链接、替换占位符即可；只复制其中一份时，把指向另一份的引用链接一并删除或修正。

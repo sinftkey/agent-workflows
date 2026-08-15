@@ -1,6 +1,6 @@
 # Agent 准则（本仓库）
 
-本文件约束在 agent-workflows 仓库内工作的 Agent（如 Codex）与协作者。
+本文件约束在 agent-workflows 仓库内工作的 Agent与协作者。
 
 ## 目标
 
