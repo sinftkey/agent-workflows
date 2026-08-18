@@ -34,7 +34,7 @@
 
 ## 2. 角色与权限
 
-角色职责与 git 权限表（含分支保护建议）由 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 2 节统一维护，本模板不重复。要点：维护者负责合并决策与发布；有 AI Agent 参与时，Agent 无 approve 权限，人类对最终合并负责。
+角色职责与权限矩阵（含分支保护建议）由 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 2 节统一维护，本模板不重复。要点：维护者负责合并决策与发布；有 AI Agent 参与时，Agent 按所扮演角色行事（开发 / 审核 / 测试），审核角色可 approve 但无提交权，**合并与发布必须由维护者执行**。
 
 ## 3. 分支模型
 
@@ -62,7 +62,7 @@
 <Agent 工具名/角色/身份>/<任务编号>-<type>-<主题>       # 例：<Agent 工具名>/42-fix-timeout
 ```
 
-`type` 与提交规范一致：`feat` / `fix` / `docs` / `refactor` / `test` / `chore`；`hotfix`、`release` 作为特殊前缀单独使用。多人 / 多 Agent 场景的分支所有权与命名约定（任务编号、owner）见 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 3.2 节。
+`type` 与提交规范一致：`feat` / `fix` / `docs` / `refactor` / `test` / `chore`；`hotfix`、`release` 作为特殊前缀单独使用。多人 / 多 Agent 场景的分支所有权与命名约定（任务编号、owner）见 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 4.2 节。
 
 ## 4. 提交规范（语言无关）
 
@@ -173,7 +173,7 @@ closes #<任务编号>
 - [ ] 无夹带无关改动
 - [ ] 错误处理与日志合理
 
-> 多人 / 多 Agent 场景的 Review 补充检查与 approve 规则见 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 7 节。
+> 多人 / 多 Agent 场景的 Review 补充检查与 approve 规则见 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 8 节。
 
 ## 9. 合并策略
 
@@ -207,8 +207,9 @@ closes #<任务编号>
 多人 / 多 Agent 协作规则由 [collaborative-workflow-template.md](collaborative-workflow-template.md) 统一维护，本节只留要点：
 
 - 任务必须有 owner（人类或 Agent），分支名带任务编号；
+- **角色权限分离**：开发写生产代码（自验测试不提交）、审核只提意见不提交、测试只提交测试文件（详见协作模板第 2 节权限矩阵）；
 - 同一分支同一时间只允许一个写入者，冲突时先沟通、不单方面覆盖；
-- Agent 之间可互审机械问题，**最终 approve 与合并必须来自人类**；
+- Agent 之间可互审机械问题，审核 Agent 可 approve，**合并与发布必须由维护者执行**；
 - Agent 账号不授予默认分支直接推送权限。
 
 ## 13. 提交 / 合并检查清单（最终版）

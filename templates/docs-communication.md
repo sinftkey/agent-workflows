@@ -47,7 +47,7 @@ Git 天然只能回答三个问题：**改了什么、谁改的、什么时候�
 - 文档怎么同步（列出更新的文档路径，或明确声明「无需文档变更」并说明理由）；
 - 验证证据（检查命令 + CI 结果）。
 
-PR 模板里放一个「文档同步」字段（模板见 [git-workflow-template.md](git-workflow-template.md) 第 7 节，多人场景补充见 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 6 节）。行为、接口、配置变更如果没带文档变更，review 不通过就不合并。
+PR 模板里放一个「文档同步」字段（模板见 [git-workflow-template.md](git-workflow-template.md) 第 7 节，多人场景补充见 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 7 节）。行为、接口、配置变更如果没带文档变更，review 不通过就不合并。
 
 ### 4.2 文档先行（doc-first）
 

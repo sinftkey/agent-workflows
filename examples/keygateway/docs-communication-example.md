@@ -22,8 +22,8 @@
 ## 2. 已落地
 
 - [AGENTS.md](../../AGENTS.md) 第 8 节已链接整套文档集；
-- 协作工作流的 PR 模板已加入「文档同步」字段（见 [collaborative-workflow.md](collaborative-workflow.md) 第 6 节）；
-- Review 清单已加入文档一致性检查（见 [collaborative-workflow.md](collaborative-workflow.md) 第 7 节）。
+- 协作工作流的 PR 模板已加入「文档同步」字段（见 [collaborative-workflow.md](collaborative-workflow.md) 第 7 节）；
+- Review 清单已加入文档一致性检查（见 [collaborative-workflow.md](collaborative-workflow.md) 第 8 节）。
 
 ## 3. 建议后续（可选）
 
