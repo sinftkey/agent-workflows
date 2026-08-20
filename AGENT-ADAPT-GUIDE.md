@@ -109,7 +109,7 @@ https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/docs-c
 
 - [ ] 全文无残留 `{{...}}` 适配占位符（校验命令见下；`<...>` 语法占位符不在校验范围）
   - bash：`grep -rno '{{[^{}]+}}' AGENTS.md docs/`（应无输出）
-  - PowerShell：`Get-ChildItem AGENTS.md, docs -Recurse -Filter *.md | Select-String -Pattern '\{\{[^{}]+\}\}'`（应无输出）
+  - PowerShell：`Get-ChildItem AGENTS.md, docs -Recurse -Filter *.md | Select-String -Pattern '\{\{[^{}]+\}\}' -Encoding UTF8`（应无输出）
 - [ ] 所有 Markdown 链接有效（本地文件路径存在）
 - [ ] 无密钥、凭据、`.env`、构建产物进入工作区
 - [ ] 权限矩阵、流程编排与模板原文结构一致，未擅自弱化约束
