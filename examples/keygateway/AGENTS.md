@@ -95,7 +95,7 @@ handler 顺序固定：提取代理 Key → 校验 → 解析 model → 路由�
 - 多人 / 多 Agent 协作模板：[collaborative-workflow-template.md](docs/development/collaborative-workflow-template.md)
 - Git 工作流与项目文档的集成设计：[docs-communication.md](docs/development/docs-communication.md)
 
-- 新分支使用 `<Agent 工具名/角色/身份>/` 前缀（除非用户另有要求），**角色（开发 / 审核 / 测试）在任务开始前明确**，后续操作以该角色为准
+- 新分支使用 `<身份>/` 前缀（除非用户另有要求），`<身份>` = Agent 工具名或人员名，任选其一（如 `zcode/`），**角色（开发 / 审核 / 测试）在任务开始前明确**，后续操作以该角色为准
 - **角色权限分离**（矩阵与流程见 [collaborative-workflow.md](docs/development/collaborative-workflow.md) 第 2、3 节）：开发写生产代码（自验测试**即写即测即删**，不提交、不采信）；审核只提意见、绝不提交代码；测试只提交测试文件
 - commit 前必须通过：`cargo fmt --check`、`cargo clippy -- -D warnings`、`cargo test`、`cargo build`
 - 保持 commit 聚焦：一次提交对应一个可描述的功能或修复

@@ -1,6 +1,6 @@
 # 示例：KeyGateway
 
-本目录是 [KeyGateway](https://github.com/) 项目中真实使用的文档副本，作为「模板落地后的样子」参考：
+本目录是 KeyGateway（Rust AI API 网关）项目中真实使用的文档副本，作为「模板落地后的样子」参考：
 
 - `AGENTS.md` — 项目级 Agent 准则（含安全红线、模块职责表）
 - `git-workflow.md` — 项目级 Git 工作流（Rust 专属命令）

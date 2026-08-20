@@ -6,7 +6,7 @@
 
 ## 1. 核心原则
 
-1. **一个任务一个分支**：新分支统一使用 `<Agent 工具名/角色/身份>/` 前缀。
+1. **一个任务一个分支**：新分支统一使用 `<身份>/` 前缀（`<身份>` = Agent 工具名或人员名，任选其一，如 `zcode`）。
 2. **提交前必须验证**：`cargo fmt --check`、`cargo clippy -- -D warnings`、`cargo test`、`cargo build` 全部通过。
 3. **提交保持聚焦**：一次提交只包含一个可独立描述的功能或修复，不夹带无关改动。
 4. **密钥绝不进版本库**：真实 API Key、代理 Key 全文、master key、`config.json`、`.keygateway/` 均不得提交。
@@ -71,11 +71,11 @@ git log --oneline -5
 
 ## 4. 创建分支
 
-分支命名建议 `<Agent 工具名/角色/身份>/<类型>/<简短主题>`，类型可选 `feat`、`fix`、`docs`、`refactor`、`test`、`chore`：
+分支命名建议 `<身份>/<类型>/<简短主题>`（`<身份>` = Agent 工具名或人员名，任选其一，如 `zcode`），类型可选 `feat`、`fix`、`docs`、`refactor`、`test`、`chore`：
 
 ```powershell
-git switch -c <Agent 工具名>/docs/git-workflow
-git switch -c <Agent 工具名>/feat/sse-streaming
+git switch -c zcode/docs/git-workflow
+git switch -c zcode/feat/sse-streaming
 ```
 
 分支应基于最新的 `master` 创建。分支生命周期：任务完成、合并后即删除，不长期保留。
@@ -181,7 +181,7 @@ feat: 实现 SSE 流式转发
 ### 7.1 推送分支
 
 ```powershell
-git push -u origin <Agent 工具名>/feat/sse-streaming
+git push -u origin zcode/feat/sse-streaming
 ```
 
 ### 7.2 创建 PR
@@ -201,7 +201,7 @@ gh pr create --title "feat: 实现 SSE 流式转发" --body "说明改动内容�
 ```powershell
 git switch master
 git pull
-git branch -d <Agent 工具名>/feat/sse-streaming
+git branch -d zcode/feat/sse-streaming
 ```
 
 ## 8. 冲突处理
@@ -325,6 +325,10 @@ warning: unable to access 'C:\Users\wsssj/.config/git/ignore': Permission denied
 ```
 
 这是环境权限问题，不影响本仓库 git 操作；如需要，可在仓库内补充 `.gitignore` 规则，不要依赖全局配置。
+
+### 10.5 敏感模块合并要求
+
+涉及认证、加密、密钥、支付等敏感模块的改动，合并前**至少 1 个人类 approve**（人类 = 人员，不含 Agent），并由维护者执行合并（见 [collaborative-workflow.md](collaborative-workflow.md) 第 8、13 节）。
 
 ## 11. 与 AGENTS.md 的关系
 
