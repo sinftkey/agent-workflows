@@ -38,42 +38,43 @@ KeyGateway（Rust AI API 网关）中完整落地的版本，作为「模板在�
 把单行命令粘贴给任意 AI Agent（先 `cd` 到新项目根目录），即可自主完成下载、落位、适配、校验与提交；完整步骤见 [AGENT-ADAPT-GUIDE.md](AGENT-ADAPT-GUIDE.md)。
 
 ```powershell
-irm https://raw.githubusercontent.com/<owner>/agent-workflows/main/scripts/adapt.ps1 | iex
+irm https://raw.githubusercontent.com/sinftkey/agent-workflows/main/scripts/adapt.ps1 | iex
 ```
 
 ```bash
-curl -sL https://raw.githubusercontent.com/<owner>/agent-workflows/main/scripts/adapt.sh | bash -s
+curl -sL https://raw.githubusercontent.com/sinftkey/agent-workflows/main/scripts/adapt.sh | bash -s
 ```
 
-脚本机械步骤（下载模板、复制到 `docs/development/`、生成 `AGENTS.md`、输出待替换占位符清单）见 [scripts/](scripts/)。
+脚本机械步骤（下载模板、复制到 `docs/development/`、生成 `AGENTS.md`、输出待替换 `{{...}}` 适配占位符清单）见 [scripts/](scripts/)。
 
 ### 方式二：手动复制
 
-1. 复制模板：
+1. 复制模板（`AGENTS.template.md` 除外，见第 2 步）：
 
 ```powershell
-Copy-Item -Recurse templates/* <新项目>/docs/development/
+Copy-Item -Recurse templates/git-workflow-template.md,templates/collaborative-workflow-template.md,templates/docs-communication.md <新项目>/docs/development/
 ```
 
 ```bash
-cp -r templates/* <新项目>/docs/development/
+cp templates/git-workflow-template.md templates/collaborative-workflow-template.md templates/docs-communication.md <新项目>/docs/development/
 ```
 
-2. 把 `AGENTS.template.md` 放到新项目根目录并改名为 `AGENTS.md`；
-3. 按 AGENTS 模板第 0 节替换 `<占位符>`（项目名、技术栈、命令、Agent 工具名/角色/身份）；
+2. **移动** `AGENTS.template.md` 到新项目根目录并改名为 `AGENTS.md`（仅此一份，不留在 `docs/development/` 中，避免双份漂移）；
+3. 按 AGENTS 模板第 0 节替换 `{{...}}` 适配占位符（项目名、技术栈、命令、身份等；`<...>` 为命令语法或每次填写的内容，保留不动）；
 4. 把「提交前检查」的命令换成项目实际命令（模板自带 Rust / Node / Python / Go 等对照表）；
-5. 同时保留 `collaborative-workflow-template.md` 与 `docs-communication.md`（整套模板按多人 / 多 Agent 协作设计，不覆盖单人场景）；
+5. 同时保留 `collaborative-workflow-template.md` 与 `docs-communication.md`（整套模板面向多人 / 多 Agent 协作设计，不面向单人场景；单人无 Agent 的裁剪见 [AGENT-ADAPT-GUIDE.md](AGENT-ADAPT-GUIDE.md) 第 3.5 节裁剪矩阵）；
 6. 在 `AGENTS.md` 中链接这些文档，并让第一个 PR 落实「文档同步」字段。
 
-> 注意：替换 `<owner>` 为本仓库实际的 GitHub 组织 / 用户名。方式一执行前，脚本会跳过已存在的 `AGENTS.md` 并提示手动合并（保留更具体、更严格的一条）。
+> 注意：方式一执行前，脚本会跳过已存在的 `AGENTS.md` 并提示手动合并（保留更具体、更严格的一条）。
 
-注意：`docs-communication.md` 第 5 节用 `<占位符>` 表示各类文档路径，新项目请按实际目录结构填写，并建立自己的「变更 ↔ 文档」映射矩阵；真实示例见 [examples/keygateway/docs-communication-example.md](examples/keygateway/docs-communication-example.md)。
+注意：`docs-communication.md` 第 5、6 节为需适配部分，用 `{{...}}` 表示各类文档路径，新项目请按实际目录结构填写，并建立自己的「变更 ↔ 文档」映射矩阵；其余章节可原样保留。真实示例见 [examples/keygateway/docs-communication-example.md](examples/keygateway/docs-communication-example.md)。
 
 ## 维护方式
 
 - 模板保持**语言无关**：项目特有的命令、路径只能进 `examples/`，不能进 `templates/`；
 - 修改模板走分支 + PR（遵循本仓库 [AGENTS.md](AGENTS.md)）；
-- 规则冲突时，以使用方项目自己的 `AGENTS.md` 与用户指令为准。
+- 规则冲突时，以使用方项目自己的 `AGENTS.md` 与用户指令为准；
+- 模板后续更新跟进机制（submodule / subtree / 重跑适配脚本 diff）见 [AGENT-ADAPT-GUIDE.md](AGENT-ADAPT-GUIDE.md) 第 6 节。
 
 ## License
 
