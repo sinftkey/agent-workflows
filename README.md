@@ -14,7 +14,6 @@
 | [templates/](templates/) | 可直接复制到新项目的通用模板（语言无关） |
 | [scripts/](scripts/) | Agent 适配脚本（adapt.ps1 / adapt.sh，下载并落位模板） |
 | [AGENT-ADAPT-GUIDE.md](AGENT-ADAPT-GUIDE.md) | 给 AI Agent 的模板下载适配步骤（含单行命令） |
-| [examples/keygateway/](examples/keygateway/) | 真实项目的落地示例（Rust AI 网关） |
 | [AGENTS.md](AGENTS.md) | 本仓库自己的 Agent 准则 |
 | [LICENSE](LICENSE) | MIT 许可证 |
 | [README.md](README.md) | 本文件 |
@@ -27,10 +26,6 @@
 | [git-workflow-template.md](templates/git-workflow-template.md) | Git 工作流模板（与协作模板配套使用）：提交规范、命令级操作、回退 |
 | [collaborative-workflow-template.md](templates/collaborative-workflow-template.md) | 多人 / 多 Agent 协作模板：角色 × 权限矩阵（开发 / 审核 / 测试职责分离）、标准流程编排（需求→开发→测试→审核→发布）、分支所有权、PR/Review、冲突协调 |
 | [docs-communication.md](templates/docs-communication.md) | 通用设计指南：让 Git 工作流与项目文档结合，改善人 × Agent 通信（含占位符式落地步骤） |
-
-### examples/keygateway/
-
-KeyGateway（Rust AI API 网关）中完整落地的版本，作为「模板在真实项目里长什么样」的参考：`AGENTS.md`、`git-workflow.md`、`collaborative-workflow.md`、`docs-communication-example.md`。
 
 ## 快速开始（新项目使用）
 
@@ -68,8 +63,7 @@ cp templates/git-workflow-template.md templates/collaborative-workflow-template.
 
 > 注意：方式一执行前，脚本会跳过已存在的 `AGENTS.md` 并提示手动合并（保留更具体、更严格的一条）。
 
-注意：`docs-communication.md` 第 5、6 节为需适配部分，用 `{{...}}` 表示各类文档路径，新项目请按实际目录结构填写，并建立自己的「变更 ↔ 文档」映射矩阵；其余章节可原样保留。真实示例见 [examples/keygateway/docs-communication-example.md](examples/keygateway/docs-communication-example.md)。
-
+注意：`docs-communication.md` 第 5、6 节为需适配部分，用 `{{...}}` 表示各类文档路径，新项目请按实际目录结构填写，并建立自己的「变更 ↔ 文档」映射矩阵；其余章节可原样保留。
 ## 维护方式
 
 - 模板保持**语言无关**：项目特有的命令、路径只能进 `examples/`，不能进 `templates/`；
