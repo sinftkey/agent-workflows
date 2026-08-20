@@ -24,7 +24,8 @@ curl -sL https://raw.githubusercontent.com/sinftkey/agent-workflows/main/scripts
 1. 克隆模板仓库（`--depth 1`）到临时目录，用完即删；
 2. `templates/*` 复制到 `{{新项目}}/docs/development/`，并移除其中的 `AGENTS.template.md`（它只落位根目录一份，见第 2 节）；
 3. `AGENTS.template.md` 复制到项目根目录并改名 `AGENTS.md`（已存在则跳过并警告，需手动合并）；
-4. 输出复制后所有残留 `{{...}}` 适配占位符清单（`<...>` 是命令语法或每次填写的内容，不在清单内）。
+4. `.gitattributes`、`.gitignore` 复制到项目根目录（已存在则跳过并警告，需手动合并）；
+5. 输出复制后所有残留 `{{...}}` 适配占位符清单（`<...>` 是命令语法或每次填写的内容，不在清单内）。
 
 ## 1. 手动获取模板（备用，脚本失败时用）
 
@@ -47,6 +48,7 @@ https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/docs-c
 |------|------|
 | `templates/*`（除 `AGENTS.template.md` 外的 3 个文件） | `{{新项目}}/docs/development/` |
 | `templates/AGENTS.template.md` | `{{新项目}}/AGENTS.md`（改名，仅此一份，不落入 `docs/development/`） |
+| `.gitattributes`、`.gitignore` | `{{新项目}}/`（已存在则跳过并手动合并） |
 
 ## 3. 适配（Agent 判断性工作，必须完成）
 

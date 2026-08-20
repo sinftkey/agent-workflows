@@ -1,4 +1,6 @@
 # 统一行尾：入库使用 LF，检出按平台处理
 * text=auto
 *.md text
+*.sh text eol=lf
+*.ps1 text eol=lf
 *.gitattributes text

@@ -41,7 +41,7 @@ irm https://raw.githubusercontent.com/sinftkey/agent-workflows/main/scripts/adap
 curl -sL https://raw.githubusercontent.com/sinftkey/agent-workflows/main/scripts/adapt.sh | bash -s
 ```
 
-脚本机械步骤（下载模板、复制到 `docs/development/`、生成 `AGENTS.md`、输出待替换 `{{...}}` 适配占位符清单）见 [scripts/](scripts/)。参数可用环境变量覆盖：`ADAPT_REPO`（模板仓库地址）、`ADAPT_SOURCE`（本地模板目录，跳过克隆）、`ADAPT_TARGET`（落位目标目录，默认当前目录）；直接执行脚本时也可用 `-Source` / `-Target` 参数。
+脚本机械步骤（下载模板、复制到 `docs/development/`、生成 `AGENTS.md`、复制 `.gitattributes` / `.gitignore`、输出待替换 `{{...}}` 适配占位符清单）见 [scripts/](scripts/)。参数可用环境变量覆盖：`ADAPT_REPO`（模板仓库地址）、`ADAPT_SOURCE`（本地模板目录，跳过克隆）、`ADAPT_TARGET`（落位目标目录，默认当前目录）；直接执行脚本时也可用 `-Source` / `-Target` 参数。
 
 ### 方式二：手动复制
 
@@ -56,12 +56,13 @@ cp templates/git-workflow-template.md templates/collaborative-workflow-template.
 ```
 
 2. **移动** `AGENTS.template.md` 到新项目根目录并改名为 `AGENTS.md`（仅此一份，不留在 `docs/development/` 中，避免双份漂移）；
-3. 按 AGENTS 模板第 0 节替换 `{{...}}` 适配占位符（项目名、技术栈、命令、身份等；`<...>` 为命令语法或每次填写的内容，保留不动）；
-4. 把「提交前检查」的命令换成项目实际命令（模板自带 Rust / Node / Python / Go 等对照表）；
-5. 同时保留 `collaborative-workflow-template.md` 与 `docs-communication.md`（整套模板面向多人 / 多 Agent 协作设计，不面向单人场景；单人无 Agent 的裁剪见 [AGENT-ADAPT-GUIDE.md](AGENT-ADAPT-GUIDE.md) 第 3.5 节裁剪矩阵）；
-6. 在 `AGENTS.md` 中链接这些文档，并让第一个 PR 落实「文档同步」字段。
+3. 复制 `.gitattributes`、`.gitignore` 到新项目根目录（已存在则跳过，手动合并）；
+4. 按 AGENTS 模板第 0 节替换 `{{...}}` 适配占位符（项目名、技术栈、命令、身份等；`<...>` 为命令语法或每次填写的内容，保留不动）；
+5. 把「提交前检查」的命令换成项目实际命令（模板自带 Rust / Node / Python / Go 等对照表）；
+6. 同时保留 `collaborative-workflow-template.md` 与 `docs-communication.md`（整套模板面向多人 / 多 Agent 协作设计，不面向单人场景；单人无 Agent 的裁剪见 [AGENT-ADAPT-GUIDE.md](AGENT-ADAPT-GUIDE.md) 第 3.5 节裁剪矩阵）；
+7. 在 `AGENTS.md` 中链接这些文档，并让第一个 PR 落实「文档同步」字段。
 
-> 注意：方式一执行前，脚本会跳过已存在的 `AGENTS.md` 并提示手动合并（保留更具体、更严格的一条）。
+> 注意：方式一执行前，脚本会跳过已存在的 `AGENTS.md`、`.gitattributes`、`.gitignore` 并提示手动合并（保留更具体、更严格的一条）。
 
 注意：`docs-communication.md` 第 5、6 节为需适配部分，用 `{{...}}` 表示各类文档路径，新项目请按实际目录结构填写，并建立自己的「变更 ↔ 文档」映射矩阵；其余章节可原样保留。
 ## 维护方式

@@ -46,6 +46,17 @@ if (Test-Path -LiteralPath $agentsDest) {
     Copy-Item -Path (Join-Path $Source "templates\AGENTS.template.md") -Destination $agentsDest
 }
 
+foreach ($dotFile in @(".gitattributes", ".gitignore")) {
+    $dotSrc = Join-Path $Source $dotFile
+    $dotDest = Join-Path $Target $dotFile
+    if (-not (Test-Path -LiteralPath $dotSrc)) { continue }
+    if (Test-Path -LiteralPath $dotDest) {
+        Write-Warning "$dotFile already exists in target; skipped. Merge manually if needed."
+    } else {
+        Copy-Item -LiteralPath $dotSrc -Destination $dotDest
+    }
+}
+
 if ($tmp) {
     Remove-Item -Recurse -Force $tmp
 }
@@ -54,6 +65,7 @@ Write-Host ""
 Write-Host "=== Placement done ==="
 Write-Host "templates/* (except AGENTS.template.md)  ->  $docsDir"
 Write-Host "AGENTS.template.md  ->  $agentsDest (single copy)"
+Write-Host ".gitattributes / .gitignore  ->  $Target (skip if already exists)"
 Write-Host ""
 Write-Host "=== Remaining {{...}} placeholders to replace (<...> are syntax placeholders, not listed) ==="
 $files = @(Get-ChildItem -Path $docsDir -Filter *.md) + @(Get-Item -LiteralPath $agentsDest)
