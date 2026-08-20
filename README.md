@@ -16,6 +16,7 @@
 | [AGENT-ADAPT-GUIDE.md](AGENT-ADAPT-GUIDE.md) | 给 AI Agent 的模板下载适配步骤（含单行命令） |
 | [examples/keygateway/](examples/keygateway/) | 真实项目的落地示例（Rust AI 网关） |
 | [AGENTS.md](AGENTS.md) | 本仓库自己的 Agent 准则 |
+| [LICENSE](LICENSE) | MIT 许可证 |
 | [README.md](README.md) | 本文件 |
 
 ### templates/
@@ -78,4 +79,4 @@ cp templates/git-workflow-template.md templates/collaborative-workflow-template.
 
 ## License
 
-暂未选择开源许可证；对外公开或复用前，请先与作者确认。
+[MIT](LICENSE)（Copyright © 2026 sinftkey），复制、修改、商用均免费，保留版权声明即可。
