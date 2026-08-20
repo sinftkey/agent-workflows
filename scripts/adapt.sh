@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO="${REPO:-https://github.com/<owner>/agent-workflows.git}"
+REPO="${REPO:-https://github.com/sinftkey/agent-workflows.git}"
 SOURCE="${1:-}"
 TARGET="${TARGET:-.}"
 
@@ -21,6 +21,7 @@ fi
 DOCS_DIR="$TARGET/docs/development"
 mkdir -p "$DOCS_DIR"
 cp -r "$SOURCE/templates/." "$DOCS_DIR/"
+rm -f "$DOCS_DIR/AGENTS.template.md"
 
 AGENTS_DEST="$TARGET/AGENTS.md"
 if [ -f "$AGENTS_DEST" ]; then
@@ -35,14 +36,14 @@ fi
 
 echo ""
 echo "=== 落位完成 ==="
-echo "templates/*  ->  $DOCS_DIR"
-echo "AGENTS.template.md  ->  $AGENTS_DEST"
+echo "templates/*（除 AGENTS.template.md）  ->  $DOCS_DIR"
+echo "AGENTS.template.md  ->  $AGENTS_DEST（仅此一份）"
 echo ""
-echo "=== 残留占位符清单（请逐一替换）==="
-grep -rno '<[^<>]\+>' "$DOCS_DIR" "$AGENTS_DEST" 2>/dev/null | sort -u || echo "（无残留占位符）"
+echo "=== 残留 {{...}} 适配占位符清单（请逐一替换；<...> 为语法占位符，不在清单内）==="
+grep -rno '{{[^{}]\+}}' "$DOCS_DIR" "$AGENTS_DEST" 2>/dev/null | sort -u || echo "（无残留适配占位符）"
 
 echo ""
 echo "机械步骤已完成。请继续按 AGENT-ADAPT-GUIDE.md 第 3~5 节执行："
-echo "  3. 适配：替换占位符、换实际命令、修正链接、删除不适用章节"
-echo "  4. 校验：占位符无残留、链接有效、无密钥"
-echo "  5. 提交：分支前缀 <角色>/，Conventional Commits"
+echo "  3. 适配：替换 {{...}} 占位符、换实际命令、修正链接、删除不适用章节"
+echo "  4. 校验：{{...}} 无残留、链接有效、无密钥"
+echo "  5. 提交：分支前缀 {{身份}}/，Conventional Commits"
