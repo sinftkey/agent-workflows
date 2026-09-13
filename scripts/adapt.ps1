@@ -1,8 +1,13 @@
 # No param() block: Invoke-Expression (irm | iex) does not allow param.
 # Pass values via environment variables (ADAPT_REPO / ADAPT_SOURCE / ADAPT_TARGET)
 # or via $args named params. Priority: env > args > defaults.
+#
+# Output language note: this script (PowerShell) prints English, adapt.sh prints
+# Chinese. Reason: under irm | iex, UTF-8 Chinese output is unreliable on some
+# Windows terminals, so English is used here. Keep the two scripts' text in sync.
 
 $Repo = "https://github.com/sinftkey/agent-workflows.git"
+$DefaultBranch = "main"
 $Source = ""
 $Target = "."
 
@@ -21,11 +26,20 @@ if ($env:ADAPT_TARGET) { $Target = $env:ADAPT_TARGET }
 
 $ErrorActionPreference = "Stop"
 
+# Derive raw file base URL so skipped files still have a comparison source
+$rawBase = ""
+$m = [regex]::Match($Repo, '^https://github\.com/([^/]+)/([^/]+?)(\.git)?/?$')
+if ($m.Success) { $rawBase = "https://raw.githubusercontent.com/$($m.Groups[1].Value)/$($m.Groups[2].Value)/$DefaultBranch" }
+function CompareHint($relPath) {
+    if ($rawBase) { Write-Warning "Template source for comparison: $rawBase/$relPath" }
+    elseif ($Source) { Write-Warning "Template source for comparison: $(Join-Path $Source $relPath)" }
+}
+
 $tmp = ""
 if (-not $Source) {
     $tmp = Join-Path $env:TEMP ("agent-workflows-" + [guid]::NewGuid().ToString("N"))
     Write-Host "Cloning template repo to $tmp ..."
-    git clone --depth 1 $Repo $tmp
+    git clone --depth 1 -b $DefaultBranch $Repo $tmp
     if (-not $?) { throw "git clone failed" }
     $Source = $tmp
 }
@@ -36,14 +50,15 @@ if (-not (Test-Path -LiteralPath (Join-Path $Source "templates"))) {
 
 $docsDir = Join-Path $Target "docs/development"
 New-Item -ItemType Directory -Force -Path $docsDir | Out-Null
-Copy-Item -Path (Join-Path $Source "templates\*") -Destination $docsDir -Recurse -Force
-Remove-Item -LiteralPath (Join-Path $docsDir "AGENTS.template.md") -Force -ErrorAction SilentlyContinue
+Copy-Item -Path (Join-Path (Join-Path $Source "templates") "*") -Destination $docsDir -Recurse -Force
+Remove-Item -LiteralPath (Join-Path $docsDir "AGENTS.md") -Force -ErrorAction SilentlyContinue
 
 $agentsDest = Join-Path $Target "AGENTS.md"
 if (Test-Path -LiteralPath $agentsDest) {
     Write-Warning "AGENTS.md already exists; skipped overwrite. Merge manually (keep the more specific/stricter one)."
+    CompareHint "templates/AGENTS.md"
 } else {
-    Copy-Item -Path (Join-Path $Source "templates\AGENTS.template.md") -Destination $agentsDest
+    Copy-Item -Path (Join-Path $Source "templates/AGENTS.md") -Destination $agentsDest
 }
 
 foreach ($dotFile in @(".gitattributes", ".gitignore")) {
@@ -52,6 +67,7 @@ foreach ($dotFile in @(".gitattributes", ".gitignore")) {
     if (-not (Test-Path -LiteralPath $dotSrc)) { continue }
     if (Test-Path -LiteralPath $dotDest) {
         Write-Warning "$dotFile already exists in target; skipped. Merge manually if needed."
+        CompareHint $dotFile
     } else {
         Copy-Item -LiteralPath $dotSrc -Destination $dotDest
     }
@@ -63,8 +79,8 @@ if ($tmp) {
 
 Write-Host ""
 Write-Host "=== Placement done ==="
-Write-Host "templates/* (except AGENTS.template.md)  ->  $docsDir"
-Write-Host "AGENTS.template.md  ->  $agentsDest (single copy)"
+Write-Host "templates/* (except templates/AGENTS.md)  ->  $docsDir"
+Write-Host "templates/AGENTS.md  ->  $agentsDest (single copy)"
 Write-Host ".gitattributes / .gitignore  ->  $Target (skip if already exists)"
 Write-Host ""
 Write-Host "=== Remaining {{...}} placeholders to replace (<...> are syntax placeholders, not listed) ==="
@@ -84,6 +100,6 @@ if ($placeholderLines) {
 
 Write-Host ""
 Write-Host "Mechanical steps done. Continue with AGENT-ADAPT-GUIDE.md sections 3-5:"
-Write-Host "  3. Adapt: replace {{...}} placeholders, swap real commands, fix links, drop inapplicable sections"
+Write-Host "  3. Adapt: replace {{...}} placeholders, swap real commands, fix links, drop inapplicable sections, extract PR template"
 Write-Host "  4. Verify: no {{...}} left, links valid, no secrets"
 Write-Host "  5. Commit: branch prefix {{identity}}/, Conventional Commits"

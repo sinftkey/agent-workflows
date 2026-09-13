@@ -19,11 +19,13 @@ irm https://raw.githubusercontent.com/sinftkey/agent-workflows/main/scripts/adap
 curl -sL https://raw.githubusercontent.com/sinftkey/agent-workflows/main/scripts/adapt.sh | bash -s
 ```
 
+需要指定本地模板目录、落位目标或换仓库源时，可用环境变量 `ADAPT_SOURCE` / `ADAPT_TARGET` / `ADAPT_REPO`，或用参数 `-Source` / `-Target` / `-Repo`；优先级：环境变量 > 参数 > 默认值。两个脚本接口一致。
+
 脚本自动完成：
 
 1. 克隆模板仓库（`--depth 1`）到临时目录，用完即删；
-2. `templates/*` 复制到 `{{新项目}}/docs/development/`，并移除其中的 `AGENTS.template.md`（它只落位根目录一份，见第 2 节）；
-3. `AGENTS.template.md` 复制到项目根目录并改名 `AGENTS.md`（已存在则跳过并警告，需手动合并）；
+2. `templates/*` 复制到 `{{新项目}}/docs/development/`，并移除其中的 `AGENTS.md`（它只落位根目录一份，见第 2 节）；
+3. `templates/AGENTS.md` 复制到项目根目录，文件名不变（已存在则跳过并警告，需手动合并）；
 4. `.gitattributes`、`.gitignore` 复制到项目根目录（已存在则跳过并警告，需手动合并）；
 5. 输出复制后所有残留 `{{...}}` 适配占位符清单（`<...>` 是命令语法或每次填写的内容，不在清单内）。
 
@@ -36,9 +38,9 @@ git clone --depth 1 https://github.com/sinftkey/agent-workflows.git {{临时目�
 或逐文件下载：
 
 ```
-https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/AGENTS.template.md
-https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/git-workflow-template.md
-https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/collaborative-workflow-template.md
+https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/AGENTS.md
+https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/git-workflow.md
+https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/collaborative-workflow.md
 https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/docs-communication.md
 ```
 
@@ -46,8 +48,8 @@ https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/docs-c
 
 | 来源 | 目标 |
 |------|------|
-| `templates/*`（除 `AGENTS.template.md` 外的 3 个文件） | `{{新项目}}/docs/development/` |
-| `templates/AGENTS.template.md` | `{{新项目}}/AGENTS.md`（改名，仅此一份，不落入 `docs/development/`） |
+| `templates/*`（除 `AGENTS.md` 外的 3 个文件） | `{{新项目}}/docs/development/` |
+| `templates/AGENTS.md` | `{{新项目}}/AGENTS.md`（仅此一份，不落入 `docs/development/`） |
 | `.gitattributes`、`.gitignore` | `{{新项目}}/`（已存在则跳过并手动合并） |
 
 ## 3. 适配（Agent 判断性工作，必须完成）
@@ -55,7 +57,7 @@ https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/docs-c
 1. **确认角色**：本次任务是「开发」角色（把模板适配进新项目），按角色权限行事——本次允许修改/新建项目内文件并提交，但不得越权（如 approve、合并）。
 2. **替换全部 `{{...}}` 适配占位符**，完整清单按文件分组如下（以第 0 节脚本输出的清单为准，若脚本输出与下表不一致以脚本为准）：
 
-   **AGENTS.md（由 AGENTS.template.md 改名）**
+   **AGENTS.md（来自 templates/AGENTS.md）**
 
    | 占位符 | 替换为 |
    |--------|--------|
@@ -68,7 +70,7 @@ https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/docs-c
    | `{{说明}}` | 目录说明 |
    | `{{一句话描述项目}}`、`{{当前阶段 / 目标；如有路线图文档则附链接}}`、`{{关键依赖或外部服务}}`、`{{运行、部署或性能约束}}`、`{{命名 / 风格约定}}`、`{{错误处理约定}}`、`{{日志约定}}`、`{{敏感目录 / 文件清单，如 .env、密钥库}}`、`{{其他必须遵守的安全约束}}`、`{{业务关键流程，按项目实际填写，例如请求处理顺序、数据流、权限模型}}` | 按名称语义填写项目实际内容 |
 
-   **docs/development/git-workflow-template.md**
+   **docs/development/git-workflow.md**
 
    | 占位符 | 替换为 |
    |--------|--------|
@@ -79,13 +81,13 @@ https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/docs-c
    | `{{维护者}}` | 维护者身份 |
    | `{{Review 人数}}` | 如 `1` |
 
-   **docs/development/collaborative-workflow-template.md**
+   **docs/development/collaborative-workflow.md**
 
    | 占位符 | 替换为 |
    |--------|--------|
    | `{{默认分支}}`、`{{身份}}`、`{{CI 名称}}`、`{{维护者}}`、`{{Review 人数}}` | 同上 |
    | `{{Agent 账号}}` | Agent 使用的平台账号 |
-   | `{{任务系统}}` | 任务系统名（GitHub Issues 等） |
+   | `{{任务系统}}` | 任务系统名（GitHub Issues 等）；不用外部系统时可启用「任务中心」（仓库内 markdown，步骤见本节第 8 步） |
 
    **docs/development/docs-communication.md**（第 5、6 节为需适配部分，其余可原样保留）
 
@@ -95,24 +97,29 @@ https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/docs-c
 
    保留不动：`<...>`（命令语法或每次填写的内容，如 `<file>`、`<commit>`、`<type>`、`<主题>`、`<任务编号>`、`closes #<任务编号>`、PR 模板字段），不是适配项。
 
-3. **换实际命令**：按 `docs/development/git-workflow-template.md` 第 5.2 节把 `AGENTS.md` 第 3 节与模板中的命令换成项目真实命令（Rust / Node / Python / Go 等对照表）。
+3. **换实际命令**：按 `docs/development/git-workflow.md` 第 5.2 节把 `AGENTS.md` 第 3 节与模板中的命令换成项目真实命令（Rust / Node / Python / Go 等对照表）。
 4. **修正相对链接**：各模板之间、`AGENTS.md` 指向 `docs/development/` 的链接，按实际位置修正。
-5. **删除不适用章节**：与项目已有规则冲突时保留更具体、更严格的一条；场景裁剪按下表（一处维护，模板第 0 节与 README 均引用本表）：
+5. **删除不适用章节**：与项目已有规则冲突时保留更具体、更严格的一条；场景裁剪按下表（一处维护，README 引用本表）：
 
    | 场景 | AGENTS.md | git-workflow 模板 | 协作模板 | docs-communication |
    |------|-----------|-------------------|----------|--------------------|
    | 单人无 Agent | 保留全部 | 保留；删第 12 节「多 Agent 协作」 | 删第 11、12 节（Agent 行为规范、多 Agent 并行） | 保留（第 5、6 节适配） |
    | 多人无 Agent | 保留全部 | 保留 | 保留；删第 11、12 节 | 保留 |
    | 多人多 Agent | 保留全部 | 保留全部 | 保留全部 | 保留 |
+| 角色不足（如 2 人团队、无专职测试） | 保留全部 | 保留 | 保留；由维护者授权开发兼任测试并在任务登记中声明，或显式降级为「开发自验 + 审核对账」并写明证据等级下降 | 保留 |
 
 6. 角色权限矩阵（协作模板第 2 节）与标准流程编排（第 3 节）按项目实际角色调整，但保持「开发 / 审核 / 测试」职责分离的默认结构。
+7. **抽取 PR 模板**：把 git-workflow 模板第 7 节内容抽取为 `.github/PULL_REQUEST_TEMPLATE.md`（GitHub；其他平台放对应位置，如 GitLab 的 `.gitlab/merge_request_templates/`），让 PR 模板在真实 PR 中生效。
+8. **任务中心（可选）**：若不用外部任务系统（或作为 Agent 操作面），启用任务中心——把 `templates/task-center/` 复制为项目 `docs/tasks/`（含 `TASK-CENTER.md` 协议与 `scripts/task.sh` / `task.ps1`），按协议第 2 节创建 `task-center` 分支并初始化 worktree；`{{任务系统}}` 占位符填「任务中心」。
 
 ## 4. 校验（未通过不得提交）
 
 - [ ] 全文无残留 `{{...}}` 适配占位符（校验命令见下；`<...>` 语法占位符不在校验范围）
-  - bash：`grep -rno '{{[^{}]+}}' AGENTS.md docs/`（应无输出）
+  - bash：`grep -rnoE '{{[^{}]+}}' AGENTS.md docs/`（应无输出）
   - PowerShell：`Get-ChildItem AGENTS.md, docs -Recurse -Filter *.md | Select-String -Pattern '\{\{[^{}]+\}\}' -Encoding UTF8`（应无输出）
 - [ ] 所有 Markdown 链接有效（本地文件路径存在）
+- [ ] PR 模板已抽取落位（`.github/PULL_REQUEST_TEMPLATE.md` 或对应平台位置，见第 3 节步骤 7）
+- [ ] 任务中心已按 `TASK-CENTER.md` 初始化（如启用）：`task-center` 分支、`INDEX.md`、worktree 就绪，任务文件格式符合协议
 - [ ] 无密钥、凭据、`.env`、构建产物进入工作区
 - [ ] 权限矩阵、流程编排与模板原文结构一致，未擅自弱化约束
 - [ ] 文档内命令与项目实际命令一致
@@ -129,3 +136,4 @@ https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/docs-c
 - **git submodule**：`git submodule add https://github.com/sinftkey/agent-workflows.git docs/development/agent-workflows`
 - **git subtree**：`git subtree add --prefix docs/development/agent-workflows https://github.com/sinftkey/agent-workflows.git main --squash`
 - 或重跑第 0 节脚本到临时目录，用 `git diff` 对比本地上次落位的副本，手动吸收更新（文档与代码同步规则见 `docs/development/docs-communication.md`）
+- 跟进时建议 pin 到版本 tag 而不是跟随默认分支漂移（本仓库版本记录见 [CHANGELOG.md](CHANGELOG.md)）

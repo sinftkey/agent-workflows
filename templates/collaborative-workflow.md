@@ -10,13 +10,13 @@
 
 1. 替换所有占位符；
 2. 确定分支模型（默认 trunk-based，见第 4 节）；
-3. 决定是否启用 AI Agent：不启用就删除第 11、12 节（2.1 职责表中的「AI Agent」行一并删除或忽略；2.2 权限矩阵只有开发 / 审核 / 测试三列，不受影响）；
-4. 与 [git-workflow-template.md](git-workflow-template.md) 配套使用，分工如下；
+3. 决定是否启用 AI Agent：不启用就删除第 11、12 节（2.1 职责表中的「AI Agent」行一并删除或忽略；2.2 权限矩阵只有开发 / 审核 / 测试三列，不受影响）；完整的场景裁剪矩阵（单人 / 多人 × 有无 Agent × 角色是否齐全）见 [agent-workflows 适配指南](https://github.com/sinftkey/agent-workflows/blob/main/AGENT-ADAPT-GUIDE.md) 第 3 节，以矩阵为准；
+4. 与 [git-workflow.md](git-workflow.md) 配套使用，分工如下；
 5. 复制时相关的模板文件一起带走，并修正相对链接。
 
 | 场景 | 使用 |
 |------|------|
-| 提交信息、命令级操作、本地检查、回退命令；PR 模板与基础 Review 清单 | [git-workflow-template.md](git-workflow-template.md) 第 4、5、7、8、10 节 |
+| 提交信息、命令级操作、本地检查、回退命令；PR 模板与基础 Review 清单 | [git-workflow.md](git-workflow.md) 第 4、5、7、8、10 节 |
 | 角色权限矩阵、标准流程编排、任务认领、多人 / 多 Agent 并行、冲突协调、发布节奏 | 本模板 |
 | 文档如何与代码同步（通信设计） | [docs-communication.md](docs-communication.md) |
 
@@ -26,7 +26,7 @@
 2. 所有变更走分支 + PR，任何人都不直接推送默认分支；
 3. 一个分支 = 一个任务 = 一个明确 owner；
 4. 机器检查（CI）前置，人类审批兜底；
-5. 有 AI Agent 参与时：Agent 按角色行事，**不得自审自批**，合并与发布必须由维护者执行；
+5. 有 AI Agent 参与时：Agent 按角色行事，**不得自审自批**、**不得担任维护者**（维护者必须由人类担任），合并与发布必须由维护者执行；
 6. 角色权限分离：开发写代码、审核提意见、测试产用例，**正式测试用例的唯一来源是测试角色**；
 7. 冲突不可怕，可怕的是单方面覆盖他人意图。
 
@@ -61,6 +61,7 @@
 平台侧建议：
 
 - `{{默认分支}}` 开启分支保护：禁止直接推送、CI 必须通过、至少 `{{Review 人数}}` 个 approve；
+- 启用任务中心时：`task-center` 分支禁止 force push，参与者按 `TASK-CENTER.md` 协议推送（见 §5.1）；
 - `{{Agent 账号}}` 不授予默认分支直接推送权限；
 - 合并与打 tag 仅授予维护者。
 
@@ -77,7 +78,7 @@
 
 - 适用：接口、算法、缺陷修复等验收标准可先写为测试的任务；
 - 落地方式（**默认**）：**同一分支**由测试角色先提交用例（带 `#[ignore]` / `skip` / `xfail` 标记，保证 CI 绿），开发在分支上提交实现后**单独提交移除标记**，合并时整体绿；
-- 备选：测试角色的用例 PR **独立先行合并**——用例合并时同样须带 skip 标记，实现完成后单独提交移除标记（独立合并时用例是红灯，会短暂打破「{{默认分支}} 永远可构建」红线，仅在 CI 允许 skip 用例时使用）。
+- 备选：测试角色的用例 PR **独立先行合并**——用例合并时带 skip 标记（CI 保持绿），实现完成后单独提交移除标记，用例由跳过转为生效；仅在 CI 允许 skip 用例时使用。
 
 ### 3.2 开发先行
 
@@ -112,18 +113,20 @@
 
 ### 4.1 分支模型
 
-默认 trunk-based；分支模型（长期分支、功能分支、`release/`、`hotfix/`）见 [git-workflow-template.md](git-workflow-template.md) 第 3.1 节。
+默认 trunk-based；分支模型（长期分支、功能分支、`release/`、`hotfix/`）见 [git-workflow.md](git-workflow.md) 第 3.1 节。
 
 ### 4.2 分支命名（多人场景约定）
 
-基础格式见 [git-workflow-template.md](git-workflow-template.md) 第 3.3 节；多人 / 多 Agent 场景在基础格式上统一带任务编号（owner 在任务登记中标注，见第 5 节，不重复写进分支名）：
+基础格式见 [git-workflow.md](git-workflow.md) 第 3.3 节；多人 / 多 Agent 场景推荐在基础格式上带任务编号，PR、commit、issue 之间可互相追溯：
 
 ```text
 {{身份}}/<任务编号>-<type>-<主题>        # 例：zcode/42-feat-rate-limit
 {{身份}}/<type>/<主题>                  # 例：alice/feat/rate-limit
 ```
 
-推荐带任务编号：PR、commit、issue 之间可互相追溯。`{{身份}}` = Agent 工具名或人员名，任选其一。**同一分支同一时间只允许一个写入者**。
+任务编号取自任务登记（见第 5 节）；owner 在任务登记中标注，不重复写进分支名。`{{身份}}` = 分支 owner 的身份（Agent 工具名或人员名，任选其一），通常为任务 owner。**同一分支同一时间只允许一个写入者**。
+
+**多写入者分支**（如 3.1 测试先行的同一分支，测试与开发先后写入）：分支以任务 owner（通常为开发）的 `{{身份}}` 命名，其余角色的提交视为受让写入权，写入顺序按第 3 节约定；也可用中性前缀 `task/<任务编号>-<主题>` 明确表示多写入者分支。
 
 ## 5. 任务认领与分支所有权
 
@@ -134,6 +137,15 @@ git 没有「锁」，多 Agent 并行靠纪律：
 3. 开工前检查：目标文件近期是否有人改过（`git log -- <path>`、查看进行中的 PR 列表），避免撞车；
 4. 需要多人改同一批文件时：拆子任务串行合并，或明确先后顺序，**不并行修改同一文件**；
 5. 发现分支上有他人新提交：先沟通，再决定继续、合流或换分支，不直接覆盖。
+
+### 5.1 任务中心模式（无外部任务系统，或作为 Agent 操作面时）
+
+用仓库内的 markdown 任务中心（`docs/tasks/`，协议见该目录下 `TASK-CENTER.md`）承接任务登记：编号递增发号、一任务一文件，任务与进度在专用 `task-center` 分支上流转（不随任务分支、不进默认分支），参与者经 git worktree 读写，可用 `scripts/task.sh` / `task.ps1` 脚本操作。要点：
+
+- 「任务在 `{{任务系统}}` 登记、owner 必填」由任务中心 `INDEX.md` + 任务文件承接，任务编号即分支命名里的 `<任务编号>`；
+- 代码 PR 的「关联任务」字段引用任务编号，进度单一事实来源在任务中心，PR 中不复制进度内容；
+- 有外部任务系统时二选一或单向回链（完成后回链关闭 issue），不做双向同步；
+- 任务中心分支的推送权限与角色权限矩阵联动，详见 `TASK-CENTER.md` 第 2、3 节。
 
 ## 6. 日常协作循环
 
@@ -159,7 +171,7 @@ git switch -c {{身份}}/42-feat-rate-limit origin/{{默认分支}}
 git fetch origin
 git rebase origin/{{默认分支}}
 
-# 项目规定的完整检查（格式化 / 静态检查 / 测试 / 构建，见 git-workflow-template.md 第 5 节）
+# 项目规定的完整检查（格式化 / 静态检查 / 测试 / 构建，见 git-workflow.md 第 5 节）
 
 git push -u origin {{身份}}/42-feat-rate-limit
 ```
@@ -173,9 +185,10 @@ git push -u origin {{身份}}/42-feat-rate-limit
 
 ## 7. PR 模板
 
-PR 模板正文（关联任务、改动概述、验证结果、影响范围、文档同步、安全声明）由 [git-workflow-template.md](git-workflow-template.md) 第 7 节统一维护，本模板不重复。多人场景的要求：
+PR 模板正文（关联任务、改动概述、验证结果、影响范围、文档同步、安全声明）由 [git-workflow.md](git-workflow.md) 第 7 节统一维护，本模板不重复。多人场景的要求：
 
 - 「文档同步」字段必须给出明确结论（列出已更新文档路径，或声明无需更新并说明理由）；
+- PR 必须填写「角色」字段（开发 / 审核 / 测试），与分支声明、任务登记互相印证；
 - 测试角色的 PR：改动范围**只允许测试文件**，验证结果字段给出实际运行输出；
 - 开发的 PR：验证结果**只引用测试角色的用例与结果**，不引用开发自验测试；
 - PR 的 Review 与修改流程见第 6.3 节与 8.2 节。
@@ -184,7 +197,7 @@ PR 模板正文（关联任务、改动概述、验证结果、影响范围、�
 
 ### 8.1 基础检查清单
 
-通用基础清单（逻辑、测试、密钥、风格、文档同步、无关改动、错误处理等）由 [git-workflow-template.md](git-workflow-template.md) 第 8 节统一维护，本模板不重复。
+通用基础清单（逻辑、测试、密钥、风格、文档同步、无关改动、错误处理等）由 [git-workflow.md](git-workflow.md) 第 8 节统一维护，本模板不重复。
 
 ### 8.2 多人 / 多 Agent 补充
 
@@ -192,7 +205,7 @@ PR 模板正文（关联任务、改动概述、验证结果、影响范围、�
 
 - [ ] 改动文件与分支声明一致，未覆盖他人正在修改的模块
 - [ ] 作者逐条回复了 review 意见
-- [ ] 合并前有**人类**做了最终 review（维护者执行合并即视为人类终审；敏感模块还须满足 [git-workflow-template.md](git-workflow-template.md) 第 11 节「至少 1 个人类 approve」）
+- [ ] 合并前有**人类**做了最终 review（维护者执行合并即视为人类终审；敏感模块还须满足 [git-workflow.md](git-workflow.md) 第 11 节「至少 1 个人类 approve」）
 - [ ] 开发的 PR 中无自验测试残留；测试的 PR 中无生产代码改动
 - [ ] 验证结果可复现（引用的用例与命令明确）
 
@@ -209,11 +222,11 @@ PR 模板正文（关联任务、改动概述、验证结果、影响范围、�
 - 预防：小步提交、频繁同步 `{{默认分支}}`、文件级避让；
 - 处理：先理解对方提交意图 → 保留双方合理部分 → 涉及取舍先沟通 → 重新完整验证；
 - 同一区域频繁冲突时，停下调整任务拆分或模块边界，不硬顶；
-- 禁止命令（`git reset --hard`、`git checkout -- .`、`git clean -fdx`、`git push --force` 等）见 [git-workflow-template.md](git-workflow-template.md) 第 10 节，除非用户 / 维护者明确要求不得使用。
+- 禁止命令（`git reset --hard`、`git checkout -- .`、`git clean -fdx`、`git push --force` 等）见 [git-workflow.md](git-workflow.md) 第 10 节，除非用户 / 维护者明确要求不得使用。
 
 ## 10. 合并与发布
 
-合并策略（默认 squash、历史线性、合并后删分支等）由 [git-workflow-template.md](git-workflow-template.md) 第 9 节统一维护，本模板不重复。本节只补充发布节奏：
+合并策略（默认 squash、历史线性、合并后删分支等）由 [git-workflow.md](git-workflow.md) 第 9 节统一维护，本模板不重复。本节只补充发布节奏：
 
 - 发布 = 打 tag `vX.Y.Z` + release notes；破坏性变更升级 major；
 - hotfix：从 `{{默认分支}}`/tag 创建 → 修复验证 → **审核 approve** → 合并打新 tag → cherry-pick 回功能分支；
@@ -241,13 +254,13 @@ PR 模板正文（关联任务、改动概述、验证结果、影响范围、�
 
 ## 13. 检查清单
 
-本节的「push 前 / 合并前」清单只列**协作特有**条目；通用条目（格式化、静态检查、测试、构建、无密钥、无无关改动、diff 检查等）由 [git-workflow-template.md](git-workflow-template.md) 第 5、8 节统一维护，不在此重复。
+本节的「push 前 / 合并前」清单只列**协作特有**条目；通用条目（格式化、静态检查、测试、构建、无密钥、无无关改动、diff 检查等）由 [git-workflow.md](git-workflow.md) 第 5、8 节统一维护，不在此重复。
 
 ### push 前
 
 - [ ] 分支名符合约定，只有我在写入
 - [ ] 已 fetch 并基于最新 `{{默认分支}}`
-- [ ] 通用提交前检查通过（见 [git-workflow-template.md](git-workflow-template.md) 第 5 节）
+- [ ] 通用提交前检查通过（见 [git-workflow.md](git-workflow.md) 第 5 节）
 - [ ] 提交内容符合自身角色（开发：生产代码 + 文档；测试：仅测试文件；审核：不提交）
 - [ ] 无自验测试残留（开发的自验测试、审核的临时验证均不提交）
 
@@ -257,5 +270,5 @@ PR 模板正文（关联任务、改动概述、验证结果、影响范围、�
 - [ ] `{{CI 名称}}` 通过
 - [ ] 审核 approve（至少 `{{Review 人数}}` 个，可由审核 Agent 给出）
 - [ ] 验证结果引用测试角色的用例与结果
-- [ ] 敏感模块满足「至少 1 个人类 approve」（见 [git-workflow-template.md](git-workflow-template.md) 第 11 节）
-- [ ] 合并策略符合约定（默认 squash，见 [git-workflow-template.md](git-workflow-template.md) 第 9 节）
+- [ ] 敏感模块满足「至少 1 个人类 approve」（见 [git-workflow.md](git-workflow.md) 第 11 节）
+- [ ] 合并策略符合约定（默认 squash，见 [git-workflow.md](git-workflow.md) 第 9 节）

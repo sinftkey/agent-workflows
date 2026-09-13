@@ -13,8 +13,11 @@
 |------|------|
 | [templates/](templates/) | 可直接复制到新项目的通用模板（语言无关） |
 | [scripts/](scripts/) | Agent 适配脚本（adapt.ps1 / adapt.sh，下载并落位模板） |
+| [.gitattributes](.gitattributes) | 文本属性 / 行尾规则，随模板一起复制到新项目 |
+| [.gitignore](.gitignore) | 通用忽略规则，随模板一起复制到新项目 |
 | [AGENT-ADAPT-GUIDE.md](AGENT-ADAPT-GUIDE.md) | 给 AI Agent 的模板下载适配步骤（含单行命令） |
 | [AGENTS.md](AGENTS.md) | 本仓库自己的 Agent 准则 |
+| [CHANGELOG.md](CHANGELOG.md) | 版本变更记录（模板发版打 tag 的基线） |
 | [LICENSE](LICENSE) | MIT 许可证 |
 | [README.md](README.md) | 本文件 |
 
@@ -22,10 +25,11 @@
 
 | 文件 | 作用 |
 |------|------|
-| [AGENTS.template.md](templates/AGENTS.template.md) | 新项目的 `AGENTS.md` 模板：项目规则、命令、安全红线、Git 流程入口 |
-| [git-workflow-template.md](templates/git-workflow-template.md) | Git 工作流模板（与协作模板配套使用）：提交规范、命令级操作、回退 |
-| [collaborative-workflow-template.md](templates/collaborative-workflow-template.md) | 多人 / 多 Agent 协作模板：角色 × 权限矩阵（开发 / 审核 / 测试职责分离）、标准流程编排（需求→开发→测试→审核→发布）、分支所有权、PR/Review、冲突协调 |
+| [AGENTS.md](templates/AGENTS.md) | 新项目的 `AGENTS.md` 模板：项目规则、命令、安全红线、Git 流程入口 |
+| [git-workflow.md](templates/git-workflow.md) | Git 工作流模板（与协作模板配套使用）：提交规范、命令级操作、回退 |
+| [collaborative-workflow.md](templates/collaborative-workflow.md) | 多人 / 多 Agent 协作模板：角色 × 权限矩阵（开发 / 审核 / 测试职责分离）、标准流程编排（需求→开发→测试→审核→发布）、分支所有权、PR/Review、冲突协调 |
 | [docs-communication.md](templates/docs-communication.md) | 通用设计指南：让 Git 工作流与项目文档结合，改善人 × Agent 通信（含占位符式落地步骤） |
+| [task-center/](templates/task-center/) | 任务中心（可选）：以 markdown 文档作为任务中枢，在多 Agent 协作中传递任务与进度（含 task.sh / task.ps1 脚本；任务流转于专用孤儿分支 `task-center`，不携带代码历史） |
 
 ## 快速开始（新项目使用）
 
@@ -41,25 +45,27 @@ irm https://raw.githubusercontent.com/sinftkey/agent-workflows/main/scripts/adap
 curl -sL https://raw.githubusercontent.com/sinftkey/agent-workflows/main/scripts/adapt.sh | bash -s
 ```
 
-脚本机械步骤（下载模板、复制到 `docs/development/`、生成 `AGENTS.md`、复制 `.gitattributes` / `.gitignore`、输出待替换 `{{...}}` 适配占位符清单）见 [scripts/](scripts/)。参数可用环境变量覆盖：`ADAPT_REPO`（模板仓库地址）、`ADAPT_SOURCE`（本地模板目录，跳过克隆）、`ADAPT_TARGET`（落位目标目录，默认当前目录）；直接执行脚本时也可用 `-Source` / `-Target` 参数。
+脚本机械步骤（下载模板、复制到 `docs/development/`、生成 `AGENTS.md`、复制 `.gitattributes` / `.gitignore`、输出待替换 `{{...}}` 适配占位符清单）见 [scripts/](scripts/)。参数接口两个脚本一致：环境变量 `ADAPT_REPO`（模板仓库地址）、`ADAPT_SOURCE`（本地模板目录，跳过克隆）、`ADAPT_TARGET`（落位目标目录，默认当前目录），优先级环境变量 > 命令行参数；直接执行脚本时也可用 `-Repo` / `-Source` / `-Target` 参数。
 
 ### 方式二：手动复制
 
-1. 复制模板（`AGENTS.template.md` 除外，见第 2 步）：
+1. 复制模板（`templates/AGENTS.md` 除外，见第 2 步）：
 
 ```powershell
-Copy-Item -Recurse templates/git-workflow-template.md,templates/collaborative-workflow-template.md,templates/docs-communication.md <新项目>/docs/development/
+New-Item -ItemType Directory -Force <新项目>/docs/development/
+Copy-Item templates/git-workflow.md,templates/collaborative-workflow.md,templates/docs-communication.md <新项目>/docs/development/
 ```
 
 ```bash
-cp templates/git-workflow-template.md templates/collaborative-workflow-template.md templates/docs-communication.md <新项目>/docs/development/
+mkdir -p <新项目>/docs/development
+cp templates/git-workflow.md templates/collaborative-workflow.md templates/docs-communication.md <新项目>/docs/development/
 ```
 
-2. **移动** `AGENTS.template.md` 到新项目根目录并改名为 `AGENTS.md`（仅此一份，不留在 `docs/development/` 中，避免双份漂移）；
+2. **移动** `templates/AGENTS.md` 到新项目根目录（文件名不变，仅此一份，不留在 `docs/development/` 中，避免双份漂移）；
 3. 复制 `.gitattributes`、`.gitignore` 到新项目根目录（已存在则跳过，手动合并）；
 4. 按 AGENTS 模板第 0 节替换 `{{...}}` 适配占位符（项目名、技术栈、命令、身份等；`<...>` 为命令语法或每次填写的内容，保留不动）；
 5. 把「提交前检查」的命令换成项目实际命令（模板自带 Rust / Node / Python / Go 等对照表）；
-6. 同时保留 `collaborative-workflow-template.md` 与 `docs-communication.md`（整套模板面向多人 / 多 Agent 协作设计，不面向单人场景；单人无 Agent 的裁剪见 [AGENT-ADAPT-GUIDE.md](AGENT-ADAPT-GUIDE.md) 第 3.5 节裁剪矩阵）；
+6. 同时保留 `collaborative-workflow.md` 与 `docs-communication.md`（整套模板面向多人 / 多 Agent 协作设计，不面向单人场景；单人无 Agent 的裁剪见 [AGENT-ADAPT-GUIDE.md](AGENT-ADAPT-GUIDE.md) 第 3 节步骤 5 的裁剪矩阵）；
 7. 在 `AGENTS.md` 中链接这些文档，并让第一个 PR 落实「文档同步」字段。
 
 > 注意：方式一执行前，脚本会跳过已存在的 `AGENTS.md`、`.gitattributes`、`.gitignore` 并提示手动合并（保留更具体、更严格的一条）。
@@ -67,10 +73,11 @@ cp templates/git-workflow-template.md templates/collaborative-workflow-template.
 注意：`docs-communication.md` 第 5、6 节为需适配部分，用 `{{...}}` 表示各类文档路径，新项目请按实际目录结构填写，并建立自己的「变更 ↔ 文档」映射矩阵；其余章节可原样保留。
 ## 维护方式
 
-- 模板保持**语言无关**：项目特有的命令、路径只能进 `examples/`，不能进 `templates/`；
+- 模板保持**语言无关**：项目特有的命令、路径不能进 `templates/`；如需示例先建 `examples/` 并在本文登记；
 - 修改模板走分支 + PR（遵循本仓库 [AGENTS.md](AGENTS.md)）；
 - 规则冲突时，以使用方项目自己的 `AGENTS.md` 与用户指令为准；
-- 模板后续更新跟进机制（submodule / subtree / 重跑适配脚本 diff）见 [AGENT-ADAPT-GUIDE.md](AGENT-ADAPT-GUIDE.md) 第 6 节。
+- 模板后续更新跟进机制（submodule / subtree / 重跑适配脚本 diff）见 [AGENT-ADAPT-GUIDE.md](AGENT-ADAPT-GUIDE.md) 第 6 节；
+- 版本化：模板仓库发版打 tag，变更记录见 [CHANGELOG.md](CHANGELOG.md)，跟进方建议 pin 到 tag。
 
 ## License
 

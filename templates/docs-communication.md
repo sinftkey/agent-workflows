@@ -49,7 +49,7 @@ Git 天然只能回答三个问题：**改了什么、谁改的、什么时候�
 - 文档怎么同步（列出更新的文档路径，或明确声明「无需文档变更」并说明理由）；
 - 验证证据（检查命令 + CI 结果）。
 
-PR 模板里放一个「文档同步」字段（模板见 [git-workflow-template.md](git-workflow-template.md) 第 7 节，多人场景补充见 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 7 节）。行为、接口、配置变更如果没带文档变更，review 不通过就不合并。
+PR 模板里放一个「文档同步」字段（模板见 [git-workflow.md](git-workflow.md) 第 7 节，多人场景补充见 [collaborative-workflow.md](collaborative-workflow.md) 第 7 节）。行为、接口、配置变更如果没带文档变更，review 不通过就不合并。
 
 ### 4.2 文档先行（doc-first）
 
@@ -133,8 +133,8 @@ Review 清单中加入：
 先完成以下三步，让「文档随变更同步」成为约定：
 
 1. 在项目的 `{{AGENTS.md}}` 中链接整套文档集；
-2. 在 PR 模板中加入「文档同步」字段（见 [git-workflow-template.md](git-workflow-template.md) 第 7 节）；
-3. 在 Review 清单中加入文档一致性检查（见 [git-workflow-template.md](git-workflow-template.md) 第 8 节）。
+2. 在 PR 模板中加入「文档同步」字段（见 [git-workflow.md](git-workflow.md) 第 7 节）；
+3. 在 Review 清单中加入文档一致性检查（见 [git-workflow.md](git-workflow.md) 第 8 节）。
 
 ### 5.3 可选增强
 

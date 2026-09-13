@@ -1,6 +1,6 @@
 # Git 工作流模板（适用于任意项目类型）
 
-> 这是一份**模板**，不是某个仓库的既定规则。整套模板面向**多人 / 多 Agent 协作**设计，本模板与 [collaborative-workflow-template.md](collaborative-workflow-template.md) 配套使用，不单独覆盖单人场景。复制到新项目后，按「0. 使用说明」完成适配。落位方式二选一：用 `scripts/adapt.*` 自动落位到 `docs/development/`（推荐，本模板即在此目录），或作为 `CONTRIBUTING.md` / 团队 Wiki 的基底手动放置；新项目的 `AGENTS.md` 用 [AGENTS.template.md](AGENTS.template.md) 生成。
+> 这是一份**模板**，不是某个仓库的既定规则。整套模板面向**多人 / 多 Agent 协作**设计，本模板与 [collaborative-workflow.md](collaborative-workflow.md) 配套使用，不单独覆盖单人场景。复制到新项目后，按「0. 使用说明」完成适配。落位方式二选一：用 `scripts/adapt.*` 自动落位到 `docs/development/`（推荐，本模板即在此目录），或作为 `CONTRIBUTING.md` / 团队 Wiki 的基底手动放置；新项目的 `AGENTS.md` 复制自同目录的 [AGENTS.md](AGENTS.md)。
 
 ## 0. 使用说明
 
@@ -18,9 +18,9 @@
 
 | 模板 | 维护内容 |
 |------|----------|
-| [AGENTS.template.md](AGENTS.template.md) | 项目规则、常用命令、安全红线；作为新项目的 `AGENTS.md` |
+| [AGENTS.md](AGENTS.md) | 项目规则、常用命令、安全红线；作为新项目的 `AGENTS.md` |
 | 本模板 | 提交规范、命令级操作、本地检查、回退；PR 模板与基础 Review 清单 |
-| [collaborative-workflow-template.md](collaborative-workflow-template.md) | 角色权限、任务认领、多人 / 多 Agent 并行、冲突协调、发布节奏 |
+| [collaborative-workflow.md](collaborative-workflow.md) | 角色权限、任务认领、多人 / 多 Agent 并行、冲突协调、发布节奏 |
 | [docs-communication.md](docs-communication.md) | 文档如何与代码同步（通信设计） |
 
 ## 1. 核心原则（语言无关，可直接保留）
@@ -34,7 +34,7 @@
 
 ## 2. 角色与权限
 
-角色职责与权限矩阵（含分支保护建议）由 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 2 节统一维护，本模板不重复。要点：维护者负责合并决策与发布；有 AI Agent 参与时，Agent 按所扮演角色行事（开发 / 审核 / 测试），审核角色可 approve 但无提交权，**合并与发布必须由维护者执行**。
+角色职责与权限矩阵（含分支保护建议）由 [collaborative-workflow.md](collaborative-workflow.md) 第 2 节统一维护，本模板不重复。要点：维护者负责合并决策与发布；有 AI Agent 参与时，Agent 按所扮演角色行事（开发 / 审核 / 测试），审核角色可 approve 但无提交权，**合并与发布必须由维护者执行**。
 
 ## 3. 分支模型
 
@@ -62,7 +62,7 @@
 {{身份}}/<任务编号>-<type>-<主题>       # 例：zcode/42-fix-timeout
 ```
 
-`type` 与提交规范一致：`feat` / `fix` / `docs` / `refactor` / `test` / `chore`；`hotfix`、`release` 作为特殊前缀单独使用。`{{身份}}` = Agent 工具名或人员名，任选其一。多人 / 多 Agent 场景的任务编号与分支所有权约定见 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 4.2、5 节。
+`type` 与提交规范一致：`feat` / `fix` / `docs` / `refactor` / `test` / `chore`；`hotfix`、`release` 作为特殊前缀单独使用。`{{身份}}` = Agent 工具名或人员名，任选其一。多人 / 多 Agent 场景的任务编号与分支所有权约定见 [collaborative-workflow.md](collaborative-workflow.md) 第 4.2、5 节。
 
 ## 4. 提交规范（语言无关）
 
@@ -93,6 +93,8 @@ feat: 新增登录接口
 | `refactor` | 重构，行为不变 |
 | `test` | 测试新增/修改 |
 | `chore` | 构建、依赖、配置等杂项 |
+
+存在任务系统时，提交主题建议带任务编号：`<type>: <描述> (#<任务编号>)`，如 `fix: 修复超时 (#42)`，与 [docs-communication.md](docs-communication.md) 第 4.4 节一致。
 
 ## 5. 提交前检查
 
@@ -137,7 +139,10 @@ feat: 新增登录接口
 
 ```text
 ## 关联任务
-closes #<任务编号>
+closes #<任务编号>        # 使用任务中心（仓库内 markdown）时改为：#<任务编号>（进度见任务中心 docs/tasks/）
+
+## 角色
+<开发 / 审核 / 测试；多人 / 多 Agent 场景必填，用于核对改动范围与分支声明一致>
 
 ## 改动概述
 <一到三句话说明改了什么、为什么>
@@ -163,6 +168,8 @@ closes #<任务编号>
 <你最不确定的部分>
 ```
 
+> 适配项目时，把本节内容抽取为 `.github/PULL_REQUEST_TEMPLATE.md`（或所用平台对应的 PR 模板位置），见 agent-workflows 适配指南第 3 节步骤 7。
+
 ## 8. Review 检查清单（语言无关）
 
 - [ ] 逻辑正确，边界与异常路径已处理
@@ -173,7 +180,7 @@ closes #<任务编号>
 - [ ] 无夹带无关改动
 - [ ] 错误处理与日志合理
 
-> 多人 / 多 Agent 场景的 Review 补充检查与 approve 规则见 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 8 节。
+> 多人 / 多 Agent 场景的 Review 补充检查与 approve 规则见 [collaborative-workflow.md](collaborative-workflow.md) 第 8 节。
 
 ## 9. 合并策略
 
@@ -200,26 +207,23 @@ closes #<任务编号>
 - 提交前检查 `git status` 与 `.gitignore`，确认没有凭据或构建产物；
 - 误提交密钥：立即 `git rm --cached` → **轮换密钥**（视为已泄露）→ 更新 `.gitignore`；已推送时清理历史需维护者决策；
 - 大文件使用 LFS 或外部存储，不直接入库；
-- 涉及权限、加密、支付等敏感模块时，**至少 1 个人类 approve**（人类 = 人员，不含 Agent），并由 `{{维护者}}` 合并；Review 人数见第 8 节与协作模板第 8.2 节。
+- 涉及权限、加密、支付等敏感模块时，**至少 1 个人类 approve**（人类 = 人员，不含 Agent），并由 `{{维护者}}` 合并；Review 人数见第 13 节与协作模板第 2、13 节。
 
 ## 12. 多 Agent 协作（无 AI 参与时删除本节）
 
-多人 / 多 Agent 协作规则由 [collaborative-workflow-template.md](collaborative-workflow-template.md) 统一维护，本节只留要点：
+多人 / 多 Agent 协作规则由 [collaborative-workflow.md](collaborative-workflow.md) 统一维护，角色与权限要点见本模板第 2 节，不重复。Agent 特有的两条红线：
 
-- 任务必须有 owner（人类或 Agent），分支名带任务编号；
-- **角色权限分离**：开发写生产代码（自验测试不提交）、审核只提意见不提交、测试只提交测试文件（详见协作模板第 2 节权限矩阵）；
-- 同一分支同一时间只允许一个写入者，冲突时先沟通、不单方面覆盖；
-- Agent 之间可互审机械问题，审核 Agent 可 approve，**合并与发布必须由维护者执行**；
-- Agent 账号不授予默认分支直接推送权限。
+- **合并与发布必须由维护者执行**，Agent 账号不授予默认分支直接推送权限；
+- 同一分支同一时间只允许一个写入者（多写入者分支的命名见协作模板第 4.2 节），冲突时先沟通、不单方面覆盖。
 
 ## 13. 提交 / 合并检查清单（最终版）
 
-- [ ] 格式化、静态检查、测试、构建全部通过
-- [ ] PR 描述完整（任务、概述、验证、影响、文档同步、安全声明、请 reviewer 重点看）
-- [ ] `{{CI 名称}}` 通过
-- [ ] Review approve 数达到 `{{Review 人数}}`
-- [ ] 无密钥与无关文件
-- [ ] 合并策略符合约定（默认 squash）
-- [ ] 合并后分支已删除，全员已同步
+本节不重复具体条目，合并前按引用逐项核对：
 
-> 多人 / 多 Agent 场景的协作特有清单（角色合规、人类终审、验证证据来源等）见 [collaborative-workflow-template.md](collaborative-workflow-template.md) 第 13 节。
+- [ ] 提交前检查全部通过（第 5.1 节）
+- [ ] PR 模板填写完整（第 7 节）
+- [ ] Review 检查通过，approve 数达到 `{{Review 人数}}`（第 8 节）
+- [ ] `{{CI 名称}}` 通过、无密钥与无关文件（第 5.1、11 节）
+- [ ] 合并策略符合约定，合并后删除分支并全员同步（第 6、9 节）
+
+> 多人 / 多 Agent 场景的协作特有清单（角色合规、人类终审、验证证据来源等）见 [collaborative-workflow.md](collaborative-workflow.md) 第 13 节。
