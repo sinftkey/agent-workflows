@@ -50,8 +50,21 @@ if (-not (Test-Path -LiteralPath (Join-Path $Source "templates"))) {
 
 $docsDir = Join-Path $Target "docs/development"
 New-Item -ItemType Directory -Force -Path $docsDir | Out-Null
-Copy-Item -Path (Join-Path (Join-Path $Source "templates") "*") -Destination $docsDir -Recurse -Force
+$templateDir = Join-Path $Source "templates"
+foreach ($item in Get-ChildItem -LiteralPath $templateDir -Force) {
+    if ($item.Name -eq "task-center") { continue }
+    Copy-Item -LiteralPath $item.FullName -Destination $docsDir -Recurse -Force
+}
 Remove-Item -LiteralPath (Join-Path $docsDir "AGENTS.md") -Force -ErrorAction SilentlyContinue
+
+$existingTaskCenter = Join-Path $docsDir "task-center"
+if (Test-Path -LiteralPath $existingTaskCenter) {
+    Write-Warning "An existing $existingTaskCenter was left untouched. Check that it is not a legacy task-center copy; current task-center installations belong in the local task-center worktree created by the standalone setup tool."
+}
+$legacyTasksProtocol = Join-Path (Join-Path $Target "docs") "tasks/TASK-CENTER.md"
+if (Test-Path -LiteralPath $legacyTasksProtocol -PathType Leaf) {
+    Write-Warning "A legacy task-center protocol was found at $legacyTasksProtocol and was left untouched. Have a maintainer review it and follow the task-center migration process; do not treat that copy as the current task center."
+}
 
 $agentsDest = Join-Path $Target "AGENTS.md"
 if (Test-Path -LiteralPath $agentsDest) {
@@ -79,7 +92,8 @@ if ($tmp) {
 
 Write-Host ""
 Write-Host "=== Placement done ==="
-Write-Host "templates/* (except templates/AGENTS.md)  ->  $docsDir"
+Write-Host "Generic templates/ content (excluding AGENTS.md and optional task-center/)  ->  $docsDir"
+Write-Host "templates/task-center/ was not copied; use the standalone setup tool to enable it"
 Write-Host "templates/AGENTS.md  ->  $agentsDest (single copy)"
 Write-Host ".gitattributes / .gitignore  ->  $Target (skip if already exists)"
 Write-Host ""

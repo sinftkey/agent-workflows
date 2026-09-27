@@ -94,7 +94,7 @@ feat: 新增登录接口
 | `test` | 测试新增/修改 |
 | `chore` | 构建、依赖、配置等杂项 |
 
-存在任务系统时，提交主题建议带任务编号：`<type>: <描述> (#<任务编号>)`，如 `fix: 修复超时 (#42)`，与 [docs-communication.md](docs-communication.md) 第 4.4 节一致。
+存在任务系统时，提交主题建议带任务编号，如 `fix: 修复超时 (#42)`；若使用本地任务中心，则写作 `fix: 修复超时 (TC-0042)`，不要把本地编号写成平台 issue 编号。与 [docs-communication.md](docs-communication.md) 第 4.4 节一致。
 
 ## 5. 提交前检查
 
@@ -139,7 +139,7 @@ feat: 新增登录接口
 
 ```text
 ## 关联任务
-closes #<任务编号>        # 使用任务中心（仓库内 markdown）时改为：#<任务编号>（进度见任务中心 docs/tasks/）
+closes #<外部 issue 编号>  # 只有外部 issue 存在时填写；本地任务中心写：关联任务 TC-0042（不使用 closes）
 
 ## 角色
 <开发 / 审核 / 测试；多人 / 多 Agent 场景必填，用于核对改动范围与分支声明一致>

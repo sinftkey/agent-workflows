@@ -12,7 +12,7 @@
 | 路径 | 内容 |
 |------|------|
 | [templates/](templates/) | 可直接复制到新项目的通用模板（语言无关） |
-| [scripts/](scripts/) | Agent 适配脚本（adapt.ps1 / adapt.sh，下载并落位模板） |
+| [scripts/](scripts/) | Agent 适配脚本（adapt.ps1 / adapt.sh）与任务中心安装、修复引导器（setup-task-center.ps1 / setup-task-center.sh） |
 | [.gitattributes](.gitattributes) | 文本属性 / 行尾规则，随模板一起复制到新项目 |
 | [.gitignore](.gitignore) | 通用忽略规则，随模板一起复制到新项目 |
 | [AGENT-ADAPT-GUIDE.md](AGENT-ADAPT-GUIDE.md) | 给 AI Agent 的模板下载适配步骤（含单行命令） |
@@ -29,7 +29,7 @@
 | [git-workflow.md](templates/git-workflow.md) | Git 工作流模板（与协作模板配套使用）：提交规范、命令级操作、回退 |
 | [collaborative-workflow.md](templates/collaborative-workflow.md) | 多人 / 多 Agent 协作模板：角色 × 权限矩阵（开发 / 审核 / 测试职责分离）、标准流程编排（需求→开发→测试→审核→发布）、分支所有权、PR/Review、冲突协调 |
 | [docs-communication.md](templates/docs-communication.md) | 通用设计指南：让 Git 工作流与项目文档结合，改善人 × Agent 通信（含占位符式落地步骤） |
-| [task-center/](templates/task-center/) | 任务中心（可选）：以 markdown 文档作为任务中枢，在多 Agent 协作中传递任务与进度（含 task.sh / task.ps1 脚本；任务流转于专用孤儿分支 `task-center`，不携带代码历史） |
+| [task-center/](templates/task-center/) | 可选的同一克隆本地任务中枢：任务文件是唯一数据源，INDEX 自动生成；Bash / PowerShell 命令提供状态校验、全局写锁、隔离暂存和可恢复事务；由独立 setup 安装在孤儿分支和共享 worktree，不落入项目代码分支 |
 
 ## 快速开始（新项目使用）
 
@@ -45,7 +45,7 @@ irm https://raw.githubusercontent.com/sinftkey/agent-workflows/main/scripts/adap
 curl -sL https://raw.githubusercontent.com/sinftkey/agent-workflows/main/scripts/adapt.sh | bash -s
 ```
 
-脚本机械步骤（下载模板、复制到 `docs/development/`、生成 `AGENTS.md`、复制 `.gitattributes` / `.gitignore`、输出待替换 `{{...}}` 适配占位符清单）见 [scripts/](scripts/)。参数接口两个脚本一致：环境变量 `ADAPT_REPO`（模板仓库地址）、`ADAPT_SOURCE`（本地模板目录，跳过克隆）、`ADAPT_TARGET`（落位目标目录，默认当前目录），优先级环境变量 > 命令行参数；直接执行脚本时也可用 `-Repo` / `-Source` / `-Target` 参数。
+脚本机械步骤（下载通用模板、复制到 `docs/development/`、生成 `AGENTS.md`、复制 `.gitattributes` / `.gitignore`、输出待替换 `{{...}}` 适配占位符清单）见 [scripts/](scripts/)。适配脚本会跳过可选的 `templates/task-center/`；如需启用，请按下方说明使用独立 setup。参数接口两个脚本一致：环境变量 `ADAPT_REPO`（模板仓库地址）、`ADAPT_SOURCE`（本地模板目录，跳过克隆）、`ADAPT_TARGET`（落位目标目录，默认当前目录），优先级环境变量 > 命令行参数；直接执行脚本时也可用 `-Repo` / `-Source` / `-Target` 参数。
 
 ### 方式二：手动复制
 
@@ -71,6 +71,33 @@ cp templates/git-workflow.md templates/collaborative-workflow.md templates/docs-
 > 注意：方式一执行前，脚本会跳过已存在的 `AGENTS.md`、`.gitattributes`、`.gitignore` 并提示手动合并（保留更具体、更严格的一条）。
 
 注意：`docs-communication.md` 第 5、6 节为需适配部分，用 `{{...}}` 表示各类文档路径，新项目请按实际目录结构填写，并建立自己的「变更 ↔ 文档」映射矩阵；其余章节可原样保留。
+
+### 任务中心（可选）
+
+任务中心供同一份本地克隆内的多个会话使用。它的协议、脚本和任务数据保存在本地 `task-center` 孤儿分支及一个共享 worktree 中；setup 登记路径并维护本地忽略规则，不修改使用方代码分支里的 `AGENTS.md`、`.gitignore`、开发文档或其他已跟踪文件。它不推送任务分支、不设置 upstream，也不提供跨克隆同步。
+
+从固定版本的模板仓库 checkout 运行 setup；脚本和 `templates/task-center/` 资产必须来自同一 tag 或提交：
+
+```powershell
+pwsh -File "<固定版本模板目录>/scripts/setup-task-center.ps1" -RepoPath "<项目仓库根目录>" -SourcePath "<固定版本模板目录>"
+pwsh -File "<任务中心 worktree>/scripts/task.ps1" init
+pwsh -File "<任务中心 worktree>/scripts/task.ps1" list
+pwsh -File "<任务中心 worktree>/scripts/task.ps1" check
+```
+
+```bash
+bash "<固定版本模板目录>/scripts/setup-task-center.sh" --repo "<项目仓库根目录>" --source "<固定版本模板目录>"
+bash "<任务中心 worktree>/scripts/task.sh" init
+bash "<任务中心 worktree>/scripts/task.sh" list
+bash "<任务中心 worktree>/scripts/task.sh" check
+```
+
+写命令前设置能区分并发会话的 `TASK_IDENTITY`，并阅读任务中心 worktree 中的 `TASK-CENTER.md`。用户级 Agent 指令示例由 setup 输出；安装位置和加载规则须按目标工具实际文档核对，setup 不自动修改用户全局指令。未启用任务中心时，Agent 应告知用户，不得静默创建。
+
+安装要求项目已有至少一个 Git 提交；不支持 bare 仓库或网络共享文件系统。脚本当前会拒绝低于 Git 2.23 的版本，但最低版本和各平台兼容性仍需发布前验证，不能据此视为已保证支持。
+
+迁移与修复流程为：先运行 `setup-task-center` 的 repair 预览；确认克隆外备份和迁移计划后，才显式执行。PowerShell 使用 `-Repair -DryRun` / `-Repair -Apply`，Bash 使用 `--repair --dry-run` / `--repair --apply`。恢复、bundle 备份、版本与字段规则见 [任务中心协议](templates/task-center/TASK-CENTER.md)。
+
 ## 维护方式
 
 - 模板保持**语言无关**：项目特有的命令、路径不能进 `templates/`；如需示例先建 `examples/` 并在本文登记；

@@ -24,7 +24,7 @@ curl -sL https://raw.githubusercontent.com/sinftkey/agent-workflows/main/scripts
 脚本自动完成：
 
 1. 克隆模板仓库（`--depth 1`）到临时目录，用完即删；
-2. `templates/*` 复制到 `{{新项目}}/docs/development/`，并移除其中的 `AGENTS.md`（它只落位根目录一份，见第 2 节）；
+2. 通用 `templates/` 内容复制到 `{{新项目}}/docs/development/`，跳过 `AGENTS.md` 和可选的 `task-center/`（见第 2 节）；
 3. `templates/AGENTS.md` 复制到项目根目录，文件名不变（已存在则跳过并警告，需手动合并）；
 4. `.gitattributes`、`.gitignore` 复制到项目根目录（已存在则跳过并警告，需手动合并）；
 5. 输出复制后所有残留 `{{...}}` 适配占位符清单（`<...>` 是命令语法或每次填写的内容，不在清单内）。
@@ -48,7 +48,7 @@ https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/docs-c
 
 | 来源 | 目标 |
 |------|------|
-| `templates/*`（除 `AGENTS.md` 外的 3 个文件） | `{{新项目}}/docs/development/` |
+| 通用模板内容（排除 `AGENTS.md` 与可选的 `task-center/`） | `{{新项目}}/docs/development/` |
 | `templates/AGENTS.md` | `{{新项目}}/AGENTS.md`（仅此一份，不落入 `docs/development/`） |
 | `.gitattributes`、`.gitignore` | `{{新项目}}/`（已存在则跳过并手动合并） |
 
@@ -86,8 +86,8 @@ https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/docs-c
    | 占位符 | 替换为 |
    |--------|--------|
    | `{{默认分支}}`、`{{身份}}`、`{{CI 名称}}`、`{{维护者}}`、`{{Review 人数}}` | 同上 |
-   | `{{Agent 账号}}` | Agent 使用的平台账号 |
-   | `{{任务系统}}` | 任务系统名（GitHub Issues 等）；不用外部系统时可启用「任务中心」（仓库内 markdown，步骤见本节第 8 步） |
+| `{{Agent 账号}}` | Agent 使用的平台账号 |
+| `{{任务系统}}` | 任务系统名（如 GitHub Issues）；若使用本地任务中心，填写「任务中心」，并按本节第 8 步单独启用 |
 
    **docs/development/docs-communication.md**（第 5、6 节为需适配部分，其余可原样保留）
 
@@ -95,7 +95,7 @@ https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/docs-c
    |--------|--------|
    | `{{配置规范文档}}`、`{{接口文档}}`、`{{错误处理文档}}`、`{{对应模块的实现文档}}`、`{{认证与密钥文档}}`、`{{架构文档}}`、`{{项目根 AGENTS.md / CONTRIBUTING.md}}`、`{{README}}`、`{{AGENTS.md}}`、`{{文档目录}}` | 项目实际文档路径 |
 
-   保留不动：`<...>`（命令语法或每次填写的内容，如 `<file>`、`<commit>`、`<type>`、`<主题>`、`<任务编号>`、`closes #<任务编号>`、PR 模板字段），不是适配项。
+   保留不动：`<...>`（命令语法或每次填写的内容，如 `<file>`、`<commit>`、`<type>`、`<主题>`、`<任务编号>`、`closes #<外部 issue 编号>`、PR 模板字段），不是适配项。本地任务中心编号写 `TC-0042`，不能用 `#42` 冒充平台 issue 编号。
 
 3. **换实际命令**：按 `docs/development/git-workflow.md` 第 5.2 节把 `AGENTS.md` 第 3 节与模板中的命令换成项目真实命令（Rust / Node / Python / Go 等对照表）。
 4. **修正相对链接**：各模板之间、`AGENTS.md` 指向 `docs/development/` 的链接，按实际位置修正。
@@ -110,7 +110,7 @@ https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/docs-c
 
 6. 角色权限矩阵（协作模板第 2 节）与标准流程编排（第 3 节）按项目实际角色调整，但保持「开发 / 审核 / 测试」职责分离的默认结构。
 7. **抽取 PR 模板**：把 git-workflow 模板第 7 节内容抽取为 `.github/PULL_REQUEST_TEMPLATE.md`（GitHub；其他平台放对应位置，如 GitLab 的 `.gitlab/merge_request_templates/`），让 PR 模板在真实 PR 中生效。
-8. **任务中心（可选）**：若不用外部任务系统（或作为 Agent 操作面），启用任务中心——把 `templates/task-center/` 复制为项目 `docs/tasks/`（含 `TASK-CENTER.md` 协议与 `scripts/task.sh` / `task.ps1`），按协议第 2 节创建 `task-center` 分支并初始化 worktree；`{{任务系统}}` 占位符填「任务中心」。
+8. **任务中心（可选）**：若不用外部任务系统，或希望 Agent 使用本地任务操作面，取得与其余模板相同 tag / 提交的完整模板仓库 checkout，再运行其中独立的 `scripts/setup-task-center.ps1` 或 `scripts/setup-task-center.sh`，显式指定项目仓库与该固定来源。不要把 `templates/task-center/` 复制到项目代码分支的 `docs/tasks/` 或 `docs/development/`，也不要把本地安装路径写入项目 `AGENTS.md`。setup 会把运行资产放到本地 `task-center` 孤儿分支和共享 worktree，并登记在 Git 元数据中；它不会改写使用方代码分支中的文件。安装后按协议运行 `init`、`list`、`check`。setup 会输出工具无关的 Agent 引导语；安装到用户级指令的位置前，先按目标工具自己的文档核对实际机制，不假设路径或加载顺序，也不自动改写全局指令文件。未启用时应明确告知 Agent，不得静默安装。
 
 ## 4. 校验（未通过不得提交）
 
@@ -119,7 +119,7 @@ https://raw.githubusercontent.com/sinftkey/agent-workflows/main/templates/docs-c
   - PowerShell：`Get-ChildItem AGENTS.md, docs -Recurse -Filter *.md | Select-String -Pattern '\{\{[^{}]+\}\}' -Encoding UTF8`（应无输出）
 - [ ] 所有 Markdown 链接有效（本地文件路径存在）
 - [ ] PR 模板已抽取落位（`.github/PULL_REQUEST_TEMPLATE.md` 或对应平台位置，见第 3 节步骤 7）
-- [ ] 任务中心已按 `TASK-CENTER.md` 初始化（如启用）：`task-center` 分支、`INDEX.md`、worktree 就绪，任务文件格式符合协议
+- [ ] 任务中心已按 `TASK-CENTER.md` 初始化（如启用）：同一克隆内登记唯一、worktree 与版本有效；运行 `init` / `list` / `check`；任务中心资产未复制到项目代码分支，且代码分支没有因启用任务中心而新增文件
 - [ ] 无密钥、凭据、`.env`、构建产物进入工作区
 - [ ] 权限矩阵、流程编排与模板原文结构一致，未擅自弱化约束
 - [ ] 文档内命令与项目实际命令一致
