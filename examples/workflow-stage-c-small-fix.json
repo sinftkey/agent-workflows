@@ -1,0 +1,135 @@
+{
+  "schema": "example-only/C1-draft",
+  "example_only": true,
+  "notice": "设计示意；身份、授权、产物、检查、时间和接受均为虚构。不是完整 Schema 示例，禁止输入现行脚本或当作真实证据。",
+  "defaults_example": {
+    "ref": "example://policy/p1/small-fix",
+    "coordinator": "human",
+    "contract_decider": "human",
+    "delivery_confirmer": "human",
+    "owner": "executor",
+    "authorized_checker": "checker",
+    "check_assignment_basis": "示意配置已授权 executor 在本任务内分配已授权 checker；此数据不授予真实权限。",
+    "required_checks": [
+      { "id": "Q1", "coverage": ["AC1", "AC2"], "method": "回归自验", "independence": "author", "gate": "before-delivery" },
+      { "id": "Q2", "coverage": ["AC1", "AC2"], "method": "独立复核及边界检查", "independence": "independent", "gate": "before-delivery" }
+    ],
+    "delivery_boundary": "用户接受本地候选",
+    "dependencies": []
+  },
+  "task_example": {
+    "id": "1",
+    "title": "修复空输入处理",
+    "records": [
+      {
+        "batch_id": "batch-1",
+        "at": "2026-01-01T00:00:00Z",
+        "actor": { "identity": "executor", "run": "run-owner-1" },
+        "facts": [
+          {
+            "kind": "contract.declared",
+            "id": "contract-1",
+            "revision": 1,
+            "defaults_ref": "example://policy/p1/small-fix",
+            "goal": "空输入返回约定空结果，正常输入保持原行为",
+            "acceptance": [
+              { "id": "AC1", "text": "空输入返回空结果" },
+              { "id": "AC2", "text": "正常输入的已有输出不变" }
+            ],
+            "read_scope": ["相关实现、接口约定及回归测试"],
+            "write_scope": ["输入处理模块", "相关回归测试"],
+            "decision_source": "example://human/initial-request"
+          },
+          {
+            "kind": "assignment.recorded",
+            "id": "owner-assignment-1",
+            "revision": 1,
+            "owner": "executor",
+            "accepted_run": "run-owner-1",
+            "basis": "example://human/initial-request"
+          },
+          { "kind": "work.begun", "contract": "contract-1", "assignment": "owner-assignment-1" }
+        ]
+      },
+      {
+        "batch_id": "batch-2",
+        "at": "2026-01-01T00:10:00Z",
+        "actor": { "identity": "executor", "run": "run-owner-1" },
+        "facts": [
+          {
+            "kind": "candidate.submitted",
+            "id": "candidate-1",
+            "contract": "contract-1",
+            "artifact_manifest": "example://immutable-snapshot/candidate-1",
+            "acceptance_mapping": { "AC1": "result-self-1", "AC2": "result-self-1" },
+            "known_issues": []
+          },
+          {
+            "kind": "result.recorded",
+            "id": "result-self-1",
+            "candidate": "candidate-1",
+            "contract": "contract-1",
+            "coverage": [{ "requirement": "Q1", "outcome": "pass" }],
+            "environment": "example://environment/local-test",
+            "observations": "示意：空输入与已有正常输入断言通过",
+            "evidence": "example://report/self-1",
+            "unverified": ["性能基准未纳入本任务"]
+          },
+          {
+            "kind": "check.assigned",
+            "id": "check-assignment-1",
+            "revision": 1,
+            "candidate": "candidate-1",
+            "contract": "contract-1",
+            "requirement": "Q2",
+            "assignee": "checker",
+            "acceptance_pending": true
+          }
+        ]
+      },
+      {
+        "batch_id": "batch-3",
+        "at": "2026-01-01T00:15:00Z",
+        "actor": { "identity": "checker", "run": "run-checker-1" },
+        "facts": [
+          { "kind": "assignment.accepted", "assignment": "check-assignment-1", "revision": 1, "run": "run-checker-1" },
+          {
+            "kind": "result.recorded",
+            "id": "result-independent-1",
+            "candidate": "candidate-1",
+            "contract": "contract-1",
+            "assignment": "check-assignment-1",
+            "coverage": [{ "requirement": "Q2", "outcome": "pass" }],
+            "environment": "example://environment/independent-test",
+            "observations": "示意：直接核对产物并复跑两类输入，另检查空白输入边界",
+            "evidence": "example://report/independent-1",
+            "unverified": ["性能基准未纳入本任务"]
+          }
+        ]
+      },
+      {
+        "batch_id": "batch-4",
+        "at": "2026-01-01T00:20:00Z",
+        "actor": { "identity": "executor", "run": "run-owner-1" },
+        "facts": [
+          {
+            "kind": "delivery.recorded",
+            "id": "delivery-1",
+            "candidate": "candidate-1",
+            "contract": "contract-1",
+            "boundary": "用户接受本地候选",
+            "confirmer": "human",
+            "acceptance_source": "example://human/accept-candidate-1"
+          },
+          { "kind": "lifecycle.completed", "candidate": "candidate-1", "contract": "contract-1", "delivery": "delivery-1" }
+        ]
+      }
+    ],
+    "current_example": {
+      "contract": "contract-1",
+      "candidate": "candidate-1",
+      "owner": "executor",
+      "state": "已完成"
+    }
+  }
+}

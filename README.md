@@ -12,6 +12,7 @@
 | 路径 | 内容 |
 |------|------|
 | [templates/](templates/) | 可直接复制到新项目的通用模板（语言无关） |
+| [examples/workflow-small-fix.md](examples/workflow-small-fix.md) | 优化方案的最小正常路径与操作账单示例，尚未真实运行，不是现行模板操作指令 |
 | [scripts/](scripts/) | Agent 适配脚本（adapt.ps1 / adapt.sh）与任务中心安装、修复引导器（setup-task-center.ps1 / setup-task-center.sh） |
 | [.gitattributes](.gitattributes) | 文本属性 / 行尾规则，随模板一起复制到新项目 |
 | [.gitignore](.gitignore) | 通用忽略规则，随模板一起复制到新项目 |
@@ -61,14 +62,14 @@ mkdir -p <新项目>/docs/development
 cp templates/git-workflow.md templates/collaborative-workflow.md templates/docs-communication.md <新项目>/docs/development/
 ```
 
-2. **移动** `templates/AGENTS.md` 到新项目根目录（文件名不变，仅此一份，不留在 `docs/development/` 中，避免双份漂移）；
+2. 保留来源仓库的 `templates/AGENTS.md`，将其**复制**为新项目根目录的 `AGENTS.md`；若目标文件已存在，则跳过覆盖并手动比对合并。新项目仅在根目录维护这一份，不在 `docs/development/` 中另存副本，避免双份漂移；
 3. 复制 `.gitattributes`、`.gitignore` 到新项目根目录（已存在则跳过，手动合并）；
 4. 按 AGENTS 模板第 0 节替换 `{{...}}` 适配占位符（项目名、技术栈、命令、身份等；`<...>` 为命令语法或每次填写的内容，保留不动）；
 5. 把「提交前检查」的命令换成项目实际命令（模板自带 Rust / Node / Python / Go 等对照表）；
 6. 同时保留 `collaborative-workflow.md` 与 `docs-communication.md`（整套模板面向多人 / 多 Agent 协作设计，不面向单人场景；单人无 Agent 的裁剪见 [AGENT-ADAPT-GUIDE.md](AGENT-ADAPT-GUIDE.md) 第 3 节步骤 5 的裁剪矩阵）；
 7. 在 `AGENTS.md` 中链接这些文档，并让第一个 PR 落实「文档同步」字段。
 
-> 注意：方式一执行前，脚本会跳过已存在的 `AGENTS.md`、`.gitattributes`、`.gitignore` 并提示手动合并（保留更具体、更严格的一条）。
+> 注意：方式一只对目标根目录已存在的 `AGENTS.md`、`.gitattributes`、`.gitignore` 跳过覆盖并提示手动合并；`docs/development/` 中的同名通用模板文档会被覆盖。已有适配文档或准备重跑时，先将 `ADAPT_TARGET` 指向独立临时落位目录，再比对并手动合并到项目；已有任务中心副本的处理与具体步骤见 [适配指南第 0 节](AGENT-ADAPT-GUIDE.md#0-单行命令)。
 
 注意：`docs-communication.md` 第 5、6 节为需适配部分，用 `{{...}}` 表示各类文档路径，新项目请按实际目录结构填写，并建立自己的「变更 ↔ 文档」映射矩阵；其余章节可原样保留。
 
@@ -99,6 +100,20 @@ bash "<任务中心 worktree>/scripts/task.sh" check
 迁移与修复流程为：先运行 `setup-task-center` 的 repair 预览；确认克隆外备份和迁移计划后，才显式执行。PowerShell 使用 `-Repair -DryRun` / `-Repair -Apply`，Bash 使用 `--repair --dry-run` / `--repair --apply`。恢复、bundle 备份、版本与字段规则见 [任务中心协议](templates/task-center/TASK-CENTER.md)。
 
 ## 维护方式
+
+### 工作流优化方案（尚未实施）
+
+[一人多 Agent 工作流统一优化方案](optimization-plan.md)整合了历轮讨论，提出仓库定位、任务生命周期、身份授权、检查与证据、交付边界及分阶段实施建议。它是整体评审入口，尚未改变本 README 上述使用说明、现行模板、脚本或任务数据格式。
+
+方案已根据七项评审意见调整为“语义评审 → 临时任务卡真实试用 → 按需格式设计 → 实现及迁移”，尚不具备全面实现的批准条件。配套材料为[正常路径与操作账单](examples/workflow-small-fix.md)、[异常推演表](optimization-exception-cases.md)、[成本与删减标准](optimization-trial-criteria.md)；原数值门槛保留，当前采用范围和试用状态以执行安排为准。
+
+新会话继续执行时，从[执行交接单](execution-handoff.md)开始，以试用安排中的最新阶段决定为准；交接单后部 A/B 工作单保留历史。
+
+语义依据见[核对记录](optimization-stage-a-review.md)；最新执行方式、阶段授权与任务状态统一见[试用安排](optimization-trial-arrangement.md)。README 只维护入口，不重复逐任务回传。阶段 C 先读 [C1 信息模型](optimization-stage-c-design.md)及其[概念示意](examples/workflow-stage-c-small-fix.json)，精确设计见 [C2 完整格式与接口契约](optimization-stage-c-spec.md)，配套[协议 Schema](design/stage-c/protocol.schema.json)、[四组完整正常数据](examples/workflow-stage-c-complete.json)和[设计向量](design/stage-c/vectors.json)。C2 区分写动作与只读查询/历史重放授权，候选前开工评估不要求候选，依赖排除绑定完整来源交付版本。这些均为设计资料，不能导入现行工具；结构校验不证明新协议已实现。量化成本标准仍保留，设计评审不等于 D 实现或迁移获准。
+
+讨论依据保留在[移交摘要](discussion-handoff.md)、[完整研讨记录](discussion-notes.md)和[协议草案与场景推演](discussion-protocol-draft.md)。方案中的推荐默认值仍待评审，后续模板变更须与说明同步并经过 review 后合并。
+
+### 仓库维护规则
 
 - 模板保持**语言无关**：项目特有的命令、路径不能进 `templates/`；如需示例先建 `examples/` 并在本文登记；
 - 修改模板走分支 + PR（遵循本仓库 [AGENTS.md](AGENTS.md)）；

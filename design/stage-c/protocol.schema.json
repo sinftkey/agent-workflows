@@ -1,0 +1,4366 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:agent-workflows:stage-c:2-draft",
+  "$comment": "Design candidate only. Not installed schema 3; semantic rules in the companion specification are mandatory.",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{0,63}(?![\\s\\S])"
+    },
+    "taskId": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]{0,14}(?![\\s\\S])"
+    },
+    "uuid": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}(?![\\s\\S])"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2147483647
+    },
+    "positive": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 2147483647
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}(?![\\s\\S])"
+    },
+    "gitOid": {
+      "type": "string",
+      "pattern": "^([0-9a-f]{40}|[0-9a-f]{64})(?![\\s\\S])"
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024,
+      "pattern": "^[^\\\\\\u0000-\\u001f]+(?![\\s\\S])"
+    },
+    "uri": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4096,
+      "pattern": "^[a-z][a-z0-9+.-]*:[^\\u0000-\\u0020]+(?![\\s\\S])"
+    },
+    "time": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "known"
+            },
+            "utc": {
+              "type": "string",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z(?![\\s\\S])"
+            }
+          },
+          "required": [
+            "kind",
+            "utc"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "unknown"
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            }
+          },
+          "required": [
+            "kind",
+            "reason"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "legacy"
+            },
+            "raw": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 1024
+            }
+          },
+          "required": [
+            "kind",
+            "raw",
+            "reason"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "actor": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/id"
+        },
+        "run": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "identity",
+        "run"
+      ],
+      "additionalProperties": false
+    },
+    "source": {
+      "type": "object",
+      "properties": {
+        "uri": {
+          "$ref": "#/$defs/uri"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        }
+      },
+      "required": [
+        "uri",
+        "sha256",
+        "description"
+      ],
+      "additionalProperties": false
+    },
+    "policyRef": {
+      "type": "object",
+      "properties": {
+        "commit": {
+          "$ref": "#/$defs/gitOid"
+        },
+        "blob": {
+          "$ref": "#/$defs/gitOid"
+        },
+        "revision": {
+          "$ref": "#/$defs/positive"
+        }
+      },
+      "required": [
+        "commit",
+        "blob",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "defaultsRef": {
+      "type": "object",
+      "properties": {
+        "policy": {
+          "$ref": "#/$defs/policyRef"
+        },
+        "profile": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "policy",
+        "profile"
+      ],
+      "additionalProperties": false
+    },
+    "acceptance": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        }
+      },
+      "required": [
+        "id",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "requirement": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "acceptance": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "method": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "independence": {
+          "enum": [
+            "author",
+            "independent"
+          ]
+        },
+        "condition": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "after": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "gate": {
+          "enum": [
+            "before-delivery",
+            "complete"
+          ]
+        },
+        "waivable": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "acceptance",
+        "method",
+        "independence",
+        "condition",
+        "after",
+        "gate",
+        "waivable"
+      ],
+      "additionalProperties": false
+    },
+    "confirmation": {
+      "type": "object",
+      "properties": {
+        "identity": {
+          "$ref": "#/$defs/id"
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "at": {
+          "$ref": "#/$defs/time"
+        }
+      },
+      "required": [
+        "identity",
+        "source",
+        "at"
+      ],
+      "additionalProperties": false
+    },
+    "boundary": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "enum": [
+            "report-accepted",
+            "internal-integration",
+            "pr-created",
+            "pr-merged",
+            "deployment-verified"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "confirmers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "external": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "kind",
+        "description",
+        "confirmers",
+        "external"
+      ],
+      "additionalProperties": false
+    },
+    "contractOverrides": {
+      "type": "object",
+      "properties": {
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/requirement"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "boundary": {
+          "$ref": "#/$defs/boundary"
+        },
+        "coordinator": {
+          "$ref": "#/$defs/id"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/taskId"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "completion_children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/taskId"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "contractSpec": {
+      "type": "object",
+      "properties": {
+        "defaults": {
+          "$ref": "#/$defs/defaultsRef"
+        },
+        "goal": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "acceptance": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/acceptance"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "read_scope": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "write_scope": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1024
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "overrides": {
+          "$ref": "#/$defs/contractOverrides"
+        },
+        "decision": {
+          "$ref": "#/$defs/confirmation"
+        }
+      },
+      "required": [
+        "defaults",
+        "goal",
+        "acceptance",
+        "read_scope",
+        "write_scope",
+        "overrides",
+        "decision"
+      ],
+      "additionalProperties": false
+    },
+    "binding": {
+      "type": "object",
+      "properties": {
+        "assignment": {
+          "$ref": "#/$defs/id"
+        },
+        "revision": {
+          "$ref": "#/$defs/positive"
+        }
+      },
+      "required": [
+        "assignment",
+        "revision"
+      ],
+      "additionalProperties": false
+    },
+    "candidateRef": {
+      "type": "object",
+      "properties": {
+        "candidate": {
+          "$ref": "#/$defs/id"
+        },
+        "contract_revision": {
+          "$ref": "#/$defs/positive"
+        }
+      },
+      "required": [
+        "candidate",
+        "contract_revision"
+      ],
+      "additionalProperties": false
+    },
+    "startRef": {
+      "type": "object",
+      "properties": {
+        "contract_revision": {
+          "$ref": "#/$defs/positive"
+        },
+        "binding": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/binding"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "contract_revision",
+        "binding"
+      ],
+      "additionalProperties": false
+    },
+    "deliveryRef": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "$ref": "#/$defs/taskId"
+        },
+        "delivery": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "task",
+        "delivery"
+      ],
+      "additionalProperties": false
+    },
+    "artifact": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "git",
+            "snapshot"
+          ]
+        },
+        "uri": {
+          "$ref": "#/$defs/uri"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "git_object": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/gitOid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "materialization": {
+          "anyOf": [
+            {
+              "type": "object",
+              "properties": {
+                "source": {
+                  "$ref": "#/$defs/source"
+                },
+                "rule": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 8192
+                },
+                "verification": {
+                  "$ref": "#/$defs/source"
+                }
+              },
+              "required": [
+                "source",
+                "rule",
+                "verification"
+              ],
+              "additionalProperties": false
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "uri",
+        "sha256",
+        "git_object",
+        "materialization"
+      ],
+      "additionalProperties": false
+    },
+    "coverage": {
+      "type": "object",
+      "properties": {
+        "requirement": {
+          "$ref": "#/$defs/id"
+        },
+        "outcome": {
+          "enum": [
+            "pass",
+            "fail",
+            "unknown"
+          ]
+        },
+        "observations": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "unverified": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 8192
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        }
+      },
+      "required": [
+        "requirement",
+        "outcome",
+        "observations",
+        "unverified"
+      ],
+      "additionalProperties": false
+    },
+    "result": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "target": {
+          "$ref": "#/$defs/candidateRef"
+        },
+        "binding": {
+          "$ref": "#/$defs/binding"
+        },
+        "source_actor": {
+          "$ref": "#/$defs/actor"
+        },
+        "performed_at": {
+          "$ref": "#/$defs/time"
+        },
+        "method": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "environment": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "report": {
+          "$ref": "#/$defs/source"
+        },
+        "coverage": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/coverage"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "corrects": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        }
+      },
+      "required": [
+        "id",
+        "target",
+        "binding",
+        "source_actor",
+        "performed_at",
+        "method",
+        "environment",
+        "report",
+        "coverage",
+        "prerequisites",
+        "corrects"
+      ],
+      "additionalProperties": false
+    },
+    "expected": {
+      "type": "object",
+      "properties": {
+        "contract": {
+          "$ref": "#/$defs/revision"
+        },
+        "candidate": {
+          "$ref": "#/$defs/revision"
+        },
+        "assignment": {
+          "$ref": "#/$defs/revision"
+        },
+        "issue": {
+          "$ref": "#/$defs/revision"
+        },
+        "block": {
+          "$ref": "#/$defs/revision"
+        },
+        "delivery": {
+          "$ref": "#/$defs/revision"
+        },
+        "policy": {
+          "$ref": "#/$defs/revision"
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "assignmentSpec": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "role": {
+          "enum": [
+            "owner",
+            "checker"
+          ]
+        },
+        "identity": {
+          "$ref": "#/$defs/id"
+        },
+        "target": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/candidateRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "basis": {
+          "$ref": "#/$defs/source"
+        },
+        "isolation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/source"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "role",
+        "identity",
+        "target",
+        "requirements",
+        "reason",
+        "basis",
+        "isolation"
+      ],
+      "additionalProperties": false
+    },
+    "grant": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "identity": {
+          "$ref": "#/$defs/id"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "task.open",
+              "contract.revise",
+              "assignment.set",
+              "assignment.accept",
+              "work.begin",
+              "progress.append",
+              "candidate.submit",
+              "result.append",
+              "result.record-historical",
+              "applicability.confirm",
+              "requirement.disposition",
+              "issue.report",
+              "issue.resolve",
+              "block.set",
+              "block.resolve",
+              "dependency.consume",
+              "dependency.clearance",
+              "delivery.record",
+              "delivery.reconcile",
+              "gate.evaluate",
+              "task.complete",
+              "task.cancel",
+              "task.archive",
+              "policy.update"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "read_actions": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "task.read",
+              "task.list",
+              "task.check",
+              "task.handoff",
+              "gate.read",
+              "receipt.read",
+              "policy.read"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "tasks": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/taskId"
+              },
+              {
+                "enum": [
+                  "*",
+                  "new"
+                ]
+              }
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "confirmers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "basis": {
+          "$ref": "#/$defs/source"
+        }
+      },
+      "required": [
+        "id",
+        "identity",
+        "actions",
+        "read_actions",
+        "tasks",
+        "confirmers",
+        "basis"
+      ],
+      "additionalProperties": false,
+      "anyOf": [
+        {
+          "properties": {
+            "actions": {
+              "minItems": 1
+            }
+          }
+        },
+        {
+          "properties": {
+            "read_actions": {
+              "minItems": 1
+            }
+          }
+        }
+      ]
+    },
+    "profile": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/requirement"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "boundary": {
+          "$ref": "#/$defs/boundary"
+        },
+        "coordinator": {
+          "$ref": "#/$defs/id"
+        },
+        "dependencies": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/taskId"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        }
+      },
+      "required": [
+        "id",
+        "requirements",
+        "boundary",
+        "coordinator",
+        "dependencies"
+      ],
+      "additionalProperties": false
+    },
+    "identity": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "human",
+            "agent"
+          ]
+        },
+        "status": {
+          "enum": [
+            "active",
+            "revoked"
+          ]
+        },
+        "basis": {
+          "$ref": "#/$defs/source"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "status",
+        "basis"
+      ],
+      "additionalProperties": false
+    },
+    "run": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "identity": {
+          "$ref": "#/$defs/id"
+        },
+        "context": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "status": {
+          "enum": [
+            "active",
+            "revoked"
+          ]
+        },
+        "basis": {
+          "$ref": "#/$defs/source"
+        }
+      },
+      "required": [
+        "id",
+        "identity",
+        "context",
+        "status",
+        "basis"
+      ],
+      "additionalProperties": false
+    },
+    "policyBody": {
+      "type": "object",
+      "properties": {
+        "identities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/identity"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "runs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/run"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "grants": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/grant"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "defaults": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/profile"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        }
+      },
+      "required": [
+        "identities",
+        "runs",
+        "grants",
+        "defaults"
+      ],
+      "additionalProperties": false
+    },
+    "action": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "task.open"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {
+                "contract": {
+                  "$ref": "#/$defs/revision"
+                }
+              },
+              "required": [
+                "contract"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.task.open"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "contract.revise"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {
+                "contract": {
+                  "$ref": "#/$defs/revision"
+                }
+              },
+              "required": [
+                "contract"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.contract.revise"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "assignment.set"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {
+                "assignment": {
+                  "$ref": "#/$defs/revision"
+                }
+              },
+              "required": [
+                "assignment"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.assignment.set"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "assignment.accept"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {
+                "assignment": {
+                  "$ref": "#/$defs/revision"
+                }
+              },
+              "required": [
+                "assignment"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.assignment.accept"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "work.begin"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {
+                "contract": {
+                  "$ref": "#/$defs/revision"
+                },
+                "assignment": {
+                  "$ref": "#/$defs/revision"
+                }
+              },
+              "required": [
+                "contract",
+                "assignment"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.work.begin"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "progress.append"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.progress.append"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "candidate.submit"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {
+                "contract": {
+                  "$ref": "#/$defs/revision"
+                },
+                "candidate": {
+                  "$ref": "#/$defs/revision"
+                },
+                "assignment": {
+                  "$ref": "#/$defs/revision"
+                }
+              },
+              "required": [
+                "contract",
+                "candidate",
+                "assignment"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.candidate.submit"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "result.append"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.result.append"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "result.record-historical"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.result.record-historical"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "applicability.confirm"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.applicability.confirm"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "requirement.disposition"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {
+                "contract": {
+                  "$ref": "#/$defs/revision"
+                },
+                "candidate": {
+                  "$ref": "#/$defs/revision"
+                }
+              },
+              "required": [
+                "contract",
+                "candidate"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.requirement.disposition"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "issue.report"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.issue.report"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "issue.resolve"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {
+                "issue": {
+                  "$ref": "#/$defs/revision"
+                }
+              },
+              "required": [
+                "issue"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.issue.resolve"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "block.set"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {
+                "block": {
+                  "$ref": "#/$defs/revision"
+                }
+              },
+              "required": [
+                "block"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.block.set"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "block.resolve"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {
+                "block": {
+                  "$ref": "#/$defs/revision"
+                }
+              },
+              "required": [
+                "block"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.block.resolve"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "dependency.consume"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {
+                "contract": {
+                  "$ref": "#/$defs/revision"
+                },
+                "assignment": {
+                  "$ref": "#/$defs/revision"
+                }
+              },
+              "required": [
+                "contract",
+                "assignment"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.dependency.consume"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "dependency.clearance"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {
+                "delivery": {
+                  "$ref": "#/$defs/revision"
+                }
+              },
+              "required": [
+                "delivery"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.dependency.clearance"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "delivery.record"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.delivery.record"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "delivery.reconcile"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {
+                "delivery": {
+                  "$ref": "#/$defs/revision"
+                }
+              },
+              "required": [
+                "delivery"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.delivery.reconcile"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "gate.evaluate"
+            },
+            "expected": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "contract": {
+                      "$ref": "#/$defs/revision"
+                    },
+                    "assignment": {
+                      "$ref": "#/$defs/revision"
+                    }
+                  },
+                  "required": [
+                    "contract",
+                    "assignment"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "contract": {
+                      "$ref": "#/$defs/revision"
+                    },
+                    "candidate": {
+                      "$ref": "#/$defs/revision"
+                    }
+                  },
+                  "required": [
+                    "contract",
+                    "candidate"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.gate.evaluate"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false,
+          "allOf": [
+            {
+              "if": {
+                "properties": {
+                  "payload": {
+                    "properties": {
+                      "gate": {
+                        "const": "start"
+                      }
+                    },
+                    "required": [
+                      "gate"
+                    ]
+                  }
+                }
+              },
+              "then": {
+                "properties": {
+                  "expected": {
+                    "type": "object",
+                    "properties": {
+                      "contract": {
+                        "$ref": "#/$defs/revision"
+                      },
+                      "assignment": {
+                        "$ref": "#/$defs/revision"
+                      }
+                    },
+                    "required": [
+                      "contract",
+                      "assignment"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              },
+              "else": {
+                "properties": {
+                  "expected": {
+                    "type": "object",
+                    "properties": {
+                      "contract": {
+                        "$ref": "#/$defs/revision"
+                      },
+                      "candidate": {
+                        "$ref": "#/$defs/revision"
+                      }
+                    },
+                    "required": [
+                      "contract",
+                      "candidate"
+                    ],
+                    "additionalProperties": false
+                  }
+                }
+              }
+            }
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "task.complete"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {
+                "contract": {
+                  "$ref": "#/$defs/revision"
+                },
+                "candidate": {
+                  "$ref": "#/$defs/revision"
+                },
+                "delivery": {
+                  "$ref": "#/$defs/revision"
+                }
+              },
+              "required": [
+                "contract",
+                "candidate",
+                "delivery"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.task.complete"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "task.cancel"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {
+                "contract": {
+                  "$ref": "#/$defs/revision"
+                }
+              },
+              "required": [
+                "contract"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.task.cancel"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "task.archive"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {},
+              "required": [],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.task.archive"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "$ref": "#/$defs/id"
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "$ref": "#/$defs/taskId"
+                },
+                {
+                  "enum": [
+                    "new",
+                    "policy"
+                  ]
+                }
+              ]
+            },
+            "op": {
+              "const": "policy.update"
+            },
+            "expected": {
+              "type": "object",
+              "properties": {
+                "policy": {
+                  "$ref": "#/$defs/revision"
+                }
+              },
+              "required": [
+                "policy"
+              ],
+              "additionalProperties": false
+            },
+            "payload": {
+              "$ref": "#/$defs/payload.policy.update"
+            }
+          },
+          "required": [
+            "id",
+            "task",
+            "op",
+            "expected",
+            "payload"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "payload.task.open": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "contract": {
+          "$ref": "#/$defs/contractSpec"
+        },
+        "parent": {
+          "$ref": "#/$defs/taskId"
+        }
+      },
+      "required": [
+        "title",
+        "contract"
+      ],
+      "additionalProperties": false
+    },
+    "payload.contract.revise": {
+      "type": "object",
+      "properties": {
+        "contract": {
+          "$ref": "#/$defs/contractSpec"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        }
+      },
+      "required": [
+        "contract",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "payload.assignment.set": {
+      "$ref": "#/$defs/assignmentSpec"
+    },
+    "payload.assignment.accept": {
+      "type": "object",
+      "properties": {
+        "binding": {
+          "$ref": "#/$defs/binding"
+        },
+        "basis": {
+          "$ref": "#/$defs/source"
+        }
+      },
+      "required": [
+        "binding",
+        "basis"
+      ],
+      "additionalProperties": false
+    },
+    "payload.work.begin": {
+      "type": "object",
+      "properties": {
+        "binding": {
+          "$ref": "#/$defs/binding"
+        },
+        "contract_revision": {
+          "$ref": "#/$defs/positive"
+        }
+      },
+      "required": [
+        "binding",
+        "contract_revision"
+      ],
+      "additionalProperties": false
+    },
+    "payload.progress.append": {
+      "type": "object",
+      "properties": {
+        "binding": {
+          "$ref": "#/$defs/binding"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "checkpoint": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/source"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        }
+      },
+      "required": [
+        "binding",
+        "text",
+        "checkpoint",
+        "sources"
+      ],
+      "additionalProperties": false
+    },
+    "payload.candidate.submit": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "contract_revision": {
+          "$ref": "#/$defs/positive"
+        },
+        "binding": {
+          "$ref": "#/$defs/binding"
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "authors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/actor"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "acceptance_mapping": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "acceptance": {
+                "$ref": "#/$defs/id"
+              },
+              "artifacts": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/id"
+                },
+                "minItems": 1,
+                "maxItems": 10000
+              }
+            },
+            "required": [
+              "acceptance",
+              "artifacts"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "known_issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        }
+      },
+      "required": [
+        "id",
+        "contract_revision",
+        "binding",
+        "artifacts",
+        "authors",
+        "acceptance_mapping",
+        "known_issues"
+      ],
+      "additionalProperties": false
+    },
+    "payload.result.append": {
+      "$ref": "#/$defs/result"
+    },
+    "payload.result.record-historical": {
+      "type": "object",
+      "properties": {
+        "result": {
+          "$ref": "#/$defs/result"
+        },
+        "original_assignment": {
+          "$ref": "#/$defs/source"
+        },
+        "verification": {
+          "$ref": "#/$defs/source"
+        },
+        "unverified": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 8192
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        }
+      },
+      "required": [
+        "result",
+        "original_assignment",
+        "verification",
+        "unverified"
+      ],
+      "additionalProperties": false
+    },
+    "payload.applicability.confirm": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "result": {
+          "$ref": "#/$defs/id"
+        },
+        "target": {
+          "$ref": "#/$defs/candidateRef"
+        },
+        "binding": {
+          "$ref": "#/$defs/binding"
+        },
+        "requirements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "decision": {
+          "enum": [
+            "reuse",
+            "supplement",
+            "rerun"
+          ]
+        },
+        "differences": {
+          "$ref": "#/$defs/source"
+        },
+        "gaps": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 8192
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "basis": {
+          "$ref": "#/$defs/source"
+        }
+      },
+      "required": [
+        "id",
+        "result",
+        "target",
+        "binding",
+        "requirements",
+        "decision",
+        "differences",
+        "gaps",
+        "basis"
+      ],
+      "additionalProperties": false
+    },
+    "payload.requirement.disposition": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "target": {
+          "$ref": "#/$defs/candidateRef"
+        },
+        "requirement": {
+          "$ref": "#/$defs/id"
+        },
+        "decision": {
+          "enum": [
+            "not-applicable",
+            "waived"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "basis": {
+          "$ref": "#/$defs/confirmation"
+        },
+        "expires": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "follow_up": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/taskId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "target",
+        "requirement",
+        "decision",
+        "reason",
+        "basis",
+        "expires",
+        "follow_up"
+      ],
+      "additionalProperties": false
+    },
+    "payload.issue.report": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "target": {
+          "$ref": "#/$defs/candidateRef"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "deliveries": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "impact": {
+          "enum": [
+            "needs-review",
+            "unusable"
+          ]
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        }
+      },
+      "required": [
+        "id",
+        "target",
+        "results",
+        "deliveries",
+        "impact",
+        "description",
+        "source"
+      ],
+      "additionalProperties": false
+    },
+    "payload.issue.resolve": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "decision": {
+          "enum": [
+            "fixed",
+            "excluded",
+            "accepted-risk"
+          ]
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "basis": {
+          "$ref": "#/$defs/source"
+        },
+        "follow_up": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/taskId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "decision",
+        "results",
+        "basis",
+        "follow_up"
+      ],
+      "additionalProperties": false
+    },
+    "payload.block.set": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "gates": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "start",
+              "before-delivery",
+              "complete",
+              "retry"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "follower": {
+          "$ref": "#/$defs/id"
+        },
+        "waiting_for": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "release_condition": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        }
+      },
+      "required": [
+        "id",
+        "reason",
+        "gates",
+        "follower",
+        "waiting_for",
+        "release_condition",
+        "source"
+      ],
+      "additionalProperties": false
+    },
+    "payload.block.resolve": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "basis": {
+          "$ref": "#/$defs/source"
+        }
+      },
+      "required": [
+        "id",
+        "basis"
+      ],
+      "additionalProperties": false
+    },
+    "payload.dependency.consume": {
+      "type": "object",
+      "properties": {
+        "upstream": {
+          "$ref": "#/$defs/deliveryRef"
+        },
+        "binding": {
+          "$ref": "#/$defs/binding"
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        }
+      },
+      "required": [
+        "upstream",
+        "binding",
+        "purpose",
+        "source"
+      ],
+      "additionalProperties": false
+    },
+    "payload.dependency.clearance": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "delivery": {
+          "$ref": "#/$defs/id"
+        },
+        "restriction_task": {
+          "$ref": "#/$defs/taskId"
+        },
+        "restriction_kind": {
+          "enum": [
+            "result",
+            "issue"
+          ]
+        },
+        "restriction": {
+          "$ref": "#/$defs/id"
+        },
+        "restriction_delivery": {
+          "$ref": "#/$defs/id"
+        },
+        "decision": {
+          "enum": [
+            "excluded",
+            "revalidated"
+          ]
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "basis": {
+          "$ref": "#/$defs/source"
+        }
+      },
+      "required": [
+        "id",
+        "delivery",
+        "restriction_task",
+        "restriction_kind",
+        "restriction",
+        "restriction_delivery",
+        "decision",
+        "results",
+        "basis"
+      ],
+      "additionalProperties": false
+    },
+    "payload.delivery.record": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "target": {
+          "$ref": "#/$defs/candidateRef"
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/artifact"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "mapping": {
+          "$ref": "#/$defs/source"
+        },
+        "boundary": {
+          "$ref": "#/$defs/boundary"
+        },
+        "observation": {
+          "enum": [
+            "accepted",
+            "succeeded",
+            "failed",
+            "unknown"
+          ]
+        },
+        "confirmation": {
+          "$ref": "#/$defs/confirmation"
+        },
+        "environment": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024
+        },
+        "effects": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "responsible": {
+          "$ref": "#/$defs/id"
+        },
+        "previous_attempt": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "target",
+        "artifacts",
+        "mapping",
+        "boundary",
+        "observation",
+        "confirmation",
+        "environment",
+        "effects",
+        "responsible",
+        "previous_attempt"
+      ],
+      "additionalProperties": false
+    },
+    "payload.delivery.reconcile": {
+      "type": "object",
+      "properties": {
+        "delivery": {
+          "$ref": "#/$defs/id"
+        },
+        "actual": {
+          "enum": [
+            "confirmed",
+            "unknown"
+          ]
+        },
+        "version": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/source"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "effects": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "retry_safe": {
+          "enum": [
+            "yes",
+            "no",
+            "unknown"
+          ]
+        },
+        "basis": {
+          "$ref": "#/$defs/confirmation"
+        }
+      },
+      "required": [
+        "delivery",
+        "actual",
+        "version",
+        "effects",
+        "retry_safe",
+        "basis"
+      ],
+      "additionalProperties": false
+    },
+    "payload.gate.evaluate": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "target": {
+              "$ref": "#/$defs/startRef"
+            },
+            "gate": {
+              "const": "start"
+            },
+            "advance": {
+              "const": false
+            }
+          },
+          "required": [
+            "target",
+            "gate",
+            "advance"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "target": {
+              "$ref": "#/$defs/candidateRef"
+            },
+            "gate": {
+              "const": "before-delivery"
+            },
+            "advance": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "target",
+            "gate",
+            "advance"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "target": {
+              "$ref": "#/$defs/candidateRef"
+            },
+            "gate": {
+              "enum": [
+                "complete",
+                "retry"
+              ]
+            },
+            "advance": {
+              "const": false
+            }
+          },
+          "required": [
+            "target",
+            "gate",
+            "advance"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "payload.task.complete": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "$ref": "#/$defs/candidateRef"
+        },
+        "delivery": {
+          "$ref": "#/$defs/id"
+        }
+      },
+      "required": [
+        "target",
+        "delivery"
+      ],
+      "additionalProperties": false
+    },
+    "payload.task.cancel": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "effects": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "disposition": {
+          "$ref": "#/$defs/source"
+        },
+        "follow_up": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/taskId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "reason",
+        "effects",
+        "disposition",
+        "follow_up"
+      ],
+      "additionalProperties": false
+    },
+    "payload.task.archive": {
+      "type": "object",
+      "properties": {
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        }
+      },
+      "required": [
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "payload.policy.update": {
+      "type": "object",
+      "properties": {
+        "replacement": {
+          "$ref": "#/$defs/policyBody"
+        },
+        "decision": {
+          "$ref": "#/$defs/confirmation"
+        }
+      },
+      "required": [
+        "replacement",
+        "decision"
+      ],
+      "additionalProperties": false
+    },
+    "request": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "request"
+        },
+        "protocol": {
+          "const": "stage-c/2-draft"
+        },
+        "request_id": {
+          "$ref": "#/$defs/uuid"
+        },
+        "actor": {
+          "$ref": "#/$defs/actor"
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/action"
+          },
+          "minItems": 1,
+          "maxItems": 32
+        }
+      },
+      "required": [
+        "kind",
+        "protocol",
+        "request_id",
+        "actor",
+        "actions"
+      ],
+      "additionalProperties": false
+    },
+    "record": {
+      "type": "object",
+      "properties": {
+        "seq": {
+          "$ref": "#/$defs/positive"
+        },
+        "event_id": {
+          "$ref": "#/$defs/uuid"
+        },
+        "request_id": {
+          "$ref": "#/$defs/uuid"
+        },
+        "action_id": {
+          "$ref": "#/$defs/id"
+        },
+        "actor": {
+          "$ref": "#/$defs/actor"
+        },
+        "policy": {
+          "$ref": "#/$defs/policyRef"
+        },
+        "recorded_at": {
+          "$ref": "#/$defs/time"
+        },
+        "action": {
+          "$ref": "#/$defs/action"
+        }
+      },
+      "required": [
+        "seq",
+        "event_id",
+        "request_id",
+        "action_id",
+        "actor",
+        "policy",
+        "recorded_at",
+        "action"
+      ],
+      "additionalProperties": false
+    },
+    "legacy": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "protocol": {
+          "const": "schema-2"
+        },
+        "original_state": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "mapped_state": {
+          "enum": [
+            "todo",
+            "active",
+            "verifying",
+            "delivering",
+            "done",
+            "canceled"
+          ]
+        },
+        "missing": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 8192
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "owner_hint": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 256
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "source",
+        "protocol",
+        "original_state",
+        "mapped_state",
+        "missing",
+        "owner_hint"
+      ],
+      "additionalProperties": false
+    },
+    "current": {
+      "type": "object",
+      "properties": {
+        "contract": {
+          "$ref": "#/$defs/revision"
+        },
+        "candidate_revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "candidate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "owner_assignment": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "state": {
+          "enum": [
+            "todo",
+            "active",
+            "verifying",
+            "delivering",
+            "done",
+            "canceled"
+          ]
+        },
+        "seq": {
+          "$ref": "#/$defs/revision"
+        }
+      },
+      "required": [
+        "contract",
+        "candidate_revision",
+        "candidate",
+        "owner_assignment",
+        "state",
+        "seq"
+      ],
+      "additionalProperties": false
+    },
+    "task": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "task"
+        },
+        "protocol": {
+          "const": "stage-c/2-draft"
+        },
+        "id": {
+          "$ref": "#/$defs/taskId"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "legacy": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/legacy"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "records": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/record"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "current": {
+          "$ref": "#/$defs/current"
+        }
+      },
+      "required": [
+        "kind",
+        "protocol",
+        "id",
+        "title",
+        "legacy",
+        "records",
+        "current"
+      ],
+      "additionalProperties": false
+    },
+    "policy": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "policy"
+        },
+        "protocol": {
+          "const": "stage-c/2-draft"
+        },
+        "revision": {
+          "$ref": "#/$defs/positive"
+        },
+        "body": {
+          "$ref": "#/$defs/policyBody"
+        },
+        "decision": {
+          "$ref": "#/$defs/confirmation"
+        }
+      },
+      "required": [
+        "kind",
+        "protocol",
+        "revision",
+        "body",
+        "decision"
+      ],
+      "additionalProperties": false
+    },
+    "gap": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "task": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/taskId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "object": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        }
+      },
+      "required": [
+        "code",
+        "task",
+        "object",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    "gate": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "$ref": "#/$defs/taskId"
+        },
+        "candidate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "gate": {
+          "enum": [
+            "start",
+            "before-delivery",
+            "complete",
+            "retry"
+          ]
+        },
+        "outcome": {
+          "enum": [
+            "pass",
+            "blocked",
+            "unknown"
+          ]
+        },
+        "gaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/gap"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        }
+      },
+      "required": [
+        "task",
+        "candidate",
+        "gate",
+        "outcome",
+        "gaps"
+      ],
+      "additionalProperties": false
+    },
+    "actionResult": {
+      "type": "object",
+      "properties": {
+        "action": {
+          "$ref": "#/$defs/id"
+        },
+        "task": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/taskId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/uuid"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "disposition": {
+          "enum": [
+            "current",
+            "historical",
+            "evaluated"
+          ]
+        }
+      },
+      "required": [
+        "action",
+        "task",
+        "events",
+        "disposition"
+      ],
+      "additionalProperties": false
+    },
+    "response": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "response"
+        },
+        "protocol": {
+          "const": "stage-c/2-draft"
+        },
+        "request_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/uuid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "enum": [
+            "committed",
+            "replayed",
+            "rejected",
+            "indeterminate",
+            "read"
+          ]
+        },
+        "exit": {
+          "enum": [
+            0,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11
+          ]
+        },
+        "durable": {
+          "type": "boolean"
+        },
+        "commit": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/gitOid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "original_commit": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/gitOid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "gate_context": {
+          "enum": [
+            "at-commit",
+            "historical",
+            "current-read",
+            "none"
+          ]
+        },
+        "action_results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/actionResult"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "gates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/gate"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/gap"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "data": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/readData"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "protocol",
+        "request_id",
+        "status",
+        "exit",
+        "durable",
+        "commit",
+        "original_commit",
+        "gate_context",
+        "action_results",
+        "gates",
+        "errors",
+        "data"
+      ],
+      "additionalProperties": false
+    },
+    "receipt": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "receipt"
+        },
+        "protocol": {
+          "const": "stage-c/2-draft"
+        },
+        "request_id": {
+          "$ref": "#/$defs/uuid"
+        },
+        "request_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "actor": {
+          "$ref": "#/$defs/actor"
+        },
+        "recorded_at": {
+          "$ref": "#/$defs/time"
+        },
+        "action_results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/actionResult"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "gates": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/gate"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        }
+      },
+      "required": [
+        "kind",
+        "protocol",
+        "request_id",
+        "request_hash",
+        "actor",
+        "recorded_at",
+        "action_results",
+        "gates"
+      ],
+      "additionalProperties": false
+    },
+    "query": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "query"
+            },
+            "protocol": {
+              "const": "stage-c/2-draft"
+            },
+            "actor": {
+              "$ref": "#/$defs/actor"
+            },
+            "op": {
+              "const": "task.read"
+            },
+            "task": {
+              "$ref": "#/$defs/taskId"
+            }
+          },
+          "required": [
+            "kind",
+            "protocol",
+            "actor",
+            "op",
+            "task"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "query"
+            },
+            "protocol": {
+              "const": "stage-c/2-draft"
+            },
+            "actor": {
+              "$ref": "#/$defs/actor"
+            },
+            "op": {
+              "const": "task.list"
+            }
+          },
+          "required": [
+            "kind",
+            "protocol",
+            "actor",
+            "op"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "query"
+            },
+            "protocol": {
+              "const": "stage-c/2-draft"
+            },
+            "actor": {
+              "$ref": "#/$defs/actor"
+            },
+            "op": {
+              "const": "task.check"
+            },
+            "task": {
+              "$ref": "#/$defs/taskId"
+            }
+          },
+          "required": [
+            "kind",
+            "protocol",
+            "actor",
+            "op",
+            "task"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "query"
+            },
+            "protocol": {
+              "const": "stage-c/2-draft"
+            },
+            "actor": {
+              "$ref": "#/$defs/actor"
+            },
+            "op": {
+              "const": "task.handoff"
+            },
+            "task": {
+              "$ref": "#/$defs/taskId"
+            }
+          },
+          "required": [
+            "kind",
+            "protocol",
+            "actor",
+            "op",
+            "task"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "query"
+            },
+            "protocol": {
+              "const": "stage-c/2-draft"
+            },
+            "actor": {
+              "$ref": "#/$defs/actor"
+            },
+            "op": {
+              "const": "gate.read"
+            },
+            "task": {
+              "$ref": "#/$defs/taskId"
+            },
+            "payload": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "target": {
+                      "$ref": "#/$defs/startRef"
+                    },
+                    "gate": {
+                      "const": "start"
+                    }
+                  },
+                  "required": [
+                    "target",
+                    "gate"
+                  ],
+                  "additionalProperties": false
+                },
+                {
+                  "type": "object",
+                  "properties": {
+                    "target": {
+                      "$ref": "#/$defs/candidateRef"
+                    },
+                    "gate": {
+                      "enum": [
+                        "before-delivery",
+                        "complete",
+                        "retry"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "target",
+                    "gate"
+                  ],
+                  "additionalProperties": false
+                }
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "protocol",
+            "actor",
+            "op",
+            "task",
+            "payload"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "query"
+            },
+            "protocol": {
+              "const": "stage-c/2-draft"
+            },
+            "actor": {
+              "$ref": "#/$defs/actor"
+            },
+            "op": {
+              "const": "receipt.read"
+            },
+            "receipt_id": {
+              "$ref": "#/$defs/uuid"
+            }
+          },
+          "required": [
+            "kind",
+            "protocol",
+            "actor",
+            "op",
+            "receipt_id"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "query"
+            },
+            "protocol": {
+              "const": "stage-c/2-draft"
+            },
+            "actor": {
+              "$ref": "#/$defs/actor"
+            },
+            "op": {
+              "const": "policy.read"
+            }
+          },
+          "required": [
+            "kind",
+            "protocol",
+            "actor",
+            "op"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "taskSummary": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/taskId"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256
+        },
+        "state": {
+          "enum": [
+            "todo",
+            "active",
+            "verifying",
+            "delivering",
+            "done",
+            "canceled"
+          ]
+        },
+        "candidate": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "state",
+        "candidate"
+      ],
+      "additionalProperties": false
+    },
+    "readData": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "task.read"
+            },
+            "task": {
+              "$ref": "#/$defs/task"
+            }
+          },
+          "required": [
+            "op",
+            "task"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "task.list"
+            },
+            "tasks": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/taskSummary"
+              },
+              "minItems": 0,
+              "maxItems": 10000
+            }
+          },
+          "required": [
+            "op",
+            "tasks"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "task.check"
+            },
+            "task": {
+              "$ref": "#/$defs/taskId"
+            },
+            "consistent": {
+              "type": "boolean"
+            },
+            "gaps": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/gap"
+              },
+              "minItems": 0,
+              "maxItems": 10000
+            },
+            "readiness": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/gap"
+              },
+              "minItems": 0,
+              "maxItems": 10000
+            }
+          },
+          "required": [
+            "op",
+            "task",
+            "consistent",
+            "gaps",
+            "readiness"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "task.handoff"
+            },
+            "task": {
+              "$ref": "#/$defs/taskId"
+            },
+            "text": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 524288
+            }
+          },
+          "required": [
+            "op",
+            "task",
+            "text"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "gate.read"
+            }
+          },
+          "required": [
+            "op"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "receipt.read"
+            },
+            "receipt": {
+              "$ref": "#/$defs/receipt"
+            }
+          },
+          "required": [
+            "op",
+            "receipt"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "op": {
+              "const": "policy.read"
+            },
+            "policy": {
+              "$ref": "#/$defs/policy"
+            }
+          },
+          "required": [
+            "op",
+            "policy"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "fileChange": {
+      "type": "object",
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/path"
+        },
+        "before": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "after": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "path",
+        "before",
+        "after"
+      ],
+      "additionalProperties": false
+    },
+    "journal": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "journal"
+        },
+        "protocol": {
+          "const": "stage-c/2-draft"
+        },
+        "transaction": {
+          "$ref": "#/$defs/uuid"
+        },
+        "request_id": {
+          "$ref": "#/$defs/uuid"
+        },
+        "request_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "state": {
+          "enum": [
+            "prepared",
+            "objects-ready",
+            "ref-updated",
+            "materialized"
+          ]
+        },
+        "base_commit": {
+          "$ref": "#/$defs/gitOid"
+        },
+        "new_commit": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/gitOid"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "branch_ref": {
+          "type": "string",
+          "pattern": "^refs/heads/[a-zA-Z0-9/_-]+(?![\\s\\S])"
+        },
+        "changes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/fileChange"
+          },
+          "minItems": 1,
+          "maxItems": 10000
+        },
+        "receipt_path": {
+          "$ref": "#/$defs/path"
+        },
+        "backup_uri": {
+          "$ref": "#/$defs/uri"
+        }
+      },
+      "required": [
+        "kind",
+        "protocol",
+        "transaction",
+        "request_id",
+        "request_hash",
+        "state",
+        "base_commit",
+        "new_commit",
+        "branch_ref",
+        "changes",
+        "receipt_path",
+        "backup_uri"
+      ],
+      "additionalProperties": false
+    },
+    "migrationItem": {
+      "type": "object",
+      "properties": {
+        "old_path": {
+          "$ref": "#/$defs/path"
+        },
+        "old_hash": {
+          "$ref": "#/$defs/hash"
+        },
+        "task_id": {
+          "$ref": "#/$defs/taskId"
+        },
+        "new_path": {
+          "$ref": "#/$defs/path"
+        },
+        "new_hash": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/hash"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "old_state": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "new_state": {
+          "anyOf": [
+            {
+              "enum": [
+                "todo",
+                "active",
+                "verifying",
+                "delivering",
+                "done",
+                "canceled"
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "missing": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 8192
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        }
+      },
+      "required": [
+        "old_path",
+        "old_hash",
+        "task_id",
+        "new_path",
+        "new_hash",
+        "old_state",
+        "new_state",
+        "missing"
+      ],
+      "additionalProperties": false
+    },
+    "migration": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "const": "migration-plan"
+        },
+        "protocol": {
+          "const": "stage-c/2-draft"
+        },
+        "plan_id": {
+          "$ref": "#/$defs/uuid"
+        },
+        "mode": {
+          "enum": [
+            "preview",
+            "approved"
+          ]
+        },
+        "source_commit": {
+          "$ref": "#/$defs/gitOid"
+        },
+        "source_tool": {
+          "const": 1
+        },
+        "source_schema": {
+          "const": 2
+        },
+        "target_tool": {
+          "const": 2
+        },
+        "target_schema": {
+          "const": 3
+        },
+        "source_revision": {
+          "$ref": "#/$defs/gitOid"
+        },
+        "backup_uri": {
+          "$ref": "#/$defs/uri"
+        },
+        "backup_manifest": {
+          "$ref": "#/$defs/source"
+        },
+        "isolation_evidence": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/source"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "policy_proposal": {
+          "$ref": "#/$defs/policy"
+        },
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/migrationItem"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "next_id": {
+          "$ref": "#/$defs/taskId"
+        },
+        "issues": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/gap"
+          },
+          "minItems": 0,
+          "maxItems": 10000
+        },
+        "approval": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/confirmation"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "kind",
+        "protocol",
+        "plan_id",
+        "mode",
+        "source_commit",
+        "source_tool",
+        "source_schema",
+        "target_tool",
+        "target_schema",
+        "source_revision",
+        "backup_uri",
+        "backup_manifest",
+        "isolation_evidence",
+        "policy_proposal",
+        "items",
+        "next_id",
+        "issues",
+        "approval"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "oneOf": [
+    {
+      "$ref": "#/$defs/task"
+    },
+    {
+      "$ref": "#/$defs/policy"
+    },
+    {
+      "$ref": "#/$defs/request"
+    },
+    {
+      "$ref": "#/$defs/query"
+    },
+    {
+      "$ref": "#/$defs/response"
+    },
+    {
+      "$ref": "#/$defs/receipt"
+    },
+    {
+      "$ref": "#/$defs/journal"
+    },
+    {
+      "$ref": "#/$defs/migration"
+    }
+  ]
+}

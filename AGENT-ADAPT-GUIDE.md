@@ -20,6 +20,13 @@ curl -sL https://raw.githubusercontent.com/sinftkey/agent-workflows/main/scripts
 ```
 
 需要指定本地模板目录、落位目标或换仓库源时，可用环境变量 `ADAPT_SOURCE` / `ADAPT_TARGET` / `ADAPT_REPO`，或用参数 `-Source` / `-Target` / `-Repo`；优先级：环境变量 > 参数 > 默认值。两个脚本接口一致。
+### 已有目标与重跑
+
+适配脚本只对目标根目录已存在的 `AGENTS.md`、`.gitattributes`、`.gitignore` 跳过覆盖并提示手动合并。`docs/development/` 中的同名通用模板文档会被覆盖，其中的 `AGENTS.md` 副本会被删除；不要把根目录文件的跳过规则理解为整个落位目录都受保护。
+
+已有适配文档或准备重跑时，先把 `ADAPT_TARGET`（或未被该环境变量覆盖的 `-Target` 参数）指向独立、空的临时落位目录。落位后，比对该目录中的通用文档、根目录文件及项目已有内容，只手动合并所需变化；保留项目更具体的规则和自定义内容。临时目录尚未完成目标项目适配，不代表项目已更新或通过验收。项目自己的适配与校验仍按第 3、4 节执行，模板后续更新见第 6 节。
+
+`templates/task-center/` 不由适配脚本复制；目标已有 `docs/development/task-center` 或 `docs/tasks/TASK-CENTER.md` 时，两端脚本只提示检查，不修改或删除该旧副本。这不表示安装有效、兼容或已经迁移，需按既有任务中心流程另行处置。
 
 脚本自动完成：
 

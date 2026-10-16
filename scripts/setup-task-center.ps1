@@ -167,6 +167,11 @@ function Get-SourceAssets {
     }
 }
 
+function Assert-CandidateDirectory([string]$Path) {
+    if (-not (Test-Path -LiteralPath $Path -PathType Container)) {
+        Stop-Setup "任务中心候选目录不存在或不是目录：$Path；请先核对 Git worktree 登记和目录实际状态。"
+    }
+}
 function Get-TaskCenterCandidate {
     $worktrees = @(Get-Worktrees)
     $envPath = $env:TASK_CENTER_PATH
@@ -175,6 +180,7 @@ function Get-TaskCenterCandidate {
         $match = $worktrees | Where-Object { $_.Path -eq $candidatePath }
         if (-not $match) { Stop-Setup "TASK_CENTER_PATH 不是当前克隆登记的 worktree：$candidatePath" }
         if ($match.Branch -ne $Branch) { Stop-Setup "TASK_CENTER_PATH 分支冲突：期望 $Branch，实际 $($match.Branch)" }
+        Assert-CandidateDirectory $match.Path
         return $match
     }
     $registration = Read-Registration
@@ -182,14 +188,14 @@ function Get-TaskCenterCandidate {
         $registeredPath = Get-CanonicalPath $registration.path $script:GitRoot
         $match = $worktrees | Where-Object { $_.Path -eq $registeredPath }
         if ($match) {
-            if ($match.Branch -eq $Branch) { return $match }
+            if ($match.Branch -eq $Branch) { Assert-CandidateDirectory $match.Path; return $match }
             Write-Host "登记路径当前位于 $($match.Branch)；将按目标分支重新发现任务中心。" -ForegroundColor Yellow
         }
         if (-not $match) { Write-Host "登记的任务中心 worktree 已缺失：$registeredPath" -ForegroundColor Yellow }
     }
     $matches = @($worktrees | Where-Object { $_.Branch -eq $Branch })
     if ($matches.Count -gt 1) { Stop-Setup "发现多个 $Branch worktree，拒绝静默选择。" }
-    if ($matches.Count -eq 1) { return $matches[0] }
+    if ($matches.Count -eq 1) { Assert-CandidateDirectory $matches[0].Path; return $matches[0] }
     return $null
 }
 
