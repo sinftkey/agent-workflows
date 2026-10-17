@@ -52,7 +52,7 @@ $docsDir = Join-Path $Target "docs/development"
 New-Item -ItemType Directory -Force -Path $docsDir | Out-Null
 $templateDir = Join-Path $Source "templates"
 foreach ($item in Get-ChildItem -LiteralPath $templateDir -Force) {
-    if ($item.Name -eq "task-center") { continue }
+    if ($item.Name -in @('task-center', 'task-center-v2')) { continue }
     Copy-Item -LiteralPath $item.FullName -Destination $docsDir -Recurse -Force
 }
 Remove-Item -LiteralPath (Join-Path $docsDir "AGENTS.md") -Force -ErrorAction SilentlyContinue
@@ -60,6 +60,10 @@ Remove-Item -LiteralPath (Join-Path $docsDir "AGENTS.md") -Force -ErrorAction Si
 $existingTaskCenter = Join-Path $docsDir "task-center"
 if (Test-Path -LiteralPath $existingTaskCenter) {
     Write-Warning "An existing $existingTaskCenter was left untouched. Check that it is not a legacy task-center copy; current task-center installations belong in the local task-center worktree created by the standalone setup tool."
+}
+$existingStructuredTaskCenter = Join-Path $docsDir "task-center-v2"
+if (Test-Path -LiteralPath $existingStructuredTaskCenter) {
+    Write-Warning "An existing $existingStructuredTaskCenter was left untouched. Use the standalone structured task-center installer and its explicit migration process."
 }
 $legacyTasksProtocol = Join-Path (Join-Path $Target "docs") "tasks/TASK-CENTER.md"
 if (Test-Path -LiteralPath $legacyTasksProtocol -PathType Leaf) {
@@ -92,8 +96,8 @@ if ($tmp) {
 
 Write-Host ""
 Write-Host "=== Placement done ==="
-Write-Host "Generic templates/ content (excluding AGENTS.md and optional task-center/)  ->  $docsDir"
-Write-Host "templates/task-center/ was not copied; use the standalone setup tool to enable it"
+Write-Host "Generic templates/ content (excluding AGENTS.md and both optional task centers)  ->  $docsDir"
+Write-Host "templates/task-center/ and task-center-v2/ were not copied; use their standalone setup tools"
 Write-Host "templates/AGENTS.md  ->  $agentsDest (single copy)"
 Write-Host ".gitattributes / .gitignore  ->  $Target (skip if already exists)"
 Write-Host ""

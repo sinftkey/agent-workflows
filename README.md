@@ -31,6 +31,7 @@
 | [collaborative-workflow.md](templates/collaborative-workflow.md) | 多人 / 多 Agent 协作模板：角色 × 权限矩阵（开发 / 审核 / 测试职责分离）、标准流程编排（需求→开发→测试→审核→发布）、分支所有权、PR/Review、冲突协调 |
 | [docs-communication.md](templates/docs-communication.md) | 通用设计指南：让 Git 工作流与项目文档结合，改善人 × Agent 通信（含占位符式落地步骤） |
 | [task-center/](templates/task-center/) | 可选的同一克隆本地任务中枢：任务文件是唯一数据源，INDEX 自动生成；Bash / PowerShell 命令提供状态校验、全局写锁、隔离暂存和可恢复事务；由独立 setup 安装在孤儿分支和共享 worktree，不落入项目代码分支 |
+| [task-center-v2/](templates/task-center-v2/) | 阶段 D 的结构化候选实现（tool 2 / schema 3）：共享核心、文件请求、明确读写授权、依赖纠正、离线运行时与显式迁移；尚待独立复核及发布条件验证 |
 
 ## 快速开始（新项目使用）
 
@@ -46,7 +47,7 @@ irm https://raw.githubusercontent.com/sinftkey/agent-workflows/main/scripts/adap
 curl -sL https://raw.githubusercontent.com/sinftkey/agent-workflows/main/scripts/adapt.sh | bash -s
 ```
 
-脚本机械步骤（下载通用模板、复制到 `docs/development/`、生成 `AGENTS.md`、复制 `.gitattributes` / `.gitignore`、输出待替换 `{{...}}` 适配占位符清单）见 [scripts/](scripts/)。适配脚本会跳过可选的 `templates/task-center/`；如需启用，请按下方说明使用独立 setup。参数接口两个脚本一致：环境变量 `ADAPT_REPO`（模板仓库地址）、`ADAPT_SOURCE`（本地模板目录，跳过克隆）、`ADAPT_TARGET`（落位目标目录，默认当前目录），优先级环境变量 > 命令行参数；直接执行脚本时也可用 `-Repo` / `-Source` / `-Target` 参数。
+脚本机械步骤（下载通用模板、复制到 `docs/development/`、生成 `AGENTS.md`、复制 `.gitattributes` / `.gitignore`、输出待替换 `{{...}}` 适配占位符清单）见 [scripts/](scripts/)。适配脚本会跳过可选的 `templates/task-center/` 和 `templates/task-center-v2/`；如需启用，请按下方说明使用独立 setup。参数接口两个脚本一致：环境变量 `ADAPT_REPO`（模板仓库地址）、`ADAPT_SOURCE`（本地模板目录，跳过克隆）、`ADAPT_TARGET`（落位目标目录，默认当前目录），优先级环境变量 > 命令行参数；直接执行脚本时也可用 `-Repo` / `-Source` / `-Target` 参数。
 
 ### 方式二：手动复制
 
@@ -99,17 +100,27 @@ bash "<任务中心 worktree>/scripts/task.sh" check
 
 迁移与修复流程为：先运行 `setup-task-center` 的 repair 预览；确认克隆外备份和迁移计划后，才显式执行。PowerShell 使用 `-Repair -DryRun` / `-Repair -Apply`，Bash 使用 `--repair --dry-run` / `--repair --apply`。恢复、bundle 备份、版本与字段规则见 [任务中心协议](templates/task-center/TASK-CENTER.md)。
 
+### 结构化任务中心候选（阶段 D）
+
+这是独立的 tool 2 / schema 3 实现，入口为 [setup-task-center-v2.ps1](scripts/setup-task-center-v2.ps1) / [setup-task-center-v2.sh](scripts/setup-task-center-v2.sh)，不会自动升级上述旧安装。两端使用同一 Python 核心，JSON 文件承载请求和响应；24 个写动作、7 种读能力、恢复与管理入口见[候选使用说明](templates/task-center-v2/TASK-CENTER.md)。业务模板保持语言无关，工具运行本身需要受支持的 Python 和固定离线依赖。
+
+先在联网准备机按 [Windows 运行时锁](runtime/task-center/windows-cp312.lock.json)或 [Linux 运行时锁](runtime/task-center/linux-cp312.lock.json)获取并核对 wheel；[准备脚本](scripts/prepare-task-center-runtime.py)只从明确提供的本地 wheel 目录安装至新的隔离目录，并生成逐文件 hash 锁，不改全局环境。任务命令不会自动联网或安装。当前仅有候选运行时，安装与迁移必须显式指定 `--candidate` 并限于隔离仓库；不能据此安装到真实项目。平台实测、首次失败和修订、发布限制、操作成本及固定复核入口统一见[阶段 D 报告](optimization-stage-d-report.md)，复现方法见[隔离验证说明](tests/STRUCTURED-README.md)。
+
+D1-c1 独立复核发现三项 P2，D1-c2 已完成作者修订及验证：每份交付保留消费关系，历史代录核对原指派资格，恢复旧格式前在预览与锁内拦截业务 pending。独立复核及用户接受仍待完成。
+
+新安装先 `install-preview`，再以显式 policy 和确认来源执行 `install-apply`；已有旧任务数据先 `migrate-preview`，核对克隆外 bundle、逐文件备份和固定计划后，才允许 `migrate-apply`。迁移保留旧终态及证据未知，不把旧角色转成新授权；有后继事实时拒绝恢复旧格式。旧客户端普通命令及 recover 都拒绝新格式，所有写入共用克隆级锁。此处说明实现能力，未授权实际业务数据迁移或阶段 E。
+
 ## 维护方式
 
-### 工作流优化方案（尚未实施）
+### 工作流优化方案与阶段实施
 
-[一人多 Agent 工作流统一优化方案](optimization-plan.md)整合了历轮讨论，提出仓库定位、任务生命周期、身份授权、检查与证据、交付边界及分阶段实施建议。它是整体评审入口，尚未改变本 README 上述使用说明、现行模板、脚本或任务数据格式。
+[一人多 Agent 工作流统一优化方案](optimization-plan.md)整合了历轮讨论，提出仓库定位、任务生命周期、身份授权、检查与证据、交付边界及分阶段实施建议。它是整体评审入口；后续已接受的局部修复及阶段 C/D 增量，以[试用安排](optimization-trial-arrangement.md)及对应阶段报告为准。
 
-方案已根据七项评审意见调整为“语义评审 → 临时任务卡真实试用 → 按需格式设计 → 实现及迁移”，尚不具备全面实现的批准条件。配套材料为[正常路径与操作账单](examples/workflow-small-fix.md)、[异常推演表](optimization-exception-cases.md)、[成本与删减标准](optimization-trial-criteria.md)；原数值门槛保留，当前采用范围和试用状态以执行安排为准。
+方案已根据七项评审意见调整为“语义评审 → 临时任务卡真实试用 → 按需格式设计 → 实现及迁移”。配套材料为[正常路径与操作账单](examples/workflow-small-fix.md)、[异常推演表](optimization-exception-cases.md)、[成本与删减标准](optimization-trial-criteria.md)；原数值门槛保留，当前采用范围和试用状态以执行安排为准。用户已接受 C 精确设计并授权 D 一次实施后统一复核；量化收益仍未知，E 未授权。
 
 新会话继续执行时，从[执行交接单](execution-handoff.md)开始，以试用安排中的最新阶段决定为准；交接单后部 A/B 工作单保留历史。
 
-语义依据见[核对记录](optimization-stage-a-review.md)；最新执行方式、阶段授权与任务状态统一见[试用安排](optimization-trial-arrangement.md)。README 只维护入口，不重复逐任务回传。阶段 C 先读 [C1 信息模型](optimization-stage-c-design.md)及其[概念示意](examples/workflow-stage-c-small-fix.json)，精确设计见 [C2 完整格式与接口契约](optimization-stage-c-spec.md)，配套[协议 Schema](design/stage-c/protocol.schema.json)、[四组完整正常数据](examples/workflow-stage-c-complete.json)和[设计向量](design/stage-c/vectors.json)。C2 区分写动作与只读查询/历史重放授权，候选前开工评估不要求候选，依赖排除绑定完整来源交付版本。这些均为设计资料，不能导入现行工具；结构校验不证明新协议已实现。量化成本标准仍保留，设计评审不等于 D 实现或迁移获准。
+语义依据见[核对记录](optimization-stage-a-review.md)；最新执行方式、阶段授权与任务状态统一见[试用安排](optimization-trial-arrangement.md)。README 只维护入口，不重复逐任务回传。阶段 C 先读 [C1 信息模型](optimization-stage-c-design.md)及其[概念示意](examples/workflow-stage-c-small-fix.json)，精确设计见 [C2 完整格式与接口契约](optimization-stage-c-spec.md)，配套[协议 Schema](design/stage-c/protocol.schema.json)、[四组完整正常数据](examples/workflow-stage-c-complete.json)和[设计向量](design/stage-c/vectors.json)。C2 区分写动作与只读查询/历史重放授权，候选前开工评估不要求候选，依赖排除绑定完整来源交付版本。设计资料不能导入旧工具；D 的实际实现和验证以[阶段 D 报告](optimization-stage-d-report.md)为准，结构校验不等于业务执行或发布通过。
 
 讨论依据保留在[移交摘要](discussion-handoff.md)、[完整研讨记录](discussion-notes.md)和[协议草案与场景推演](discussion-protocol-draft.md)。方案中的推荐默认值仍待评审，后续模板变更须与说明同步并经过 review 后合并。
 

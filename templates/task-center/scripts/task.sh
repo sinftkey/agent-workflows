@@ -97,9 +97,12 @@ version_check() {
   sv="$(sed -n 's/^schema-version:[[:space:]]*//p' "$VERSION" | head -1 | sed 's/\r$//')"
   [ "$tv" = "$TOOL_VERSION" ] || die "不支持工具版本：$tv（本脚本 $TOOL_VERSION）"
   [ "$sv" = "$SCHEMA_VERSION" ] || die "不支持数据格式版本：$sv（本脚本 $SCHEMA_VERSION）；请运行迁移引导器"
-  [ -f "$NEXT_ID" ] || die '缺少 .task-center/next-id'
+  if [ "$CMD" != recover ]; then [ -f "$NEXT_ID" ] || die '缺少 .task-center/next-id'; fi
 }
-if [ "$CMD" != recover ]; then version_check; fi
+# Recovery is also format-specific; never let the legacy recovery path touch
+# a structured installation merely because ordinary version checks were skipped.
+[ ! -f "$COMMON/task-center-v2/administration.pending" ] || die '存在安装/迁移/恢复的未完成事务；先使用对应的新安装器恢复入口核对，不运行旧恢复命令。'
+version_check
 
 require_clean() {
   local state

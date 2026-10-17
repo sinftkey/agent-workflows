@@ -6,6 +6,8 @@
 
 ### Fixed
 
+- 结构化候选修订 D1-c1 复核发现的交付消费关系丢失、历史代录越过原指派及旧格式恢复绕过业务 pending；新增版本传播、资格和恢复交错回归，待独立复核。
+
 - Bash repair now writes the current padded-ID INDEX format, normalizes legacy filenames and default fields for both clients, and keeps Git Bash paths compatible with the shared PowerShell registration.
 - `adapt.sh` / `adapt.ps1` 不再把可选 `templates/task-center/` 复制进项目代码分支；既有同名目录或旧式 `docs/tasks/TASK-CENTER.md` 会提示维护者检查且不会被脚本覆盖或删除
 - 适配指南第 4 节 bash 校验命令改为 `grep -rnoE`，修复 BRE 下 `+` 按字面量匹配导致校验形同虚设的问题（P0）
@@ -18,6 +20,7 @@
 
 ### Added
 
+- 阶段 D 结构化候选：独立 `templates/task-center-v2/` 与双端 setup，共享离线 Python 核心、24 写动作/7 读能力、授权/门槛、依赖纠正、私有索引事务与恢复、显式预览/备份/迁移/旧格式恢复。固定依赖、验证及发布限制见阶段 D 报告；不自动升级旧安装，不代表实际业务迁移或发布获准。
 - 新增独立 `setup-task-center.sh` / `setup-task-center.ps1` 安装与修复入口：在同一克隆登记本地孤儿分支和共享 worktree，设置本地忽略规则；旧格式修复默认预览，显式执行前创建并验证克隆外 bundle，支持恢复并重新登记
 - 任务中心协议补充 Agent 快速上手、工具无关用户级引导、事务恢复、repair、克隆外 bundle 备份与恢复示例；setup 输出引导语，但不修改用户全局指令
 - 任务中心阶段一：定稿 v2 任务字段、状态权限、迁移映射、版本元数据与命令参数；Bash / PowerShell 脚本改为共同 Git 目录发现、本地读写、全局事务锁、显式路径提交、任务源校验与 INDEX 生成
@@ -31,6 +34,7 @@
 
 ### Changed
 
+- 适配器同时跳过两类任务中心目录；旧任务客户端连 recover 也核对版本，并在结构化管理事务未收敛时拒写。README 与适配指南登记结构化候选独立入口和限制。
 - 任务中心运行资产只进入本地孤儿分支和共享 worktree；从本仓库适配模板时跳过 `templates/task-center/`，适配指南不再建议复制至使用方代码分支的 `docs/tasks/` 或写入项目级 Agent 规则
 - 协作模板保留通用任务跟踪和 PR 衔接规则，移除本地任务中心专属的分支推送、路径和安装说明；本地任务编号统一使用 `TC-0042`，不伪装成平台 `#42`
 - 任务中心安装、迁移、版本与兼容性说明集中在 README 和协议；Git 2.23 仅为当前检查下限，最低版本及平台兼容性尚待发布前验证

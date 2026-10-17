@@ -111,7 +111,7 @@ function Check-Version {
     if ($data['tool-version'] -ne $ToolVersion) { Die "不支持工具版本：$($data['tool-version'])（本脚本 $ToolVersion）" }
     if ($data['schema-version'] -ne $SchemaVersion) { Die "不支持数据格式版本：$($data['schema-version'])（本脚本 $SchemaVersion）；请运行迁移引导器" }
     if (-not $data['source-revision']) { Die 'version 缺少 source-revision' }
-    if (-not (Test-Path -LiteralPath $NextId -PathType Leaf)) { Die '缺少 .task-center/next-id' }
+    if ($Command -ne 'recover' -and -not (Test-Path -LiteralPath $NextId -PathType Leaf)) { Die '缺少 .task-center/next-id' }
 }
 function Assert-Clean {
     $stateLines = @(& git -C $WT status --porcelain --untracked-files=all)
@@ -601,7 +601,9 @@ function Cmd-RebuildIndex {
 
 if (-not $args.Count) { Usage }; $Command = $args[0]; $Rest = @($args | Select-Object -Skip 1)
 try {
-    Find-TaskCenter; if ($Command -ne 'recover') { Check-Version }
+    Find-TaskCenter
+    if (Test-Path -LiteralPath (Join-Path $Common 'task-center-v2/administration.pending')) { Die '存在安装/迁移/恢复的未完成事务；先使用对应的新安装器恢复入口核对。' }
+    Check-Version
     switch ($Command) {
         'init' { Assert-Clean; Check-History $WT -Full; if (Check-Data $WT) { Write-Host "任务中心就绪：$WT（本地分支 $Branch）" } else { Die "check 发现 $($script:CheckErrors.Count) 项问题：`n$($script:CheckErrors -join "`n")" } }
         'list' { if ($Rest.Count -gt 1 -or ($Rest.Count -eq 1 -and $Rest[0] -ne '--all')) { Usage }; Cmd-List $Rest }

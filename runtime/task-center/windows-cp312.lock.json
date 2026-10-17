@@ -1,0 +1,74 @@
+{
+  "lock_version": 1,
+  "packages": {
+    "attrs": {
+      "version": "26.1.0",
+      "wheel": "attrs-26.1.0-py3-none-any.whl",
+      "sha256": "c647aa4a12dfbad9333ca4e71fe62ddc36f4e63b2d260a37a8b83d2f043ac309",
+      "license_expression": "MIT",
+      "license_files": {
+        "attrs-26.1.0.dist-info/licenses/LICENSE": "882115c95dfc2af1eeb6714f8ec6d5cbcabf667caff8729f42420da63f714e9f"
+      }
+    },
+    "jsonschema": {
+      "version": "4.23.0",
+      "wheel": "jsonschema-4.23.0-py3-none-any.whl",
+      "sha256": "fbadb6f8b144a8f8cf9f0b89ba94501d143e50411a1278633f56a7acf7fd5566",
+      "license_expression": "MIT",
+      "license_files": {
+        "jsonschema-4.23.0.dist-info/licenses/COPYING": "4f92a015a13c4d1a040bef018aa13430b4f1bc73b41b16bb846c346766de7439"
+      }
+    },
+    "jsonschema-specifications": {
+      "version": "2025.9.1",
+      "wheel": "jsonschema_specifications-2025.9.1-py3-none-any.whl",
+      "sha256": "98802fee3a11ee76ecaca44429fda8a41bff98b00a0f2838151b113f210cc6fe",
+      "license_expression": "MIT",
+      "license_files": {
+        "jsonschema_specifications-2025.9.1.dist-info/licenses/COPYING": "42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c"
+      }
+    },
+    "referencing": {
+      "version": "0.37.0",
+      "wheel": "referencing-0.37.0-py3-none-any.whl",
+      "sha256": "381329a9f99628c9069361716891d34ad94af76e461dcb0335825aecc7692231",
+      "license_expression": "MIT",
+      "license_files": {
+        "referencing-0.37.0.dist-info/licenses/COPYING": "42dcd63495f87b4eb7c7757afa379bb55a53f94afd7a5f657d9adf57236e515c"
+      }
+    },
+    "rpds-py": {
+      "version": "2026.9.1",
+      "wheel": "rpds_py-2026.9.1-cp312-cp312-win_amd64.whl",
+      "sha256": "5ce8943f79c2210f7abcc28e86367b03b28d95027fd01c46d2472373ae70c86f",
+      "license_expression": "MIT",
+      "license_files": {
+        "rpds_py-2026.9.1.dist-info/licenses/LICENSE": "8bcb72c82ea8ae74802293c41d93ad7d51434001b0ae45a603a5af0f507aee0a"
+      }
+    },
+    "typing-extensions": {
+      "version": "4.16.0",
+      "wheel": "typing_extensions-4.16.0-py3-none-any.whl",
+      "sha256": "481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8",
+      "license_expression": "PSF-2.0",
+      "license_files": {
+        "typing_extensions-4.16.0.dist-info/licenses/LICENSE": "3b2f81fe21d181c499c59a256c8e1968455d6689d269aa85373bfb6af41da3bf"
+      }
+    }
+  },
+  "release_approved": false,
+  "security_audit": {
+    "endpoint": "https://api.osv.dev/v1/querybatch",
+    "queried_at": "2026-10-16T08:22:46.689652+00:00",
+    "packages": {
+      "attrs": {},
+      "jsonschema": {},
+      "jsonschema-specifications": {},
+      "referencing": {},
+      "rpds-py": {},
+      "typing-extensions": {}
+    },
+    "known_findings": 0,
+    "meaning": "Database lookup only; not a security guarantee or release approval."
+  }
+}
