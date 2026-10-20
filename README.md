@@ -13,6 +13,7 @@
 |------|------|
 | [templates/](templates/) | 可直接复制到新项目的通用模板（语言无关） |
 | [examples/workflow-small-fix.md](examples/workflow-small-fix.md) | 优化方案的最小正常路径与操作账单示例，尚未真实运行，不是现行模板操作指令 |
+| [docs/workflow-optimization-summary.md](docs/workflow-optimization-summary.md) | A–D 阶段改动、实际验证范围与保留项汇总；历史讨论及逐轮记录见归档索引 |
 | [scripts/](scripts/) | Agent 适配脚本（adapt.ps1 / adapt.sh）与任务中心安装、修复引导器（setup-task-center.ps1 / setup-task-center.sh） |
 | [.gitattributes](.gitattributes) | 文本属性 / 行尾规则，随模板一起复制到新项目 |
 | [.gitignore](.gitignore) | 通用忽略规则，随模板一起复制到新项目 |
@@ -31,7 +32,7 @@
 | [collaborative-workflow.md](templates/collaborative-workflow.md) | 多人 / 多 Agent 协作模板：角色 × 权限矩阵（开发 / 审核 / 测试职责分离）、标准流程编排（需求→开发→测试→审核→发布）、分支所有权、PR/Review、冲突协调 |
 | [docs-communication.md](templates/docs-communication.md) | 通用设计指南：让 Git 工作流与项目文档结合，改善人 × Agent 通信（含占位符式落地步骤） |
 | [task-center/](templates/task-center/) | 可选的同一克隆本地任务中枢：任务文件是唯一数据源，INDEX 自动生成；Bash / PowerShell 命令提供状态校验、全局写锁、隔离暂存和可恢复事务；由独立 setup 安装在孤儿分支和共享 worktree，不落入项目代码分支 |
-| [task-center-v2/](templates/task-center-v2/) | 阶段 D 的结构化候选实现（tool 2 / schema 3）：共享核心、文件请求、明确读写授权、依赖纠正、离线运行时与显式迁移；尚待独立复核及发布条件验证 |
+| [task-center-v2/](templates/task-center-v2/) | 阶段 D 的结构化候选实现（tool 2 / schema 3）：共享核心、文件请求、明确读写授权、依赖纠正、离线运行时与显式迁移；D1-c2 已在限定范围内复核接受，完整发布条件仍未证明 |
 
 ## 快速开始（新项目使用）
 
@@ -106,7 +107,7 @@ bash "<任务中心 worktree>/scripts/task.sh" check
 
 先在联网准备机按 [Windows 运行时锁](runtime/task-center/windows-cp312.lock.json)或 [Linux 运行时锁](runtime/task-center/linux-cp312.lock.json)获取并核对 wheel；[准备脚本](scripts/prepare-task-center-runtime.py)只从明确提供的本地 wheel 目录安装至新的隔离目录，并生成逐文件 hash 锁，不改全局环境。任务命令不会自动联网或安装。当前仅有候选运行时，安装与迁移必须显式指定 `--candidate` 并限于隔离仓库；不能据此安装到真实项目。平台实测、首次失败和修订、发布限制、操作成本及固定复核入口统一见[阶段 D 报告](optimization-stage-d-report.md)，复现方法见[隔离验证说明](tests/STRUCTURED-README.md)。
 
-D1-c1 独立复核发现三项 P2，D1-c2 已完成作者修订及验证：每份交付保留消费关系，历史代录核对原指派资格，恢复旧格式前在预览与锁内拦截业务 pending。独立复核及用户接受仍待完成。
+D1-c1 独立复核发现的三项 P2 已在 D1-c2 修订并经独立复核关闭，用户已接受：每份交付保留消费关系，历史代录核对原指派资格，恢复旧格式前在预览与锁内拦截业务 pending。实际验证范围和接受依据见[A–D 汇总](docs/workflow-optimization-summary.md)，完整发布条件不据此补判通过。
 
 新安装先 `install-preview`，再以显式 policy 和确认来源执行 `install-apply`；已有旧任务数据先 `migrate-preview`，核对克隆外 bundle、逐文件备份和固定计划后，才允许 `migrate-apply`。迁移保留旧终态及证据未知，不把旧角色转成新授权；有后继事实时拒绝恢复旧格式。旧客户端普通命令及 recover 都拒绝新格式，所有写入共用克隆级锁。此处说明实现能力，未授权实际业务数据迁移或阶段 E。
 
@@ -114,15 +115,13 @@ D1-c1 独立复核发现三项 P2，D1-c2 已完成作者修订及验证：每�
 
 ### 工作流优化方案与阶段实施
 
-[一人多 Agent 工作流统一优化方案](optimization-plan.md)整合了历轮讨论，提出仓库定位、任务生命周期、身份授权、检查与证据、交付边界及分阶段实施建议。它是整体评审入口；后续已接受的局部修复及阶段 C/D 增量，以[试用安排](optimization-trial-arrangement.md)及对应阶段报告为准。
+先读[A–D 阶段改动汇总](docs/workflow-optimization-summary.md)了解实际成果，再从[执行交接](execution-handoff.md)进入[当前安排](optimization-trial-arrangement.md)。阶段决定只维护当前安排，E 按用户要求暂停推进；本轮不从旧提示词自动续做任务。
 
-方案已根据七项评审意见调整为“语义评审 → 临时任务卡真实试用 → 按需格式设计 → 实现及迁移”。配套材料为[正常路径与操作账单](examples/workflow-small-fix.md)、[异常推演表](optimization-exception-cases.md)、[成本与删减标准](optimization-trial-criteria.md)；原数值门槛保留，当前采用范围和试用状态以执行安排为准。用户已接受 C 精确设计并授权 D 一次实施后统一复核；量化收益仍未知，E 未授权。
+[统一方案](optimization-plan.md)、[正常路径与操作账单](examples/workflow-small-fix.md)、[异常推演](optimization-exception-cases.md)和[成本标准](optimization-trial-criteria.md)保留语义与试用依据。三类发现性任务已交付，但匹配基线、H/A 和总成本收益仍未知，不补判完整 A/B 达标。
 
-新会话继续执行时，从[执行交接单](execution-handoff.md)开始，以试用安排中的最新阶段决定为准；交接单后部 A/B 工作单保留历史。
+设计资料为 [C1 信息模型](optimization-stage-c-design.md)及其[概念示意](examples/workflow-stage-c-small-fix.json)、[C2 契约](optimization-stage-c-spec.md)、[Schema](design/stage-c/protocol.schema.json)、[完整数据示例](examples/workflow-stage-c-complete.json)和[向量](design/stage-c/vectors.json)。四份 C2 技术源保持冻结；D 的实现与复现入口见[技术报告](optimization-stage-d-report.md)和[隔离验证说明](tests/STRUCTURED-README.md)。设计或候选接受不等于发布或真实数据迁移许可。
 
-语义依据见[核对记录](optimization-stage-a-review.md)；最新执行方式、阶段授权与任务状态统一见[试用安排](optimization-trial-arrangement.md)。README 只维护入口，不重复逐任务回传。阶段 C 先读 [C1 信息模型](optimization-stage-c-design.md)及其[概念示意](examples/workflow-stage-c-small-fix.json)，精确设计见 [C2 完整格式与接口契约](optimization-stage-c-spec.md)，配套[协议 Schema](design/stage-c/protocol.schema.json)、[四组完整正常数据](examples/workflow-stage-c-complete.json)和[设计向量](design/stage-c/vectors.json)。C2 区分写动作与只读查询/历史重放授权，候选前开工评估不要求候选，依赖排除绑定完整来源交付版本。设计资料不能导入旧工具；D 的实际实现和验证以[阶段 D 报告](optimization-stage-d-report.md)为准，结构校验不等于业务执行或发布通过。
-
-讨论依据保留在[移交摘要](discussion-handoff.md)、[完整研讨记录](discussion-notes.md)和[协议草案与场景推演](discussion-protocol-draft.md)。方案中的推荐默认值仍待评审，后续模板变更须与说明同步并经过 review 后合并。
+早期讨论、原 A/B 工作单及逐轮回传集中到[历史归档](docs/archive/workflow-optimization/README.md)。历史“下一步”和未完成状态仅描述当时情况，后续模板变更仍须同步说明并经过 review 后合并。
 
 ### 仓库维护规则
 

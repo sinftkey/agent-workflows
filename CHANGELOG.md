@@ -6,7 +6,9 @@
 
 ### Fixed
 
-- 结构化候选修订 D1-c1 复核发现的交付消费关系丢失、历史代录越过原指派及旧格式恢复绕过业务 pending；新增版本传播、资格和恢复交错回归，待独立复核。
+- D1-c2 修复并经独立复核关闭三项问题：第二份成功交付丢失上游消费关系、历史代录扩大原指派目标/范围、旧格式恢复绕过业务 pending。新增版本传播、原指派资格及恢复交错回归；用户已接受，完整发布条件仍未证明。
+- 阶段 B 局部修复：PowerShell setup 拒绝 worktree 清单中目录已失效的候选；Bash setup 分别报告无候选、多匹配、目录不可访问和登记读取错误，并向安装/repair 调用方传播失败，防止错误后继续创建。
+- README 手动复制说明明确保留模板来源、复制到新项目根目录、已有目标手动合并；适配指南补齐开发文档覆盖/删除、`ADAPT_TARGET` 优先级和临时落位后比对合并路径。
 
 - Bash repair now writes the current padded-ID INDEX format, normalizes legacy filenames and default fields for both clients, and keeps Git Bash paths compatible with the shared PowerShell registration.
 - `adapt.sh` / `adapt.ps1` 不再把可选 `templates/task-center/` 复制进项目代码分支；既有同名目录或旧式 `docs/tasks/TASK-CENTER.md` 会提示维护者检查且不会被脚本覆盖或删除
@@ -20,7 +22,11 @@
 
 ### Added
 
-- 阶段 D 结构化候选：独立 `templates/task-center-v2/` 与双端 setup，共享离线 Python 核心、24 写动作/7 读能力、授权/门槛、依赖纠正、私有索引事务与恢复、显式预览/备份/迁移/旧格式恢复。固定依赖、验证及发布限制见阶段 D 报告；不自动升级旧安装，不代表实际业务迁移或发布获准。
+- 阶段 A 语义与试用材料：统一方案、四组正常记录示例、异常推演及成本/裁剪标准，明确候选与检查分离、接管隔离、晚到结果、交付失败及版本化依赖纠正；实际试用与语义预期分别记录。
+- 阶段 C 冻结设计：结构化任务/共享授权、24 写动作和 7 种读能力、对象级 CAS/幂等、严格 JSON/规范化 K、Schema、完整示例及向量；C2-c2 关闭四项设计 P2 并获接受，冻结不分配实际发布版本。
+- 阶段 D 独立候选 `templates/task-center-v2/`（tool 2/schema 3）及双端 setup：共享 Python 核心、授权/门槛、历史资格与依赖纠正、私有索引事务、恢复和受控锁接管、显式安装/备份/迁移/旧格式恢复。Windows/Linux 各六份固定离线依赖及许可证/hash；两个 release_approved 仍为 false，不自动升级旧安装。
+- 回归覆盖旧安装器的真实 Git/完整入口/读取故障/双端生命周期，以及结构化工具的权限、并发、幂等、版本纠正、故障与迁移恢复。D1-c2 独立 Ubuntu 全套 38/0、公开入口探针 4/0、Windows 定向 2/0；作者 Windows 10/0 单列，不等于独立 Windows 全套通过。
+- [A–D 阶段汇总](docs/workflow-optimization-summary.md)集中记录本仓库改动、外部真实任务试用边界及验证；原 A/B 量化基线、H/A、配置摊销和收益仍未知，进入 C/D 不追认这些条件达标。
 - 新增独立 `setup-task-center.sh` / `setup-task-center.ps1` 安装与修复入口：在同一克隆登记本地孤儿分支和共享 worktree，设置本地忽略规则；旧格式修复默认预览，显式执行前创建并验证克隆外 bundle，支持恢复并重新登记
 - 任务中心协议补充 Agent 快速上手、工具无关用户级引导、事务恢复、repair、克隆外 bundle 备份与恢复示例；setup 输出引导语，但不修改用户全局指令
 - 任务中心阶段一：定稿 v2 任务字段、状态权限、迁移映射、版本元数据与命令参数；Bash / PowerShell 脚本改为共同 Git 目录发现、本地读写、全局事务锁、显式路径提交、任务源校验与 INDEX 生成
@@ -34,6 +40,7 @@
 
 ### Changed
 
+- 文档导航收敛为 README → 执行交接/当前安排 → 阶段汇总与技术源；当前安排只保留最新状态，早期讨论、原工作单及逐轮记录移至 `docs/archive/workflow-optimization/`。已接受候选、原始失败和冻结 C2 技术源保留；E 按用户决定暂停推进。
 - 适配器同时跳过两类任务中心目录；旧任务客户端连 recover 也核对版本，并在结构化管理事务未收敛时拒写。README 与适配指南登记结构化候选独立入口和限制。
 - 任务中心运行资产只进入本地孤儿分支和共享 worktree；从本仓库适配模板时跳过 `templates/task-center/`，适配指南不再建议复制至使用方代码分支的 `docs/tasks/` 或写入项目级 Agent 规则
 - 协作模板保留通用任务跟踪和 PR 衔接规则，移除本地任务中心专属的分支推送、路径和安装说明；本地任务编号统一使用 `TC-0042`，不伪装成平台 `#42`
