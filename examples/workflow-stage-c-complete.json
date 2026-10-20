@@ -1,0 +1,3429 @@
+{
+  "example_only": true,
+  "notice": "全部身份、授权、来源、摘要、Git对象、运行、检查、时间及接受均为虚构。外层不是请求，禁止输入现行工具或当作真实证据。",
+  "policy": {
+    "kind": "policy",
+    "protocol": "stage-c/2-draft",
+    "revision": 1,
+    "body": {
+      "identities": [
+        {
+          "id": "human",
+          "kind": "human",
+          "status": "active",
+          "basis": {
+            "uri": "example://fixed/register-human",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "description": "虚构示意来源 register-human"
+          }
+        },
+        {
+          "id": "executor",
+          "kind": "agent",
+          "status": "active",
+          "basis": {
+            "uri": "example://fixed/register-executor",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "description": "虚构示意来源 register-executor"
+          }
+        },
+        {
+          "id": "checker",
+          "kind": "agent",
+          "status": "active",
+          "basis": {
+            "uri": "example://fixed/register-checker",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "description": "虚构示意来源 register-checker"
+          }
+        }
+      ],
+      "runs": [
+        {
+          "id": "run-human",
+          "identity": "human",
+          "context": "虚构独立上下文 run-human",
+          "status": "active",
+          "basis": {
+            "uri": "example://fixed/run-run-human",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "description": "虚构示意来源 run-run-human"
+          }
+        },
+        {
+          "id": "run-owner",
+          "identity": "executor",
+          "context": "虚构独立上下文 run-owner",
+          "status": "active",
+          "basis": {
+            "uri": "example://fixed/run-run-owner",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "description": "虚构示意来源 run-run-owner"
+          }
+        },
+        {
+          "id": "run-checker",
+          "identity": "checker",
+          "context": "虚构独立上下文 run-checker",
+          "status": "active",
+          "basis": {
+            "uri": "example://fixed/run-run-checker",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "description": "虚构示意来源 run-run-checker"
+          }
+        }
+      ],
+      "grants": [
+        {
+          "id": "maintainer",
+          "identity": "human",
+          "actions": [
+            "task.open",
+            "contract.revise",
+            "assignment.set",
+            "assignment.accept",
+            "work.begin",
+            "progress.append",
+            "candidate.submit",
+            "result.append",
+            "result.record-historical",
+            "applicability.confirm",
+            "requirement.disposition",
+            "issue.report",
+            "issue.resolve",
+            "block.set",
+            "block.resolve",
+            "dependency.consume",
+            "dependency.clearance",
+            "delivery.record",
+            "delivery.reconcile",
+            "gate.evaluate",
+            "task.complete",
+            "task.cancel",
+            "task.archive",
+            "policy.update"
+          ],
+          "tasks": [
+            "*",
+            "new"
+          ],
+          "confirmers": [
+            "human"
+          ],
+          "basis": {
+            "uri": "example://fixed/bootstrap",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "description": "虚构示意来源 bootstrap"
+          },
+          "read_actions": [
+            "task.read",
+            "task.list",
+            "task.check",
+            "task.handoff",
+            "gate.read",
+            "receipt.read",
+            "policy.read"
+          ]
+        },
+        {
+          "id": "executor-actions",
+          "identity": "executor",
+          "actions": [
+            "task.open",
+            "assignment.set",
+            "assignment.accept",
+            "work.begin",
+            "progress.append",
+            "candidate.submit",
+            "result.append",
+            "delivery.record",
+            "gate.evaluate",
+            "task.complete"
+          ],
+          "tasks": [
+            "*",
+            "new"
+          ],
+          "confirmers": [
+            "human"
+          ],
+          "basis": {
+            "uri": "example://fixed/delegate-execution",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "description": "虚构示意来源 delegate-execution"
+          },
+          "read_actions": [
+            "task.read",
+            "task.list",
+            "task.check",
+            "task.handoff",
+            "gate.read",
+            "receipt.read"
+          ]
+        },
+        {
+          "id": "checker-actions",
+          "identity": "checker",
+          "actions": [
+            "assignment.accept",
+            "result.append",
+            "applicability.confirm"
+          ],
+          "tasks": [
+            "1"
+          ],
+          "confirmers": [],
+          "basis": {
+            "uri": "example://fixed/delegate-check",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "description": "虚构示意来源 delegate-check"
+          },
+          "read_actions": [
+            "task.read",
+            "task.list",
+            "task.check",
+            "task.handoff",
+            "gate.read",
+            "receipt.read"
+          ]
+        }
+      ],
+      "defaults": [
+        {
+          "id": "small-fix",
+          "requirements": [
+            {
+              "id": "self",
+              "acceptance": [
+                "ac-empty",
+                "ac-normal"
+              ],
+              "method": "回归自验",
+              "independence": "author",
+              "condition": "总是适用",
+              "after": [],
+              "gate": "before-delivery",
+              "waivable": false
+            },
+            {
+              "id": "independent",
+              "acceptance": [
+                "ac-empty",
+                "ac-normal"
+              ],
+              "method": "独立检查产物、复跑并核对边界",
+              "independence": "independent",
+              "condition": "总是适用",
+              "after": [
+                "self"
+              ],
+              "gate": "before-delivery",
+              "waivable": false
+            }
+          ],
+          "boundary": {
+            "kind": "report-accepted",
+            "description": "用户接受本地候选",
+            "confirmers": [
+              "human"
+            ],
+            "external": false
+          },
+          "coordinator": "human",
+          "dependencies": []
+        }
+      ]
+    },
+    "decision": {
+      "identity": "human",
+      "source": {
+        "uri": "example://fixed/bootstrap",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "description": "虚构示意来源 bootstrap"
+      },
+      "at": {
+        "kind": "known",
+        "utc": "2026-01-01T00:00:00Z"
+      }
+    }
+  },
+  "requests": [
+    {
+      "kind": "request",
+      "protocol": "stage-c/2-draft",
+      "request_id": "00000000-0000-4000-8000-000000000001",
+      "actor": {
+        "identity": "executor",
+        "run": "run-owner"
+      },
+      "actions": [
+        {
+          "id": "open",
+          "task": "new",
+          "op": "task.open",
+          "expected": {
+            "contract": 0
+          },
+          "payload": {
+            "title": "修复空输入处理",
+            "contract": {
+              "defaults": {
+                "policy": {
+                  "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "revision": 1
+                },
+                "profile": "small-fix"
+              },
+              "goal": "空输入返回空结果，正常输入输出不变",
+              "acceptance": [
+                {
+                  "id": "ac-empty",
+                  "text": "空输入返回空结果"
+                },
+                {
+                  "id": "ac-normal",
+                  "text": "正常输入保持原行为"
+                }
+              ],
+              "read_scope": [
+                "相关实现和回归测试"
+              ],
+              "write_scope": [
+                "输入处理模块",
+                "相关回归测试"
+              ],
+              "overrides": {},
+              "decision": {
+                "identity": "human",
+                "source": {
+                  "uri": "example://fixed/initial-request",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "description": "虚构示意来源 initial-request"
+                },
+                "at": {
+                  "kind": "known",
+                  "utc": "2026-01-01T00:00:00Z"
+                }
+              }
+            }
+          }
+        },
+        {
+          "id": "assign-owner",
+          "task": "new",
+          "op": "assignment.set",
+          "expected": {
+            "assignment": 0
+          },
+          "payload": {
+            "id": "owner",
+            "role": "owner",
+            "identity": "executor",
+            "target": null,
+            "requirements": [],
+            "reason": "用户本轮指派",
+            "basis": {
+              "uri": "example://fixed/initial-request",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 initial-request"
+            },
+            "isolation": null
+          }
+        },
+        {
+          "id": "accept-owner",
+          "task": "new",
+          "op": "assignment.accept",
+          "expected": {
+            "assignment": 1
+          },
+          "payload": {
+            "binding": {
+              "assignment": "owner",
+              "revision": 1
+            },
+            "basis": {
+              "uri": "example://fixed/owner-accept",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 owner-accept"
+            }
+          }
+        },
+        {
+          "id": "begin",
+          "task": "new",
+          "op": "work.begin",
+          "expected": {
+            "contract": 1,
+            "assignment": 1
+          },
+          "payload": {
+            "binding": {
+              "assignment": "owner",
+              "revision": 1
+            },
+            "contract_revision": 1
+          }
+        }
+      ]
+    },
+    {
+      "kind": "request",
+      "protocol": "stage-c/2-draft",
+      "request_id": "00000000-0000-4000-8000-000000000002",
+      "actor": {
+        "identity": "executor",
+        "run": "run-owner"
+      },
+      "actions": [
+        {
+          "id": "candidate",
+          "task": "1",
+          "op": "candidate.submit",
+          "expected": {
+            "contract": 1,
+            "candidate": 0,
+            "assignment": 1
+          },
+          "payload": {
+            "id": "candidate-one",
+            "contract_revision": 1,
+            "binding": {
+              "assignment": "owner",
+              "revision": 1
+            },
+            "artifacts": [
+              {
+                "id": "artifact-one",
+                "kind": "snapshot",
+                "uri": "example://immutable/candidate-one",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "git_object": null,
+                "materialization": null
+              }
+            ],
+            "authors": [
+              {
+                "identity": "executor",
+                "run": "run-owner"
+              }
+            ],
+            "acceptance_mapping": [
+              {
+                "acceptance": "ac-empty",
+                "artifacts": [
+                  "artifact-one"
+                ]
+              },
+              {
+                "acceptance": "ac-normal",
+                "artifacts": [
+                  "artifact-one"
+                ]
+              }
+            ],
+            "known_issues": []
+          }
+        },
+        {
+          "id": "self-result",
+          "task": "1",
+          "op": "result.append",
+          "expected": {},
+          "payload": {
+            "id": "self-one",
+            "target": {
+              "candidate": "candidate-one",
+              "contract_revision": 1
+            },
+            "binding": {
+              "assignment": "owner",
+              "revision": 1
+            },
+            "source_actor": {
+              "identity": "executor",
+              "run": "run-owner"
+            },
+            "performed_at": {
+              "kind": "known",
+              "utc": "2026-01-01T00:00:00Z"
+            },
+            "method": "读取固定对象并执行实际回归（本文件中为虚构）",
+            "environment": [
+              {
+                "uri": "example://fixed/environment-self-one",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 environment-self-one"
+              }
+            ],
+            "report": {
+              "uri": "example://fixed/report-self-one",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 report-self-one"
+            },
+            "coverage": [
+              {
+                "requirement": "self",
+                "outcome": "pass",
+                "observations": "虚构：空输入和正常输入通过；独立检查另核对空白边界",
+                "unverified": [
+                  "性能不在本约定范围"
+                ]
+              }
+            ],
+            "prerequisites": [],
+            "corrects": []
+          }
+        },
+        {
+          "id": "assign-check",
+          "task": "1",
+          "op": "assignment.set",
+          "expected": {
+            "assignment": 0
+          },
+          "payload": {
+            "id": "check",
+            "role": "checker",
+            "identity": "checker",
+            "target": {
+              "candidate": "candidate-one",
+              "contract_revision": 1
+            },
+            "requirements": [
+              "independent"
+            ],
+            "reason": "已批准默认独立检查",
+            "basis": {
+              "uri": "example://fixed/check-dispatch",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 check-dispatch"
+            },
+            "isolation": null
+          }
+        }
+      ]
+    },
+    {
+      "kind": "request",
+      "protocol": "stage-c/2-draft",
+      "request_id": "00000000-0000-4000-8000-000000000003",
+      "actor": {
+        "identity": "checker",
+        "run": "run-checker"
+      },
+      "actions": [
+        {
+          "id": "accept-check",
+          "task": "1",
+          "op": "assignment.accept",
+          "expected": {
+            "assignment": 1
+          },
+          "payload": {
+            "binding": {
+              "assignment": "check",
+              "revision": 1
+            },
+            "basis": {
+              "uri": "example://fixed/checker-accept",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 checker-accept"
+            }
+          }
+        },
+        {
+          "id": "independent-result",
+          "task": "1",
+          "op": "result.append",
+          "expected": {},
+          "payload": {
+            "id": "independent-one",
+            "target": {
+              "candidate": "candidate-one",
+              "contract_revision": 1
+            },
+            "binding": {
+              "assignment": "check",
+              "revision": 1
+            },
+            "source_actor": {
+              "identity": "checker",
+              "run": "run-checker"
+            },
+            "performed_at": {
+              "kind": "known",
+              "utc": "2026-01-01T00:00:00Z"
+            },
+            "method": "读取固定对象并执行实际回归（本文件中为虚构）",
+            "environment": [
+              {
+                "uri": "example://fixed/environment-independent-one",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 environment-independent-one"
+              }
+            ],
+            "report": {
+              "uri": "example://fixed/report-independent-one",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 report-independent-one"
+            },
+            "coverage": [
+              {
+                "requirement": "independent",
+                "outcome": "pass",
+                "observations": "虚构：空输入和正常输入通过；独立检查另核对空白边界",
+                "unverified": [
+                  "性能不在本约定范围"
+                ]
+              }
+            ],
+            "prerequisites": [
+              "self-one"
+            ],
+            "corrects": []
+          }
+        }
+      ]
+    },
+    {
+      "kind": "request",
+      "protocol": "stage-c/2-draft",
+      "request_id": "00000000-0000-4000-8000-000000000004",
+      "actor": {
+        "identity": "executor",
+        "run": "run-owner"
+      },
+      "actions": [
+        {
+          "id": "delivery",
+          "task": "1",
+          "op": "delivery.record",
+          "expected": {},
+          "payload": {
+            "id": "delivery-one",
+            "target": {
+              "candidate": "candidate-one",
+              "contract_revision": 1
+            },
+            "artifacts": [
+              {
+                "id": "artifact-one",
+                "kind": "snapshot",
+                "uri": "example://immutable/candidate-one",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "git_object": null,
+                "materialization": null
+              }
+            ],
+            "mapping": {
+              "uri": "example://fixed/identical-candidate-delivery",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 identical-candidate-delivery"
+            },
+            "boundary": {
+              "kind": "report-accepted",
+              "description": "用户接受本地候选",
+              "confirmers": [
+                "human"
+              ],
+              "external": false
+            },
+            "observation": "accepted",
+            "confirmation": {
+              "identity": "human",
+              "source": {
+                "uri": "example://fixed/actual-acceptance",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 actual-acceptance"
+              },
+              "at": {
+                "kind": "known",
+                "utc": "2026-01-01T00:00:00Z"
+              }
+            },
+            "environment": "本地报告接收",
+            "effects": "无外部部署或数据改动",
+            "responsible": "human",
+            "previous_attempt": null
+          }
+        },
+        {
+          "id": "advance",
+          "task": "1",
+          "op": "gate.evaluate",
+          "expected": {
+            "contract": 1,
+            "candidate": 1
+          },
+          "payload": {
+            "target": {
+              "candidate": "candidate-one",
+              "contract_revision": 1
+            },
+            "gate": "before-delivery",
+            "advance": true
+          }
+        },
+        {
+          "id": "complete",
+          "task": "1",
+          "op": "task.complete",
+          "expected": {
+            "contract": 1,
+            "candidate": 1,
+            "delivery": 1
+          },
+          "payload": {
+            "target": {
+              "candidate": "candidate-one",
+              "contract_revision": 1
+            },
+            "delivery": "delivery-one"
+          }
+        }
+      ]
+    }
+  ],
+  "task_snapshots": [
+    {
+      "kind": "task",
+      "protocol": "stage-c/2-draft",
+      "id": "1",
+      "title": "修复空输入处理",
+      "legacy": null,
+      "records": [
+        {
+          "seq": 1,
+          "event_id": "00000000-0000-4000-8000-000000000101",
+          "request_id": "00000000-0000-4000-8000-000000000001",
+          "action_id": "open",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "open",
+            "task": "new",
+            "op": "task.open",
+            "expected": {
+              "contract": 0
+            },
+            "payload": {
+              "title": "修复空输入处理",
+              "contract": {
+                "defaults": {
+                  "policy": {
+                    "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "revision": 1
+                  },
+                  "profile": "small-fix"
+                },
+                "goal": "空输入返回空结果，正常输入输出不变",
+                "acceptance": [
+                  {
+                    "id": "ac-empty",
+                    "text": "空输入返回空结果"
+                  },
+                  {
+                    "id": "ac-normal",
+                    "text": "正常输入保持原行为"
+                  }
+                ],
+                "read_scope": [
+                  "相关实现和回归测试"
+                ],
+                "write_scope": [
+                  "输入处理模块",
+                  "相关回归测试"
+                ],
+                "overrides": {},
+                "decision": {
+                  "identity": "human",
+                  "source": {
+                    "uri": "example://fixed/initial-request",
+                    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                    "description": "虚构示意来源 initial-request"
+                  },
+                  "at": {
+                    "kind": "known",
+                    "utc": "2026-01-01T00:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "seq": 2,
+          "event_id": "00000000-0000-4000-8000-000000000102",
+          "request_id": "00000000-0000-4000-8000-000000000001",
+          "action_id": "assign-owner",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "assign-owner",
+            "task": "new",
+            "op": "assignment.set",
+            "expected": {
+              "assignment": 0
+            },
+            "payload": {
+              "id": "owner",
+              "role": "owner",
+              "identity": "executor",
+              "target": null,
+              "requirements": [],
+              "reason": "用户本轮指派",
+              "basis": {
+                "uri": "example://fixed/initial-request",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 initial-request"
+              },
+              "isolation": null
+            }
+          }
+        },
+        {
+          "seq": 3,
+          "event_id": "00000000-0000-4000-8000-000000000103",
+          "request_id": "00000000-0000-4000-8000-000000000001",
+          "action_id": "accept-owner",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "accept-owner",
+            "task": "new",
+            "op": "assignment.accept",
+            "expected": {
+              "assignment": 1
+            },
+            "payload": {
+              "binding": {
+                "assignment": "owner",
+                "revision": 1
+              },
+              "basis": {
+                "uri": "example://fixed/owner-accept",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 owner-accept"
+              }
+            }
+          }
+        },
+        {
+          "seq": 4,
+          "event_id": "00000000-0000-4000-8000-000000000104",
+          "request_id": "00000000-0000-4000-8000-000000000001",
+          "action_id": "begin",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "begin",
+            "task": "new",
+            "op": "work.begin",
+            "expected": {
+              "contract": 1,
+              "assignment": 1
+            },
+            "payload": {
+              "binding": {
+                "assignment": "owner",
+                "revision": 1
+              },
+              "contract_revision": 1
+            }
+          }
+        }
+      ],
+      "current": {
+        "contract": 1,
+        "candidate_revision": 0,
+        "candidate": null,
+        "owner_assignment": "owner",
+        "state": "active",
+        "seq": 4
+      }
+    },
+    {
+      "kind": "task",
+      "protocol": "stage-c/2-draft",
+      "id": "1",
+      "title": "修复空输入处理",
+      "legacy": null,
+      "records": [
+        {
+          "seq": 1,
+          "event_id": "00000000-0000-4000-8000-000000000101",
+          "request_id": "00000000-0000-4000-8000-000000000001",
+          "action_id": "open",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "open",
+            "task": "new",
+            "op": "task.open",
+            "expected": {
+              "contract": 0
+            },
+            "payload": {
+              "title": "修复空输入处理",
+              "contract": {
+                "defaults": {
+                  "policy": {
+                    "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "revision": 1
+                  },
+                  "profile": "small-fix"
+                },
+                "goal": "空输入返回空结果，正常输入输出不变",
+                "acceptance": [
+                  {
+                    "id": "ac-empty",
+                    "text": "空输入返回空结果"
+                  },
+                  {
+                    "id": "ac-normal",
+                    "text": "正常输入保持原行为"
+                  }
+                ],
+                "read_scope": [
+                  "相关实现和回归测试"
+                ],
+                "write_scope": [
+                  "输入处理模块",
+                  "相关回归测试"
+                ],
+                "overrides": {},
+                "decision": {
+                  "identity": "human",
+                  "source": {
+                    "uri": "example://fixed/initial-request",
+                    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                    "description": "虚构示意来源 initial-request"
+                  },
+                  "at": {
+                    "kind": "known",
+                    "utc": "2026-01-01T00:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "seq": 2,
+          "event_id": "00000000-0000-4000-8000-000000000102",
+          "request_id": "00000000-0000-4000-8000-000000000001",
+          "action_id": "assign-owner",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "assign-owner",
+            "task": "new",
+            "op": "assignment.set",
+            "expected": {
+              "assignment": 0
+            },
+            "payload": {
+              "id": "owner",
+              "role": "owner",
+              "identity": "executor",
+              "target": null,
+              "requirements": [],
+              "reason": "用户本轮指派",
+              "basis": {
+                "uri": "example://fixed/initial-request",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 initial-request"
+              },
+              "isolation": null
+            }
+          }
+        },
+        {
+          "seq": 3,
+          "event_id": "00000000-0000-4000-8000-000000000103",
+          "request_id": "00000000-0000-4000-8000-000000000001",
+          "action_id": "accept-owner",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "accept-owner",
+            "task": "new",
+            "op": "assignment.accept",
+            "expected": {
+              "assignment": 1
+            },
+            "payload": {
+              "binding": {
+                "assignment": "owner",
+                "revision": 1
+              },
+              "basis": {
+                "uri": "example://fixed/owner-accept",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 owner-accept"
+              }
+            }
+          }
+        },
+        {
+          "seq": 4,
+          "event_id": "00000000-0000-4000-8000-000000000104",
+          "request_id": "00000000-0000-4000-8000-000000000001",
+          "action_id": "begin",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "begin",
+            "task": "new",
+            "op": "work.begin",
+            "expected": {
+              "contract": 1,
+              "assignment": 1
+            },
+            "payload": {
+              "binding": {
+                "assignment": "owner",
+                "revision": 1
+              },
+              "contract_revision": 1
+            }
+          }
+        },
+        {
+          "seq": 5,
+          "event_id": "00000000-0000-4000-8000-000000000105",
+          "request_id": "00000000-0000-4000-8000-000000000002",
+          "action_id": "candidate",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "candidate",
+            "task": "1",
+            "op": "candidate.submit",
+            "expected": {
+              "contract": 1,
+              "candidate": 0,
+              "assignment": 1
+            },
+            "payload": {
+              "id": "candidate-one",
+              "contract_revision": 1,
+              "binding": {
+                "assignment": "owner",
+                "revision": 1
+              },
+              "artifacts": [
+                {
+                  "id": "artifact-one",
+                  "kind": "snapshot",
+                  "uri": "example://immutable/candidate-one",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "git_object": null,
+                  "materialization": null
+                }
+              ],
+              "authors": [
+                {
+                  "identity": "executor",
+                  "run": "run-owner"
+                }
+              ],
+              "acceptance_mapping": [
+                {
+                  "acceptance": "ac-empty",
+                  "artifacts": [
+                    "artifact-one"
+                  ]
+                },
+                {
+                  "acceptance": "ac-normal",
+                  "artifacts": [
+                    "artifact-one"
+                  ]
+                }
+              ],
+              "known_issues": []
+            }
+          }
+        },
+        {
+          "seq": 6,
+          "event_id": "00000000-0000-4000-8000-000000000106",
+          "request_id": "00000000-0000-4000-8000-000000000002",
+          "action_id": "self-result",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "self-result",
+            "task": "1",
+            "op": "result.append",
+            "expected": {},
+            "payload": {
+              "id": "self-one",
+              "target": {
+                "candidate": "candidate-one",
+                "contract_revision": 1
+              },
+              "binding": {
+                "assignment": "owner",
+                "revision": 1
+              },
+              "source_actor": {
+                "identity": "executor",
+                "run": "run-owner"
+              },
+              "performed_at": {
+                "kind": "known",
+                "utc": "2026-01-01T00:00:00Z"
+              },
+              "method": "读取固定对象并执行实际回归（本文件中为虚构）",
+              "environment": [
+                {
+                  "uri": "example://fixed/environment-self-one",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "description": "虚构示意来源 environment-self-one"
+                }
+              ],
+              "report": {
+                "uri": "example://fixed/report-self-one",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 report-self-one"
+              },
+              "coverage": [
+                {
+                  "requirement": "self",
+                  "outcome": "pass",
+                  "observations": "虚构：空输入和正常输入通过；独立检查另核对空白边界",
+                  "unverified": [
+                    "性能不在本约定范围"
+                  ]
+                }
+              ],
+              "prerequisites": [],
+              "corrects": []
+            }
+          }
+        },
+        {
+          "seq": 7,
+          "event_id": "00000000-0000-4000-8000-000000000107",
+          "request_id": "00000000-0000-4000-8000-000000000002",
+          "action_id": "assign-check",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "assign-check",
+            "task": "1",
+            "op": "assignment.set",
+            "expected": {
+              "assignment": 0
+            },
+            "payload": {
+              "id": "check",
+              "role": "checker",
+              "identity": "checker",
+              "target": {
+                "candidate": "candidate-one",
+                "contract_revision": 1
+              },
+              "requirements": [
+                "independent"
+              ],
+              "reason": "已批准默认独立检查",
+              "basis": {
+                "uri": "example://fixed/check-dispatch",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 check-dispatch"
+              },
+              "isolation": null
+            }
+          }
+        }
+      ],
+      "current": {
+        "contract": 1,
+        "candidate_revision": 1,
+        "candidate": "candidate-one",
+        "owner_assignment": "owner",
+        "state": "verifying",
+        "seq": 7
+      }
+    },
+    {
+      "kind": "task",
+      "protocol": "stage-c/2-draft",
+      "id": "1",
+      "title": "修复空输入处理",
+      "legacy": null,
+      "records": [
+        {
+          "seq": 1,
+          "event_id": "00000000-0000-4000-8000-000000000101",
+          "request_id": "00000000-0000-4000-8000-000000000001",
+          "action_id": "open",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "open",
+            "task": "new",
+            "op": "task.open",
+            "expected": {
+              "contract": 0
+            },
+            "payload": {
+              "title": "修复空输入处理",
+              "contract": {
+                "defaults": {
+                  "policy": {
+                    "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "revision": 1
+                  },
+                  "profile": "small-fix"
+                },
+                "goal": "空输入返回空结果，正常输入输出不变",
+                "acceptance": [
+                  {
+                    "id": "ac-empty",
+                    "text": "空输入返回空结果"
+                  },
+                  {
+                    "id": "ac-normal",
+                    "text": "正常输入保持原行为"
+                  }
+                ],
+                "read_scope": [
+                  "相关实现和回归测试"
+                ],
+                "write_scope": [
+                  "输入处理模块",
+                  "相关回归测试"
+                ],
+                "overrides": {},
+                "decision": {
+                  "identity": "human",
+                  "source": {
+                    "uri": "example://fixed/initial-request",
+                    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                    "description": "虚构示意来源 initial-request"
+                  },
+                  "at": {
+                    "kind": "known",
+                    "utc": "2026-01-01T00:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "seq": 2,
+          "event_id": "00000000-0000-4000-8000-000000000102",
+          "request_id": "00000000-0000-4000-8000-000000000001",
+          "action_id": "assign-owner",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "assign-owner",
+            "task": "new",
+            "op": "assignment.set",
+            "expected": {
+              "assignment": 0
+            },
+            "payload": {
+              "id": "owner",
+              "role": "owner",
+              "identity": "executor",
+              "target": null,
+              "requirements": [],
+              "reason": "用户本轮指派",
+              "basis": {
+                "uri": "example://fixed/initial-request",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 initial-request"
+              },
+              "isolation": null
+            }
+          }
+        },
+        {
+          "seq": 3,
+          "event_id": "00000000-0000-4000-8000-000000000103",
+          "request_id": "00000000-0000-4000-8000-000000000001",
+          "action_id": "accept-owner",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "accept-owner",
+            "task": "new",
+            "op": "assignment.accept",
+            "expected": {
+              "assignment": 1
+            },
+            "payload": {
+              "binding": {
+                "assignment": "owner",
+                "revision": 1
+              },
+              "basis": {
+                "uri": "example://fixed/owner-accept",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 owner-accept"
+              }
+            }
+          }
+        },
+        {
+          "seq": 4,
+          "event_id": "00000000-0000-4000-8000-000000000104",
+          "request_id": "00000000-0000-4000-8000-000000000001",
+          "action_id": "begin",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "begin",
+            "task": "new",
+            "op": "work.begin",
+            "expected": {
+              "contract": 1,
+              "assignment": 1
+            },
+            "payload": {
+              "binding": {
+                "assignment": "owner",
+                "revision": 1
+              },
+              "contract_revision": 1
+            }
+          }
+        },
+        {
+          "seq": 5,
+          "event_id": "00000000-0000-4000-8000-000000000105",
+          "request_id": "00000000-0000-4000-8000-000000000002",
+          "action_id": "candidate",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "candidate",
+            "task": "1",
+            "op": "candidate.submit",
+            "expected": {
+              "contract": 1,
+              "candidate": 0,
+              "assignment": 1
+            },
+            "payload": {
+              "id": "candidate-one",
+              "contract_revision": 1,
+              "binding": {
+                "assignment": "owner",
+                "revision": 1
+              },
+              "artifacts": [
+                {
+                  "id": "artifact-one",
+                  "kind": "snapshot",
+                  "uri": "example://immutable/candidate-one",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "git_object": null,
+                  "materialization": null
+                }
+              ],
+              "authors": [
+                {
+                  "identity": "executor",
+                  "run": "run-owner"
+                }
+              ],
+              "acceptance_mapping": [
+                {
+                  "acceptance": "ac-empty",
+                  "artifacts": [
+                    "artifact-one"
+                  ]
+                },
+                {
+                  "acceptance": "ac-normal",
+                  "artifacts": [
+                    "artifact-one"
+                  ]
+                }
+              ],
+              "known_issues": []
+            }
+          }
+        },
+        {
+          "seq": 6,
+          "event_id": "00000000-0000-4000-8000-000000000106",
+          "request_id": "00000000-0000-4000-8000-000000000002",
+          "action_id": "self-result",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "self-result",
+            "task": "1",
+            "op": "result.append",
+            "expected": {},
+            "payload": {
+              "id": "self-one",
+              "target": {
+                "candidate": "candidate-one",
+                "contract_revision": 1
+              },
+              "binding": {
+                "assignment": "owner",
+                "revision": 1
+              },
+              "source_actor": {
+                "identity": "executor",
+                "run": "run-owner"
+              },
+              "performed_at": {
+                "kind": "known",
+                "utc": "2026-01-01T00:00:00Z"
+              },
+              "method": "读取固定对象并执行实际回归（本文件中为虚构）",
+              "environment": [
+                {
+                  "uri": "example://fixed/environment-self-one",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "description": "虚构示意来源 environment-self-one"
+                }
+              ],
+              "report": {
+                "uri": "example://fixed/report-self-one",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 report-self-one"
+              },
+              "coverage": [
+                {
+                  "requirement": "self",
+                  "outcome": "pass",
+                  "observations": "虚构：空输入和正常输入通过；独立检查另核对空白边界",
+                  "unverified": [
+                    "性能不在本约定范围"
+                  ]
+                }
+              ],
+              "prerequisites": [],
+              "corrects": []
+            }
+          }
+        },
+        {
+          "seq": 7,
+          "event_id": "00000000-0000-4000-8000-000000000107",
+          "request_id": "00000000-0000-4000-8000-000000000002",
+          "action_id": "assign-check",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "assign-check",
+            "task": "1",
+            "op": "assignment.set",
+            "expected": {
+              "assignment": 0
+            },
+            "payload": {
+              "id": "check",
+              "role": "checker",
+              "identity": "checker",
+              "target": {
+                "candidate": "candidate-one",
+                "contract_revision": 1
+              },
+              "requirements": [
+                "independent"
+              ],
+              "reason": "已批准默认独立检查",
+              "basis": {
+                "uri": "example://fixed/check-dispatch",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 check-dispatch"
+              },
+              "isolation": null
+            }
+          }
+        },
+        {
+          "seq": 8,
+          "event_id": "00000000-0000-4000-8000-000000000108",
+          "request_id": "00000000-0000-4000-8000-000000000003",
+          "action_id": "accept-check",
+          "actor": {
+            "identity": "checker",
+            "run": "run-checker"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "accept-check",
+            "task": "1",
+            "op": "assignment.accept",
+            "expected": {
+              "assignment": 1
+            },
+            "payload": {
+              "binding": {
+                "assignment": "check",
+                "revision": 1
+              },
+              "basis": {
+                "uri": "example://fixed/checker-accept",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 checker-accept"
+              }
+            }
+          }
+        },
+        {
+          "seq": 9,
+          "event_id": "00000000-0000-4000-8000-000000000109",
+          "request_id": "00000000-0000-4000-8000-000000000003",
+          "action_id": "independent-result",
+          "actor": {
+            "identity": "checker",
+            "run": "run-checker"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "independent-result",
+            "task": "1",
+            "op": "result.append",
+            "expected": {},
+            "payload": {
+              "id": "independent-one",
+              "target": {
+                "candidate": "candidate-one",
+                "contract_revision": 1
+              },
+              "binding": {
+                "assignment": "check",
+                "revision": 1
+              },
+              "source_actor": {
+                "identity": "checker",
+                "run": "run-checker"
+              },
+              "performed_at": {
+                "kind": "known",
+                "utc": "2026-01-01T00:00:00Z"
+              },
+              "method": "读取固定对象并执行实际回归（本文件中为虚构）",
+              "environment": [
+                {
+                  "uri": "example://fixed/environment-independent-one",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "description": "虚构示意来源 environment-independent-one"
+                }
+              ],
+              "report": {
+                "uri": "example://fixed/report-independent-one",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 report-independent-one"
+              },
+              "coverage": [
+                {
+                  "requirement": "independent",
+                  "outcome": "pass",
+                  "observations": "虚构：空输入和正常输入通过；独立检查另核对空白边界",
+                  "unverified": [
+                    "性能不在本约定范围"
+                  ]
+                }
+              ],
+              "prerequisites": [
+                "self-one"
+              ],
+              "corrects": []
+            }
+          }
+        }
+      ],
+      "current": {
+        "contract": 1,
+        "candidate_revision": 1,
+        "candidate": "candidate-one",
+        "owner_assignment": "owner",
+        "state": "verifying",
+        "seq": 9
+      }
+    },
+    {
+      "kind": "task",
+      "protocol": "stage-c/2-draft",
+      "id": "1",
+      "title": "修复空输入处理",
+      "legacy": null,
+      "records": [
+        {
+          "seq": 1,
+          "event_id": "00000000-0000-4000-8000-000000000101",
+          "request_id": "00000000-0000-4000-8000-000000000001",
+          "action_id": "open",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "open",
+            "task": "new",
+            "op": "task.open",
+            "expected": {
+              "contract": 0
+            },
+            "payload": {
+              "title": "修复空输入处理",
+              "contract": {
+                "defaults": {
+                  "policy": {
+                    "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                    "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                    "revision": 1
+                  },
+                  "profile": "small-fix"
+                },
+                "goal": "空输入返回空结果，正常输入输出不变",
+                "acceptance": [
+                  {
+                    "id": "ac-empty",
+                    "text": "空输入返回空结果"
+                  },
+                  {
+                    "id": "ac-normal",
+                    "text": "正常输入保持原行为"
+                  }
+                ],
+                "read_scope": [
+                  "相关实现和回归测试"
+                ],
+                "write_scope": [
+                  "输入处理模块",
+                  "相关回归测试"
+                ],
+                "overrides": {},
+                "decision": {
+                  "identity": "human",
+                  "source": {
+                    "uri": "example://fixed/initial-request",
+                    "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                    "description": "虚构示意来源 initial-request"
+                  },
+                  "at": {
+                    "kind": "known",
+                    "utc": "2026-01-01T00:00:00Z"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "seq": 2,
+          "event_id": "00000000-0000-4000-8000-000000000102",
+          "request_id": "00000000-0000-4000-8000-000000000001",
+          "action_id": "assign-owner",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "assign-owner",
+            "task": "new",
+            "op": "assignment.set",
+            "expected": {
+              "assignment": 0
+            },
+            "payload": {
+              "id": "owner",
+              "role": "owner",
+              "identity": "executor",
+              "target": null,
+              "requirements": [],
+              "reason": "用户本轮指派",
+              "basis": {
+                "uri": "example://fixed/initial-request",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 initial-request"
+              },
+              "isolation": null
+            }
+          }
+        },
+        {
+          "seq": 3,
+          "event_id": "00000000-0000-4000-8000-000000000103",
+          "request_id": "00000000-0000-4000-8000-000000000001",
+          "action_id": "accept-owner",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "accept-owner",
+            "task": "new",
+            "op": "assignment.accept",
+            "expected": {
+              "assignment": 1
+            },
+            "payload": {
+              "binding": {
+                "assignment": "owner",
+                "revision": 1
+              },
+              "basis": {
+                "uri": "example://fixed/owner-accept",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 owner-accept"
+              }
+            }
+          }
+        },
+        {
+          "seq": 4,
+          "event_id": "00000000-0000-4000-8000-000000000104",
+          "request_id": "00000000-0000-4000-8000-000000000001",
+          "action_id": "begin",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "begin",
+            "task": "new",
+            "op": "work.begin",
+            "expected": {
+              "contract": 1,
+              "assignment": 1
+            },
+            "payload": {
+              "binding": {
+                "assignment": "owner",
+                "revision": 1
+              },
+              "contract_revision": 1
+            }
+          }
+        },
+        {
+          "seq": 5,
+          "event_id": "00000000-0000-4000-8000-000000000105",
+          "request_id": "00000000-0000-4000-8000-000000000002",
+          "action_id": "candidate",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "candidate",
+            "task": "1",
+            "op": "candidate.submit",
+            "expected": {
+              "contract": 1,
+              "candidate": 0,
+              "assignment": 1
+            },
+            "payload": {
+              "id": "candidate-one",
+              "contract_revision": 1,
+              "binding": {
+                "assignment": "owner",
+                "revision": 1
+              },
+              "artifacts": [
+                {
+                  "id": "artifact-one",
+                  "kind": "snapshot",
+                  "uri": "example://immutable/candidate-one",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "git_object": null,
+                  "materialization": null
+                }
+              ],
+              "authors": [
+                {
+                  "identity": "executor",
+                  "run": "run-owner"
+                }
+              ],
+              "acceptance_mapping": [
+                {
+                  "acceptance": "ac-empty",
+                  "artifacts": [
+                    "artifact-one"
+                  ]
+                },
+                {
+                  "acceptance": "ac-normal",
+                  "artifacts": [
+                    "artifact-one"
+                  ]
+                }
+              ],
+              "known_issues": []
+            }
+          }
+        },
+        {
+          "seq": 6,
+          "event_id": "00000000-0000-4000-8000-000000000106",
+          "request_id": "00000000-0000-4000-8000-000000000002",
+          "action_id": "self-result",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "self-result",
+            "task": "1",
+            "op": "result.append",
+            "expected": {},
+            "payload": {
+              "id": "self-one",
+              "target": {
+                "candidate": "candidate-one",
+                "contract_revision": 1
+              },
+              "binding": {
+                "assignment": "owner",
+                "revision": 1
+              },
+              "source_actor": {
+                "identity": "executor",
+                "run": "run-owner"
+              },
+              "performed_at": {
+                "kind": "known",
+                "utc": "2026-01-01T00:00:00Z"
+              },
+              "method": "读取固定对象并执行实际回归（本文件中为虚构）",
+              "environment": [
+                {
+                  "uri": "example://fixed/environment-self-one",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "description": "虚构示意来源 environment-self-one"
+                }
+              ],
+              "report": {
+                "uri": "example://fixed/report-self-one",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 report-self-one"
+              },
+              "coverage": [
+                {
+                  "requirement": "self",
+                  "outcome": "pass",
+                  "observations": "虚构：空输入和正常输入通过；独立检查另核对空白边界",
+                  "unverified": [
+                    "性能不在本约定范围"
+                  ]
+                }
+              ],
+              "prerequisites": [],
+              "corrects": []
+            }
+          }
+        },
+        {
+          "seq": 7,
+          "event_id": "00000000-0000-4000-8000-000000000107",
+          "request_id": "00000000-0000-4000-8000-000000000002",
+          "action_id": "assign-check",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "assign-check",
+            "task": "1",
+            "op": "assignment.set",
+            "expected": {
+              "assignment": 0
+            },
+            "payload": {
+              "id": "check",
+              "role": "checker",
+              "identity": "checker",
+              "target": {
+                "candidate": "candidate-one",
+                "contract_revision": 1
+              },
+              "requirements": [
+                "independent"
+              ],
+              "reason": "已批准默认独立检查",
+              "basis": {
+                "uri": "example://fixed/check-dispatch",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 check-dispatch"
+              },
+              "isolation": null
+            }
+          }
+        },
+        {
+          "seq": 8,
+          "event_id": "00000000-0000-4000-8000-000000000108",
+          "request_id": "00000000-0000-4000-8000-000000000003",
+          "action_id": "accept-check",
+          "actor": {
+            "identity": "checker",
+            "run": "run-checker"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "accept-check",
+            "task": "1",
+            "op": "assignment.accept",
+            "expected": {
+              "assignment": 1
+            },
+            "payload": {
+              "binding": {
+                "assignment": "check",
+                "revision": 1
+              },
+              "basis": {
+                "uri": "example://fixed/checker-accept",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 checker-accept"
+              }
+            }
+          }
+        },
+        {
+          "seq": 9,
+          "event_id": "00000000-0000-4000-8000-000000000109",
+          "request_id": "00000000-0000-4000-8000-000000000003",
+          "action_id": "independent-result",
+          "actor": {
+            "identity": "checker",
+            "run": "run-checker"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "independent-result",
+            "task": "1",
+            "op": "result.append",
+            "expected": {},
+            "payload": {
+              "id": "independent-one",
+              "target": {
+                "candidate": "candidate-one",
+                "contract_revision": 1
+              },
+              "binding": {
+                "assignment": "check",
+                "revision": 1
+              },
+              "source_actor": {
+                "identity": "checker",
+                "run": "run-checker"
+              },
+              "performed_at": {
+                "kind": "known",
+                "utc": "2026-01-01T00:00:00Z"
+              },
+              "method": "读取固定对象并执行实际回归（本文件中为虚构）",
+              "environment": [
+                {
+                  "uri": "example://fixed/environment-independent-one",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "description": "虚构示意来源 environment-independent-one"
+                }
+              ],
+              "report": {
+                "uri": "example://fixed/report-independent-one",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 report-independent-one"
+              },
+              "coverage": [
+                {
+                  "requirement": "independent",
+                  "outcome": "pass",
+                  "observations": "虚构：空输入和正常输入通过；独立检查另核对空白边界",
+                  "unverified": [
+                    "性能不在本约定范围"
+                  ]
+                }
+              ],
+              "prerequisites": [
+                "self-one"
+              ],
+              "corrects": []
+            }
+          }
+        },
+        {
+          "seq": 10,
+          "event_id": "00000000-0000-4000-8000-000000000110",
+          "request_id": "00000000-0000-4000-8000-000000000004",
+          "action_id": "delivery",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "delivery",
+            "task": "1",
+            "op": "delivery.record",
+            "expected": {},
+            "payload": {
+              "id": "delivery-one",
+              "target": {
+                "candidate": "candidate-one",
+                "contract_revision": 1
+              },
+              "artifacts": [
+                {
+                  "id": "artifact-one",
+                  "kind": "snapshot",
+                  "uri": "example://immutable/candidate-one",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "git_object": null,
+                  "materialization": null
+                }
+              ],
+              "mapping": {
+                "uri": "example://fixed/identical-candidate-delivery",
+                "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                "description": "虚构示意来源 identical-candidate-delivery"
+              },
+              "boundary": {
+                "kind": "report-accepted",
+                "description": "用户接受本地候选",
+                "confirmers": [
+                  "human"
+                ],
+                "external": false
+              },
+              "observation": "accepted",
+              "confirmation": {
+                "identity": "human",
+                "source": {
+                  "uri": "example://fixed/actual-acceptance",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "description": "虚构示意来源 actual-acceptance"
+                },
+                "at": {
+                  "kind": "known",
+                  "utc": "2026-01-01T00:00:00Z"
+                }
+              },
+              "environment": "本地报告接收",
+              "effects": "无外部部署或数据改动",
+              "responsible": "human",
+              "previous_attempt": null
+            }
+          }
+        },
+        {
+          "seq": 11,
+          "event_id": "00000000-0000-4000-8000-000000000111",
+          "request_id": "00000000-0000-4000-8000-000000000004",
+          "action_id": "advance",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "advance",
+            "task": "1",
+            "op": "gate.evaluate",
+            "expected": {
+              "contract": 1,
+              "candidate": 1
+            },
+            "payload": {
+              "target": {
+                "candidate": "candidate-one",
+                "contract_revision": 1
+              },
+              "gate": "before-delivery",
+              "advance": true
+            }
+          }
+        },
+        {
+          "seq": 12,
+          "event_id": "00000000-0000-4000-8000-000000000112",
+          "request_id": "00000000-0000-4000-8000-000000000004",
+          "action_id": "complete",
+          "actor": {
+            "identity": "executor",
+            "run": "run-owner"
+          },
+          "policy": {
+            "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+            "revision": 1
+          },
+          "recorded_at": {
+            "kind": "known",
+            "utc": "2026-01-01T00:00:00Z"
+          },
+          "action": {
+            "id": "complete",
+            "task": "1",
+            "op": "task.complete",
+            "expected": {
+              "contract": 1,
+              "candidate": 1,
+              "delivery": 1
+            },
+            "payload": {
+              "target": {
+                "candidate": "candidate-one",
+                "contract_revision": 1
+              },
+              "delivery": "delivery-one"
+            }
+          }
+        }
+      ],
+      "current": {
+        "contract": 1,
+        "candidate_revision": 1,
+        "candidate": "candidate-one",
+        "owner_assignment": "owner",
+        "state": "done",
+        "seq": 12
+      }
+    }
+  ],
+  "responses": [
+    {
+      "kind": "response",
+      "protocol": "stage-c/2-draft",
+      "request_id": "00000000-0000-4000-8000-000000000001",
+      "status": "committed",
+      "exit": 0,
+      "durable": true,
+      "commit": "1111111111111111111111111111111111111111",
+      "original_commit": null,
+      "gate_context": "at-commit",
+      "action_results": [
+        {
+          "action": "open",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000101"
+          ],
+          "disposition": "current"
+        },
+        {
+          "action": "assign-owner",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000102"
+          ],
+          "disposition": "current"
+        },
+        {
+          "action": "accept-owner",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000103"
+          ],
+          "disposition": "current"
+        },
+        {
+          "action": "begin",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000104"
+          ],
+          "disposition": "current"
+        }
+      ],
+      "gates": [],
+      "errors": [],
+      "data": null
+    },
+    {
+      "kind": "response",
+      "protocol": "stage-c/2-draft",
+      "request_id": "00000000-0000-4000-8000-000000000002",
+      "status": "committed",
+      "exit": 0,
+      "durable": true,
+      "commit": "2222222222222222222222222222222222222222",
+      "original_commit": null,
+      "gate_context": "at-commit",
+      "action_results": [
+        {
+          "action": "candidate",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000105"
+          ],
+          "disposition": "current"
+        },
+        {
+          "action": "self-result",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000106"
+          ],
+          "disposition": "current"
+        },
+        {
+          "action": "assign-check",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000107"
+          ],
+          "disposition": "current"
+        }
+      ],
+      "gates": [],
+      "errors": [],
+      "data": null
+    },
+    {
+      "kind": "response",
+      "protocol": "stage-c/2-draft",
+      "request_id": "00000000-0000-4000-8000-000000000003",
+      "status": "committed",
+      "exit": 0,
+      "durable": true,
+      "commit": "3333333333333333333333333333333333333333",
+      "original_commit": null,
+      "gate_context": "at-commit",
+      "action_results": [
+        {
+          "action": "accept-check",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000108"
+          ],
+          "disposition": "current"
+        },
+        {
+          "action": "independent-result",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000109"
+          ],
+          "disposition": "current"
+        }
+      ],
+      "gates": [],
+      "errors": [],
+      "data": null
+    },
+    {
+      "kind": "response",
+      "protocol": "stage-c/2-draft",
+      "request_id": "00000000-0000-4000-8000-000000000004",
+      "status": "committed",
+      "exit": 0,
+      "durable": true,
+      "commit": "4444444444444444444444444444444444444444",
+      "original_commit": null,
+      "gate_context": "at-commit",
+      "action_results": [
+        {
+          "action": "delivery",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000110"
+          ],
+          "disposition": "current"
+        },
+        {
+          "action": "advance",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000111"
+          ],
+          "disposition": "evaluated"
+        },
+        {
+          "action": "complete",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000112"
+          ],
+          "disposition": "current"
+        }
+      ],
+      "gates": [
+        {
+          "task": "1",
+          "candidate": "candidate-one",
+          "gate": "before-delivery",
+          "outcome": "pass",
+          "gaps": []
+        }
+      ],
+      "errors": [],
+      "data": null
+    }
+  ],
+  "receipts": [
+    {
+      "kind": "receipt",
+      "protocol": "stage-c/2-draft",
+      "request_id": "00000000-0000-4000-8000-000000000001",
+      "request_hash": "f305e6b7fff90d9021eb5054e8cb0245927398a342101dffc3d573d8e65fde38",
+      "actor": {
+        "identity": "executor",
+        "run": "run-owner"
+      },
+      "recorded_at": {
+        "kind": "known",
+        "utc": "2026-01-01T00:00:00Z"
+      },
+      "action_results": [
+        {
+          "action": "open",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000101"
+          ],
+          "disposition": "current"
+        },
+        {
+          "action": "assign-owner",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000102"
+          ],
+          "disposition": "current"
+        },
+        {
+          "action": "accept-owner",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000103"
+          ],
+          "disposition": "current"
+        },
+        {
+          "action": "begin",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000104"
+          ],
+          "disposition": "current"
+        }
+      ],
+      "gates": []
+    },
+    {
+      "kind": "receipt",
+      "protocol": "stage-c/2-draft",
+      "request_id": "00000000-0000-4000-8000-000000000002",
+      "request_hash": "ad95b2c82ba6c37d28376ee5746d514206f32f9a08596dd535052f6e5733be3f",
+      "actor": {
+        "identity": "executor",
+        "run": "run-owner"
+      },
+      "recorded_at": {
+        "kind": "known",
+        "utc": "2026-01-01T00:00:00Z"
+      },
+      "action_results": [
+        {
+          "action": "candidate",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000105"
+          ],
+          "disposition": "current"
+        },
+        {
+          "action": "self-result",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000106"
+          ],
+          "disposition": "current"
+        },
+        {
+          "action": "assign-check",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000107"
+          ],
+          "disposition": "current"
+        }
+      ],
+      "gates": []
+    },
+    {
+      "kind": "receipt",
+      "protocol": "stage-c/2-draft",
+      "request_id": "00000000-0000-4000-8000-000000000003",
+      "request_hash": "e3ce31c8c07a5154efe9543b57b4d27698a60a342a2e947eda6f08dcb10b954f",
+      "actor": {
+        "identity": "checker",
+        "run": "run-checker"
+      },
+      "recorded_at": {
+        "kind": "known",
+        "utc": "2026-01-01T00:00:00Z"
+      },
+      "action_results": [
+        {
+          "action": "accept-check",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000108"
+          ],
+          "disposition": "current"
+        },
+        {
+          "action": "independent-result",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000109"
+          ],
+          "disposition": "current"
+        }
+      ],
+      "gates": []
+    },
+    {
+      "kind": "receipt",
+      "protocol": "stage-c/2-draft",
+      "request_id": "00000000-0000-4000-8000-000000000004",
+      "request_hash": "4f5d806eed602bba229a9db136680c97d58fdb270aa25e469013861e35b9442a",
+      "actor": {
+        "identity": "executor",
+        "run": "run-owner"
+      },
+      "recorded_at": {
+        "kind": "known",
+        "utc": "2026-01-01T00:00:00Z"
+      },
+      "action_results": [
+        {
+          "action": "delivery",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000110"
+          ],
+          "disposition": "current"
+        },
+        {
+          "action": "advance",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000111"
+          ],
+          "disposition": "evaluated"
+        },
+        {
+          "action": "complete",
+          "task": "1",
+          "events": [
+            "00000000-0000-4000-8000-000000000112"
+          ],
+          "disposition": "current"
+        }
+      ],
+      "gates": [
+        {
+          "task": "1",
+          "candidate": "candidate-one",
+          "gate": "before-delivery",
+          "outcome": "pass",
+          "gaps": []
+        }
+      ]
+    }
+  ],
+  "legacy_task": {
+    "kind": "task",
+    "protocol": "stage-c/2-draft",
+    "id": "2",
+    "title": "旧已完成任务示意",
+    "legacy": {
+      "source": {
+        "uri": "example://fixed/legacy-original",
+        "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+        "description": "虚构示意来源 legacy-original"
+      },
+      "protocol": "schema-2",
+      "original_state": "已完成",
+      "mapped_state": "done",
+      "missing": [
+        "无新版检查和交付证据"
+      ],
+      "owner_hint": "旧 owner 只作线索"
+    },
+    "records": [],
+    "current": {
+      "contract": 0,
+      "candidate_revision": 0,
+      "candidate": null,
+      "owner_assignment": null,
+      "state": "done",
+      "seq": 0
+    }
+  },
+  "journal": {
+    "kind": "journal",
+    "protocol": "stage-c/2-draft",
+    "transaction": "00000000-0000-4000-8000-000000000901",
+    "request_id": "00000000-0000-4000-8000-000000000004",
+    "request_hash": "4f5d806eed602bba229a9db136680c97d58fdb270aa25e469013861e35b9442a",
+    "state": "objects-ready",
+    "base_commit": "3333333333333333333333333333333333333333",
+    "new_commit": "4444444444444444444444444444444444444444",
+    "branch_ref": "refs/heads/task-center",
+    "changes": [
+      {
+        "path": "docs/tasks/1.json",
+        "before": "0000000000000000000000000000000000000000000000000000000000000000",
+        "after": "1111111111111111111111111111111111111111111111111111111111111111"
+      },
+      {
+        "path": ".task-center/receipts/00000000-0000-4000-8000-000000000004.json",
+        "before": null,
+        "after": "2222222222222222222222222222222222222222222222222222222222222222"
+      }
+    ],
+    "receipt_path": ".task-center/receipts/00000000-0000-4000-8000-000000000004.json",
+    "backup_uri": "example://clone-external/transaction-backup"
+  },
+  "migration_preview": {
+    "kind": "migration-plan",
+    "protocol": "stage-c/2-draft",
+    "plan_id": "00000000-0000-4000-8000-000000000902",
+    "mode": "preview",
+    "source_commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "source_tool": 1,
+    "source_schema": 2,
+    "target_tool": 2,
+    "target_schema": 3,
+    "source_revision": "cccccccccccccccccccccccccccccccccccccccc",
+    "backup_uri": "example://clone-external/backup",
+    "backup_manifest": {
+      "uri": "example://fixed/backup-manifest",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "description": "虚构示意来源 backup-manifest"
+    },
+    "isolation_evidence": null,
+    "policy_proposal": {
+      "kind": "policy",
+      "protocol": "stage-c/2-draft",
+      "revision": 1,
+      "body": {
+        "identities": [
+          {
+            "id": "human",
+            "kind": "human",
+            "status": "active",
+            "basis": {
+              "uri": "example://fixed/register-human",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 register-human"
+            }
+          },
+          {
+            "id": "executor",
+            "kind": "agent",
+            "status": "active",
+            "basis": {
+              "uri": "example://fixed/register-executor",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 register-executor"
+            }
+          },
+          {
+            "id": "checker",
+            "kind": "agent",
+            "status": "active",
+            "basis": {
+              "uri": "example://fixed/register-checker",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 register-checker"
+            }
+          }
+        ],
+        "runs": [
+          {
+            "id": "run-human",
+            "identity": "human",
+            "context": "虚构独立上下文 run-human",
+            "status": "active",
+            "basis": {
+              "uri": "example://fixed/run-run-human",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 run-run-human"
+            }
+          },
+          {
+            "id": "run-owner",
+            "identity": "executor",
+            "context": "虚构独立上下文 run-owner",
+            "status": "active",
+            "basis": {
+              "uri": "example://fixed/run-run-owner",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 run-run-owner"
+            }
+          },
+          {
+            "id": "run-checker",
+            "identity": "checker",
+            "context": "虚构独立上下文 run-checker",
+            "status": "active",
+            "basis": {
+              "uri": "example://fixed/run-run-checker",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 run-run-checker"
+            }
+          }
+        ],
+        "grants": [
+          {
+            "id": "maintainer",
+            "identity": "human",
+            "actions": [
+              "task.open",
+              "contract.revise",
+              "assignment.set",
+              "assignment.accept",
+              "work.begin",
+              "progress.append",
+              "candidate.submit",
+              "result.append",
+              "result.record-historical",
+              "applicability.confirm",
+              "requirement.disposition",
+              "issue.report",
+              "issue.resolve",
+              "block.set",
+              "block.resolve",
+              "dependency.consume",
+              "dependency.clearance",
+              "delivery.record",
+              "delivery.reconcile",
+              "gate.evaluate",
+              "task.complete",
+              "task.cancel",
+              "task.archive",
+              "policy.update"
+            ],
+            "tasks": [
+              "*",
+              "new"
+            ],
+            "confirmers": [
+              "human"
+            ],
+            "basis": {
+              "uri": "example://fixed/bootstrap",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 bootstrap"
+            },
+            "read_actions": [
+              "task.read",
+              "task.list",
+              "task.check",
+              "task.handoff",
+              "gate.read",
+              "receipt.read",
+              "policy.read"
+            ]
+          },
+          {
+            "id": "executor-actions",
+            "identity": "executor",
+            "actions": [
+              "task.open",
+              "assignment.set",
+              "assignment.accept",
+              "work.begin",
+              "progress.append",
+              "candidate.submit",
+              "result.append",
+              "delivery.record",
+              "gate.evaluate",
+              "task.complete"
+            ],
+            "tasks": [
+              "*",
+              "new"
+            ],
+            "confirmers": [
+              "human"
+            ],
+            "basis": {
+              "uri": "example://fixed/delegate-execution",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 delegate-execution"
+            },
+            "read_actions": [
+              "task.read",
+              "task.list",
+              "task.check",
+              "task.handoff",
+              "gate.read",
+              "receipt.read"
+            ]
+          },
+          {
+            "id": "checker-actions",
+            "identity": "checker",
+            "actions": [
+              "assignment.accept",
+              "result.append",
+              "applicability.confirm"
+            ],
+            "tasks": [
+              "1"
+            ],
+            "confirmers": [],
+            "basis": {
+              "uri": "example://fixed/delegate-check",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 delegate-check"
+            },
+            "read_actions": [
+              "task.read",
+              "task.list",
+              "task.check",
+              "task.handoff",
+              "gate.read",
+              "receipt.read"
+            ]
+          }
+        ],
+        "defaults": [
+          {
+            "id": "small-fix",
+            "requirements": [
+              {
+                "id": "self",
+                "acceptance": [
+                  "ac-empty",
+                  "ac-normal"
+                ],
+                "method": "回归自验",
+                "independence": "author",
+                "condition": "总是适用",
+                "after": [],
+                "gate": "before-delivery",
+                "waivable": false
+              },
+              {
+                "id": "independent",
+                "acceptance": [
+                  "ac-empty",
+                  "ac-normal"
+                ],
+                "method": "独立检查产物、复跑并核对边界",
+                "independence": "independent",
+                "condition": "总是适用",
+                "after": [
+                  "self"
+                ],
+                "gate": "before-delivery",
+                "waivable": false
+              }
+            ],
+            "boundary": {
+              "kind": "report-accepted",
+              "description": "用户接受本地候选",
+              "confirmers": [
+                "human"
+              ],
+              "external": false
+            },
+            "coordinator": "human",
+            "dependencies": []
+          }
+        ]
+      },
+      "decision": {
+        "identity": "human",
+        "source": {
+          "uri": "example://fixed/bootstrap",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "description": "虚构示意来源 bootstrap"
+        },
+        "at": {
+          "kind": "known",
+          "utc": "2026-01-01T00:00:00Z"
+        }
+      }
+    },
+    "items": [
+      {
+        "old_path": "docs/tasks/archive/002-old.md",
+        "old_hash": "0000000000000000000000000000000000000000000000000000000000000000",
+        "task_id": "2",
+        "new_path": "docs/tasks/archive/2.json",
+        "new_hash": null,
+        "old_state": "已完成",
+        "new_state": "done",
+        "missing": [
+          "新版交付事实未知，拟作为不可放行的历史导入"
+        ]
+      }
+    ],
+    "next_id": "3",
+    "issues": [],
+    "approval": null
+  },
+  "prestart_task": {
+    "kind": "task",
+    "protocol": "stage-c/2-draft",
+    "id": "1",
+    "title": "修复空输入处理",
+    "legacy": null,
+    "records": [
+      {
+        "seq": 1,
+        "event_id": "00000000-0000-4000-8000-000000000101",
+        "request_id": "00000000-0000-4000-8000-000000000001",
+        "action_id": "open",
+        "actor": {
+          "identity": "executor",
+          "run": "run-owner"
+        },
+        "policy": {
+          "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "revision": 1
+        },
+        "recorded_at": {
+          "kind": "known",
+          "utc": "2026-01-01T00:00:00Z"
+        },
+        "action": {
+          "id": "open",
+          "task": "new",
+          "op": "task.open",
+          "expected": {
+            "contract": 0
+          },
+          "payload": {
+            "title": "修复空输入处理",
+            "contract": {
+              "defaults": {
+                "policy": {
+                  "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                  "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                  "revision": 1
+                },
+                "profile": "small-fix"
+              },
+              "goal": "空输入返回空结果，正常输入输出不变",
+              "acceptance": [
+                {
+                  "id": "ac-empty",
+                  "text": "空输入返回空结果"
+                },
+                {
+                  "id": "ac-normal",
+                  "text": "正常输入保持原行为"
+                }
+              ],
+              "read_scope": [
+                "相关实现和回归测试"
+              ],
+              "write_scope": [
+                "输入处理模块",
+                "相关回归测试"
+              ],
+              "overrides": {},
+              "decision": {
+                "identity": "human",
+                "source": {
+                  "uri": "example://fixed/initial-request",
+                  "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                  "description": "虚构示意来源 initial-request"
+                },
+                "at": {
+                  "kind": "known",
+                  "utc": "2026-01-01T00:00:00Z"
+                }
+              }
+            }
+          }
+        }
+      },
+      {
+        "seq": 2,
+        "event_id": "00000000-0000-4000-8000-000000000102",
+        "request_id": "00000000-0000-4000-8000-000000000001",
+        "action_id": "assign-owner",
+        "actor": {
+          "identity": "executor",
+          "run": "run-owner"
+        },
+        "policy": {
+          "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "revision": 1
+        },
+        "recorded_at": {
+          "kind": "known",
+          "utc": "2026-01-01T00:00:00Z"
+        },
+        "action": {
+          "id": "assign-owner",
+          "task": "new",
+          "op": "assignment.set",
+          "expected": {
+            "assignment": 0
+          },
+          "payload": {
+            "id": "owner",
+            "role": "owner",
+            "identity": "executor",
+            "target": null,
+            "requirements": [],
+            "reason": "用户本轮指派",
+            "basis": {
+              "uri": "example://fixed/initial-request",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 initial-request"
+            },
+            "isolation": null
+          }
+        }
+      },
+      {
+        "seq": 3,
+        "event_id": "00000000-0000-4000-8000-000000000103",
+        "request_id": "00000000-0000-4000-8000-000000000001",
+        "action_id": "accept-owner",
+        "actor": {
+          "identity": "executor",
+          "run": "run-owner"
+        },
+        "policy": {
+          "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+          "revision": 1
+        },
+        "recorded_at": {
+          "kind": "known",
+          "utc": "2026-01-01T00:00:00Z"
+        },
+        "action": {
+          "id": "accept-owner",
+          "task": "new",
+          "op": "assignment.accept",
+          "expected": {
+            "assignment": 1
+          },
+          "payload": {
+            "binding": {
+              "assignment": "owner",
+              "revision": 1
+            },
+            "basis": {
+              "uri": "example://fixed/owner-accept",
+              "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+              "description": "虚构示意来源 owner-accept"
+            }
+          }
+        }
+      }
+    ],
+    "current": {
+      "contract": 1,
+      "candidate_revision": 0,
+      "candidate": null,
+      "owner_assignment": "owner",
+      "state": "todo",
+      "seq": 3
+    }
+  },
+  "start_evaluation": {
+    "kind": "request",
+    "protocol": "stage-c/2-draft",
+    "request_id": "00000000-0000-4000-8000-000000000010",
+    "actor": {
+      "identity": "executor",
+      "run": "run-owner"
+    },
+    "actions": [
+      {
+        "id": "evaluate-start",
+        "task": "1",
+        "op": "gate.evaluate",
+        "expected": {
+          "contract": 1,
+          "assignment": 1
+        },
+        "payload": {
+          "target": {
+            "contract_revision": 1,
+            "binding": {
+              "assignment": "owner",
+              "revision": 1
+            }
+          },
+          "gate": "start",
+          "advance": false
+        }
+      }
+    ]
+  },
+  "clearance_request": {
+    "kind": "request",
+    "protocol": "stage-c/2-draft",
+    "request_id": "00000000-0000-4000-8000-000000000011",
+    "actor": {
+      "identity": "human",
+      "run": "run-human"
+    },
+    "actions": [
+      {
+        "id": "exclude-one-origin",
+        "task": "1",
+        "op": "dependency.clearance",
+        "expected": {
+          "delivery": 1
+        },
+        "payload": {
+          "id": "clear-one",
+          "delivery": "delivery-b",
+          "restriction_task": "2",
+          "restriction_kind": "issue",
+          "restriction": "restriction-one",
+          "restriction_delivery": "delivery-a1",
+          "decision": "excluded",
+          "results": [
+            "verification-one"
+          ],
+          "basis": {
+            "uri": "example://fixed/clearance-one",
+            "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+            "description": "虚构示意来源 clearance-one"
+          }
+        }
+      }
+    ]
+  },
+  "queries": [
+    {
+      "kind": "query",
+      "protocol": "stage-c/2-draft",
+      "actor": {
+        "identity": "checker",
+        "run": "run-checker"
+      },
+      "op": "task.read",
+      "task": "1"
+    },
+    {
+      "kind": "query",
+      "protocol": "stage-c/2-draft",
+      "actor": {
+        "identity": "checker",
+        "run": "run-checker"
+      },
+      "op": "task.list"
+    },
+    {
+      "kind": "query",
+      "protocol": "stage-c/2-draft",
+      "actor": {
+        "identity": "checker",
+        "run": "run-checker"
+      },
+      "op": "task.check",
+      "task": "1"
+    },
+    {
+      "kind": "query",
+      "protocol": "stage-c/2-draft",
+      "actor": {
+        "identity": "checker",
+        "run": "run-checker"
+      },
+      "op": "task.handoff",
+      "task": "1"
+    },
+    {
+      "kind": "query",
+      "protocol": "stage-c/2-draft",
+      "actor": {
+        "identity": "checker",
+        "run": "run-checker"
+      },
+      "op": "gate.read",
+      "task": "1",
+      "payload": {
+        "target": {
+          "contract_revision": 1,
+          "binding": {
+            "assignment": "owner",
+            "revision": 1
+          }
+        },
+        "gate": "start"
+      }
+    },
+    {
+      "kind": "query",
+      "protocol": "stage-c/2-draft",
+      "actor": {
+        "identity": "checker",
+        "run": "run-checker"
+      },
+      "op": "receipt.read",
+      "receipt_id": "00000000-0000-4000-8000-000000000001"
+    },
+    {
+      "kind": "query",
+      "protocol": "stage-c/2-draft",
+      "actor": {
+        "identity": "human",
+        "run": "run-human"
+      },
+      "op": "policy.read"
+    }
+  ],
+  "start_query_response": {
+    "kind": "response",
+    "protocol": "stage-c/2-draft",
+    "request_id": null,
+    "status": "read",
+    "exit": 0,
+    "durable": false,
+    "commit": "1111111111111111111111111111111111111111",
+    "original_commit": null,
+    "gate_context": "current-read",
+    "action_results": [],
+    "gates": [
+      {
+        "task": "1",
+        "candidate": null,
+        "gate": "start",
+        "outcome": "pass",
+        "gaps": []
+      }
+    ],
+    "errors": [],
+    "data": {
+      "op": "gate.read"
+    }
+  }
+}

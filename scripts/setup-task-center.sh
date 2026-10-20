@@ -140,22 +140,35 @@ gitc() { git -c core.quotepath=false -C "$1" "${@:2}"; }
 worktree_lines() { gitc "$GIT_ROOT" worktree list --porcelain; }
 get_main_worktree() { canonical_existing "$(worktree_lines | awk '/^worktree / {sub(/^worktree /, ""); print; exit}')"; }
 get_worktree_for_branch() {
-  local result
-  result="$(worktree_lines | awk -v wanted="refs/heads/$BRANCH" '
+  # 0: found, 1: no match, 2: ambiguous, 3: inaccessible directory, 4: query failure.
+  local lines result status resolved
+  lines="$(worktree_lines)" || { printf 'setup-task-center: could not query Git worktrees.\n' >&2; return 4; }
+  if result="$(awk -v wanted="refs/heads/$BRANCH" '
     /^worktree / { path=substr($0,10); next }
     /^branch / && $2 == wanted { print path; count++ }
-    END { if (count > 1) exit 2 }')" || return 2
-  if [[ -n "$result" ]]; then canonical_existing "$result"; fi
+    END { if (count > 1) exit 2 }' <<<"$lines")"; then :
+  else
+    status=$?
+    if [[ "$status" = 2 ]]; then printf 'setup-task-center: multiple worktrees are checked out on %s.\n' "$BRANCH" >&2; return 2; fi
+    printf 'setup-task-center: could not parse Git worktrees.\n' >&2; return 4
+  fi
+  [[ -n "$result" ]] || return 1
+  resolved="$(canonical_existing "$result")" || { printf 'setup-task-center: candidate directory is not accessible: %s\n' "$result" >&2; return 3; }
+  printf '%s\n' "$resolved"
 }
 remote_branch_refs() { git -C "$GIT_ROOT" for-each-ref --format='%(refname)' "refs/remotes/*/$BRANCH"; }
 read_registered_path() {
-  local registration="$REGISTRATION" first=''
+  local registration="$REGISTRATION" first='' content
   if [[ ! -f "$registration" ]]; then
     registration="$RUNTIME_DIR/registration"
     [[ -f "$registration" ]] || return 0
   fi
-  IFS= read -r first < "$registration" || true
-  if [[ "$first" == format=* ]]; then sed -n 's/^path=//p' "$registration" | head -n 1
+  # Read bytes separately from line parsing: read also fails at a valid final
+  # line without a newline, whereas cat reports actual open/read failures.
+  content="$(cat -- "$registration")" || return 4
+  first="${content%%$'\n'*}"
+  if [[ "$first" == format=* ]]; then
+    awk '/^path=/ { sub(/^path=/, ""); print; exit }' <<<"$content"
   else printf '%s\n' "$first"; fi
 }
 
@@ -302,14 +315,18 @@ run_current_task_check() {
 }
 
 find_candidate() {
-  local env_path registered registered_root matches main
+  local env_path registered registered_root matches normalized
   if [[ -n "${TASK_CENTER_PATH:-}" ]]; then
-    env_path="$(canonical_existing "$TASK_CENTER_PATH")" || die "TASK_CENTER_PATH does not exist: $TASK_CENTER_PATH"
-    [[ "$(gitc "$env_path" branch --show-current)" == "$BRANCH" ]] || die "TASK_CENTER_PATH is not on $BRANCH"
+    env_path="$(canonical_existing "$TASK_CENTER_PATH")" || { printf 'setup-task-center: candidate directory is not accessible: %s\n' "$TASK_CENTER_PATH" >&2; return 3; }
+    registered_root="$(gitc "$env_path" branch --show-current)" || { printf 'setup-task-center: could not query candidate branch: %s\n' "$env_path" >&2; return 4; }
+    [[ "$registered_root" == "$BRANCH" ]] || { printf 'setup-task-center: TASK_CENTER_PATH is not on %s: %s\n' "$BRANCH" "$env_path" >&2; return 4; }
     printf '%s\n' "$env_path"; return 0
   fi
-  registered="$(read_registered_path)"
-  if [[ -n "$registered" ]]; then registered="$(normalize_path "$registered")"; fi
+  registered="$(read_registered_path)" || { printf 'setup-task-center: could not read task-center registration.\n' >&2; return 4; }
+  if [[ -n "$registered" ]]; then
+    normalized="$(normalize_path "$registered")" || { printf 'setup-task-center: candidate directory is not accessible: %s\n' "$registered" >&2; return 3; }
+    registered="$normalized"
+  fi
   if [[ -n "$registered" && -d "$registered" ]]; then
     registered_root="$(git -C "$registered" rev-parse --show-toplevel 2>/dev/null || true)"
     if [[ -n "$registered_root" ]]; then registered_root="$(canonical_existing "$registered_root" 2>/dev/null || true)"; fi
@@ -318,9 +335,8 @@ find_candidate() {
     fi
     printf 'Registered task-center path is stale; searching this clone for %s.\n' "$BRANCH" >&2
   fi
-  matches="$(get_worktree_for_branch)" || die "multiple worktrees are checked out on $BRANCH."
-  if [[ -n "$matches" ]]; then printf '%s\n' "$matches"; return 0; fi
-  return 1
+  if matches="$(get_worktree_for_branch)"; then printf '%s\n' "$matches"; return 0
+  else return $?; fi
 }
 
 branch_head() {
@@ -328,11 +344,16 @@ branch_head() {
 }
 
 install_or_register() {
-  local candidate main destination head build
+  local candidate main destination head build candidate_status
   local remote_refs
   remote_refs="$(remote_branch_refs)"
   [[ -z "$remote_refs" ]] || printf '发现远端跟踪分支（不读取、不修改）：\n%s\n' "$remote_refs" >&2
-  candidate="$(find_candidate || true)"
+  if candidate="$(find_candidate)"; then :
+  else
+    candidate_status=$?
+    [[ "$candidate_status" = 1 ]] || return "$candidate_status"
+    candidate=''
+  fi
   main="$(get_main_worktree)"
   [[ -n "$main" ]] || die 'Git did not report a main worktree.'
   if [[ -n "$candidate" ]]; then
@@ -497,9 +518,14 @@ migration_file_name() {
 }
 
 repair_task_center() {
-  local center old_head main status tasks unknown backup_dir stamp bundle manifest new_path temp_branch backup_branch path f id remark dest max_id=0 files='' upstream
+  local center old_head main status tasks unknown backup_dir stamp bundle manifest new_path temp_branch backup_branch path f id remark dest max_id=0 files='' upstream candidate_status
   local local_assets=()
-  center="$(find_candidate)" || die "local $BRANCH worktree was not found; run setup first."
+  if center="$(find_candidate)"; then :
+  else
+    candidate_status=$?
+    if [[ "$candidate_status" = 1 ]]; then die "local $BRANCH worktree was not found; run setup first."; fi
+    return "$candidate_status"
+  fi
   old_head="$(gitc "$center" rev-parse HEAD)"
   status="$(gitc "$center" status --porcelain)"
   main="$(get_main_worktree)"

@@ -61,7 +61,7 @@ DOCS_DIR="$TARGET/docs/development"
 mkdir -p "$DOCS_DIR"
 shopt -s dotglob nullglob
 for template_item in "$SOURCE/templates/"*; do
-  [ "${template_item##*/}" = "task-center" ] && continue
+  case "${template_item##*/}" in task-center|task-center-v2) continue ;; esac
   cp -r "$template_item" "$DOCS_DIR/"
 done
 shopt -u dotglob nullglob
@@ -69,6 +69,9 @@ rm -f "$DOCS_DIR/AGENTS.md"
 
 if [ -e "$DOCS_DIR/task-center" ]; then
   echo "提示：检测到已有 $DOCS_DIR/task-center；适配脚本不会覆盖或删除它。请确认它不是旧版任务中心副本；当前任务中心应由独立 setup 安装到本地 task-center worktree。" >&2
+fi
+if [ -e "$DOCS_DIR/task-center-v2" ]; then
+  echo "提示：检测到已有 $DOCS_DIR/task-center-v2；适配脚本不会覆盖或删除它。请按结构化任务中心独立安装器的显式迁移流程检查。" >&2
 fi
 if [ -f "$TARGET/docs/tasks/TASK-CENTER.md" ]; then
   echo "提示：检测到旧式 $TARGET/docs/tasks/TASK-CENTER.md；适配脚本不会修改或删除它。请维护者确认并按任务中心迁移流程处理，避免把旧副本当作当前任务中心。" >&2
@@ -103,8 +106,8 @@ fi
 
 echo ""
 echo "=== 落位完成 ==="
-echo "通用 templates/ 内容（排除 AGENTS.md 与可选 task-center/）  ->  $DOCS_DIR"
-echo "templates/task-center/ 未复制；如需启用，请使用独立 setup 引导器"
+echo "通用 templates/ 内容（排除 AGENTS.md 与两类可选任务中心）  ->  $DOCS_DIR"
+echo "templates/task-center/ 与 task-center-v2/ 未复制；如需启用，请使用各自独立 setup 引导器"
 echo "templates/AGENTS.md  ->  $AGENTS_DEST（仅此一份）"
 echo ".gitattributes / .gitignore  ->  $TARGET（已存在则跳过）"
 echo ""

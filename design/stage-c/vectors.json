@@ -1,0 +1,3702 @@
+{
+  "design_only": true,
+  "notice": "schema/lexical/canonical为静态资料验证；decision/restriction为正文分支及版本选择器的纯数据设计探针；semantic仅桌面设计推演。均非真实权限、业务工具运行、崩溃恢复、迁移或收益证明。",
+  "fixture": "../../examples/workflow-stage-c-complete.json",
+  "schema": "protocol.schema.json",
+  "schema_cases": [
+    {
+      "id": "structure-pass-1",
+      "seed": "policy",
+      "patch": [],
+      "schema_valid": true,
+      "note": "完整数据的正例"
+    },
+    {
+      "id": "structure-pass-2",
+      "seed": "requests/0",
+      "patch": [],
+      "schema_valid": true,
+      "note": "完整数据的正例"
+    },
+    {
+      "id": "structure-pass-3",
+      "seed": "requests/1",
+      "patch": [],
+      "schema_valid": true,
+      "note": "完整数据的正例"
+    },
+    {
+      "id": "structure-pass-4",
+      "seed": "requests/2",
+      "patch": [],
+      "schema_valid": true,
+      "note": "完整数据的正例"
+    },
+    {
+      "id": "structure-pass-5",
+      "seed": "requests/3",
+      "patch": [],
+      "schema_valid": true,
+      "note": "完整数据的正例"
+    },
+    {
+      "id": "structure-pass-6",
+      "seed": "task_snapshots/3",
+      "patch": [],
+      "schema_valid": true,
+      "note": "完整数据的正例"
+    },
+    {
+      "id": "structure-pass-7",
+      "seed": "responses/3",
+      "patch": [],
+      "schema_valid": true,
+      "note": "完整数据的正例"
+    },
+    {
+      "id": "structure-pass-8",
+      "seed": "receipts/3",
+      "patch": [],
+      "schema_valid": true,
+      "note": "完整数据的正例"
+    },
+    {
+      "id": "structure-pass-9",
+      "seed": "legacy_task",
+      "patch": [],
+      "schema_valid": true,
+      "note": "完整数据的正例"
+    },
+    {
+      "id": "structure-pass-10",
+      "seed": "journal",
+      "patch": [],
+      "schema_valid": true,
+      "note": "完整数据的正例"
+    },
+    {
+      "id": "structure-pass-11",
+      "seed": "migration_preview",
+      "patch": [],
+      "schema_valid": true,
+      "note": "完整数据的正例"
+    },
+    {
+      "id": "new-shape-prestart_task",
+      "seed": "prestart_task",
+      "patch": [],
+      "schema_valid": true,
+      "note": "修订后的候选前目标/只读结构或独立clearance反例结构；结构有效不证明业务引用已满足"
+    },
+    {
+      "id": "new-shape-start_evaluation",
+      "seed": "start_evaluation",
+      "patch": [],
+      "schema_valid": true,
+      "note": "修订后的候选前目标/只读结构或独立clearance反例结构；结构有效不证明业务引用已满足"
+    },
+    {
+      "id": "new-shape-clearance_request",
+      "seed": "clearance_request",
+      "patch": [],
+      "schema_valid": true,
+      "note": "修订后的候选前目标/只读结构或独立clearance反例结构；结构有效不证明业务引用已满足"
+    },
+    {
+      "id": "new-shape-start_query_response",
+      "seed": "start_query_response",
+      "patch": [],
+      "schema_valid": true,
+      "note": "修订后的候选前目标/只读结构或独立clearance反例结构；结构有效不证明业务引用已满足"
+    },
+    {
+      "id": "new-shape-queries-0",
+      "seed": "queries/0",
+      "patch": [],
+      "schema_valid": true,
+      "note": "修订后的候选前目标/只读结构或独立clearance反例结构；结构有效不证明业务引用已满足"
+    },
+    {
+      "id": "new-shape-queries-1",
+      "seed": "queries/1",
+      "patch": [],
+      "schema_valid": true,
+      "note": "修订后的候选前目标/只读结构或独立clearance反例结构；结构有效不证明业务引用已满足"
+    },
+    {
+      "id": "new-shape-queries-2",
+      "seed": "queries/2",
+      "patch": [],
+      "schema_valid": true,
+      "note": "修订后的候选前目标/只读结构或独立clearance反例结构；结构有效不证明业务引用已满足"
+    },
+    {
+      "id": "new-shape-queries-3",
+      "seed": "queries/3",
+      "patch": [],
+      "schema_valid": true,
+      "note": "修订后的候选前目标/只读结构或独立clearance反例结构；结构有效不证明业务引用已满足"
+    },
+    {
+      "id": "new-shape-queries-4",
+      "seed": "queries/4",
+      "patch": [],
+      "schema_valid": true,
+      "note": "修订后的候选前目标/只读结构或独立clearance反例结构；结构有效不证明业务引用已满足"
+    },
+    {
+      "id": "new-shape-queries-5",
+      "seed": "queries/5",
+      "patch": [],
+      "schema_valid": true,
+      "note": "修订后的候选前目标/只读结构或独立clearance反例结构；结构有效不证明业务引用已满足"
+    },
+    {
+      "id": "new-shape-queries-6",
+      "seed": "queries/6",
+      "patch": [],
+      "schema_valid": true,
+      "note": "修订后的候选前目标/只读结构或独立clearance反例结构；结构有效不证明业务引用已满足"
+    },
+    {
+      "id": "unknown-root-key",
+      "seed": "requests/0",
+      "patch": [
+        {
+          "op": "add",
+          "path": "/override",
+          "value": true
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "unknown-nested-key",
+      "seed": "requests/0",
+      "patch": [
+        {
+          "op": "add",
+          "path": "/actions/0/payload/contract/overrides/skip_review",
+          "value": true
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "missing-field",
+      "seed": "requests/0",
+      "patch": [
+        {
+          "op": "remove",
+          "path": "/request_id"
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "wrong-protocol",
+      "seed": "requests/0",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/protocol",
+          "value": "schema-2"
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "unknown-action",
+      "seed": "requests/0",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/0/op",
+          "value": "force.complete"
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "negative-revision",
+      "seed": "requests/0",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/0/expected/contract",
+          "value": -1
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "revision-overflow",
+      "seed": "requests/0",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/0/expected/contract",
+          "value": 2147483648
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "leading-zero-task",
+      "seed": "task_snapshots/3",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/id",
+          "value": "01"
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "uppercase-hash",
+      "seed": "requests/1",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/0/payload/artifacts/0/sha256",
+          "value": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "short-git-object",
+      "seed": "requests/0",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/0/payload/contract/defaults/policy/commit",
+          "value": "abcd"
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "bad-request-uuid",
+      "seed": "requests/0",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/request_id",
+          "value": "request-one"
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "empty-actions",
+      "seed": "requests/0",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions",
+          "value": []
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "too-many-actions",
+      "seed": "requests/0",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions",
+          "value": [
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "id": "open",
+              "task": "new",
+              "op": "task.open",
+              "expected": {
+                "contract": 0
+              },
+              "payload": {
+                "title": "修复空输入处理",
+                "contract": {
+                  "defaults": {
+                    "policy": {
+                      "commit": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                      "blob": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                      "revision": 1
+                    },
+                    "profile": "small-fix"
+                  },
+                  "goal": "空输入返回空结果，正常输入输出不变",
+                  "acceptance": [
+                    {
+                      "id": "ac-empty",
+                      "text": "空输入返回空结果"
+                    },
+                    {
+                      "id": "ac-normal",
+                      "text": "正常输入保持原行为"
+                    }
+                  ],
+                  "read_scope": [
+                    "相关实现和回归测试"
+                  ],
+                  "write_scope": [
+                    "输入处理模块",
+                    "相关回归测试"
+                  ],
+                  "overrides": {},
+                  "decision": {
+                    "identity": "human",
+                    "source": {
+                      "uri": "example://fixed/initial-request",
+                      "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+                      "description": "虚构示意来源 initial-request"
+                    },
+                    "at": {
+                      "kind": "known",
+                      "utc": "2026-01-01T00:00:00Z"
+                    }
+                  }
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "empty-result-coverage",
+      "seed": "requests/1",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/1/payload/coverage",
+          "value": []
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "invented-result-status",
+      "seed": "requests/1",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/1/payload/coverage/0/outcome",
+          "value": "running"
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "time-missing-reason",
+      "seed": "requests/1",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/1/payload/performed_at",
+          "value": {
+            "kind": "unknown"
+          }
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "time-unknown-explicit",
+      "seed": "requests/1",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/1/payload/performed_at",
+          "value": {
+            "kind": "unknown",
+            "reason": "来源未计时"
+          }
+        }
+      ],
+      "schema_valid": true,
+      "note": "结构接受；若检查依赖时效，业务门槛仍阻止"
+    },
+    {
+      "id": "fake-calendar-date",
+      "seed": "requests/1",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/1/payload/performed_at/utc",
+          "value": "2026-02-31T00:00:00Z"
+        }
+      ],
+      "schema_valid": true,
+      "note": "pattern 不能检查日历；语义层须拒绝"
+    },
+    {
+      "id": "wrong-shaped-payload",
+      "seed": "requests/0",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/0/payload",
+          "value": {
+            "reason": "绕过约定"
+          }
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "null-required-goal",
+      "seed": "requests/0",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/0/payload/contract/goal",
+          "value": null
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "response-status-not-code",
+      "seed": "responses/3",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/exit",
+          "value": 12
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "zero-id",
+      "seed": "task_snapshots/3",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/id",
+          "value": "0"
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "path-backslash",
+      "seed": "journal",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/changes/0/path",
+          "value": "docs\\tasks\\1.json"
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "path-traversal-is-semantic",
+      "seed": "journal",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/changes/0/path",
+          "value": "../outside"
+        }
+      ],
+      "schema_valid": true,
+      "note": "Schema 仅形状；最终路径白名单必须拒绝"
+    },
+    {
+      "id": "false-durable-is-semantic",
+      "seed": "responses/3",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/durable",
+          "value": false
+        }
+      ],
+      "schema_valid": true,
+      "note": "committed 必须 durable=true；语义层拒绝"
+    },
+    {
+      "id": "duplicate-id-is-semantic",
+      "seed": "requests/0",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/1/id",
+          "value": "open"
+        }
+      ],
+      "schema_valid": true,
+      "note": "动作 ID 唯一由语义层校验"
+    },
+    {
+      "id": "missing-action-cas",
+      "seed": "requests/1",
+      "patch": [
+        {
+          "op": "remove",
+          "path": "/actions/0/expected/candidate"
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "unrelated-task-seq-cas",
+      "seed": "requests/2",
+      "patch": [
+        {
+          "op": "add",
+          "path": "/actions/1/expected/contract",
+          "value": 1
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "id-trailing-newline",
+      "seed": "requests/0",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/0/id",
+          "value": "open\n"
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "hash-trailing-newline",
+      "seed": "requests/1",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/0/payload/artifacts/0/sha256",
+          "value": "0000000000000000000000000000000000000000000000000000000000000000\n"
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "clearance-missing-origin-delivery",
+      "seed": "clearance_request",
+      "patch": [
+        {
+          "op": "remove",
+          "path": "/actions/0/payload/restriction_delivery"
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "clearance-missing-origin-kind",
+      "seed": "clearance_request",
+      "patch": [
+        {
+          "op": "remove",
+          "path": "/actions/0/payload/restriction_kind"
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "clearance-origin-null",
+      "seed": "clearance_request",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/0/payload/restriction_delivery",
+          "value": null
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "start-wrong-cas",
+      "seed": "start_evaluation",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/0/expected",
+          "value": {
+            "contract": 1,
+            "candidate": 0
+          }
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "start-fake-candidate",
+      "seed": "start_evaluation",
+      "patch": [
+        {
+          "op": "add",
+          "path": "/actions/0/payload/target/candidate",
+          "value": "invented"
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "start-no-assignment-yet",
+      "seed": "start_evaluation",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/0/payload/target/binding",
+          "value": null
+        },
+        {
+          "op": "replace",
+          "path": "/actions/0/expected/assignment",
+          "value": 0
+        }
+      ],
+      "schema_valid": true,
+      "note": "可表达尚未指派；评估应blocked而非Schema拒收"
+    },
+    {
+      "id": "start-cannot-advance",
+      "seed": "start_evaluation",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/0/payload/advance",
+          "value": true
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "before-delivery-null-candidate",
+      "seed": "requests/3",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/actions/1/payload/target/candidate",
+          "value": null
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "read-only-grant",
+      "seed": "policy",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/body/grants/1/actions",
+          "value": []
+        }
+      ],
+      "schema_valid": true,
+      "note": "读grant保留；可表达可读不可写身份"
+    },
+    {
+      "id": "unlisted-read-operation",
+      "seed": "policy",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/body/grants/1/read_actions",
+          "value": [
+            "show"
+          ]
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "read-action-in-write-list",
+      "seed": "policy",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/body/grants/1/actions",
+          "value": [
+            "gate.read"
+          ]
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "query-forged-advance",
+      "seed": "queries/4",
+      "patch": [
+        {
+          "op": "add",
+          "path": "/payload/advance",
+          "value": true
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "query-unknown-key",
+      "seed": "queries/0",
+      "patch": [
+        {
+          "op": "add",
+          "path": "/force",
+          "value": true
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "read-response-open-data",
+      "seed": "start_query_response",
+      "patch": [
+        {
+          "op": "add",
+          "path": "/data/force",
+          "value": true
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    },
+    {
+      "id": "empty-read-and-write-grant",
+      "seed": "policy",
+      "patch": [
+        {
+          "op": "replace",
+          "path": "/body/grants/1/actions",
+          "value": []
+        },
+        {
+          "op": "replace",
+          "path": "/body/grants/1/read_actions",
+          "value": []
+        }
+      ],
+      "schema_valid": false,
+      "note": ""
+    }
+  ],
+  "lexical_cases": [
+    {
+      "id": "duplicate-key",
+      "raw": "{\"kind\":\"request\",\"kind\":\"task\"}",
+      "valid": false,
+      "rule": "duplicate-key"
+    },
+    {
+      "id": "duplicate-escaped-key",
+      "raw": "{\"a\":1,\"\\u0061\":2}",
+      "valid": false,
+      "rule": "duplicate-key"
+    },
+    {
+      "id": "float-token",
+      "raw": "{\"n\":1.0}",
+      "valid": false,
+      "rule": "integer-token"
+    },
+    {
+      "id": "exponent-token",
+      "raw": "{\"n\":1e0}",
+      "valid": false,
+      "rule": "integer-token"
+    },
+    {
+      "id": "negative-zero",
+      "raw": "{\"n\":-0}",
+      "valid": false,
+      "rule": "integer-token"
+    },
+    {
+      "id": "nan",
+      "raw": "{\"n\":NaN}",
+      "valid": false,
+      "rule": "non-json-number"
+    },
+    {
+      "id": "surrogate",
+      "raw": "{\"x\":\"\\ud800\"}",
+      "valid": false,
+      "rule": "unicode-scalar"
+    },
+    {
+      "id": "literal-nul",
+      "raw": "{\"x\":\"\\u0000\"}",
+      "valid": false,
+      "rule": "control-character"
+    },
+    {
+      "id": "utf8-bom",
+      "raw": "﻿{}",
+      "valid": false,
+      "rule": "bom"
+    },
+    {
+      "id": "json-crlf",
+      "raw": "{\r\n \"ok\": true, \"n\": 1\r\n}",
+      "valid": true,
+      "rule": "whitespace"
+    },
+    {
+      "id": "escaped-tab",
+      "raw": "{\"text\":\"\\t正文\"}",
+      "valid": true,
+      "rule": "body-control"
+    }
+  ],
+  "canonical_cases": [
+    {
+      "id": "canonical-1",
+      "value": {},
+      "utf8_hex": "7b7d",
+      "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+    },
+    {
+      "id": "canonical-2",
+      "value": {
+        "b": 2,
+        "a": 1
+      },
+      "utf8_hex": "7b2261223a312c2262223a327d",
+      "sha256": "43258cff783fe7036d8a43033f830adfc60ec037382473548ac742b888292777"
+    },
+    {
+      "id": "canonical-3",
+      "value": {
+        "text": "引号\"/反斜\\\n\t"
+      },
+      "utf8_hex": "7b2274657874223a22e5bc95e58fb75c222fe58f8de6969c5c5c5c75303030615c7530303039227d",
+      "sha256": "53e3a62629a9e8208e0c3a8aa5b9fc1fba738ce010507a04f067f4232419fccc"
+    },
+    {
+      "id": "canonical-4",
+      "value": {
+        "flag": true,
+        "none": null,
+        "items": [
+          1,
+          "中"
+        ]
+      },
+      "utf8_hex": "7b22666c6167223a747275652c226974656d73223a5b312c22e4b8ad225d2c226e6f6e65223a6e756c6c7d",
+      "sha256": "29167ff2d183e6f2b5d91db7328515a7f0c8c24f4daeef2cafd2d9168bac7b61"
+    },
+    {
+      "id": "canonical-5",
+      "value": {
+        "s": "é"
+      },
+      "utf8_hex": "7b2273223a2265cc81227d",
+      "sha256": "1fc0bd7cc93fca8092a2041d7d01842876422aa7e2838acf42c14578e9f2be05"
+    },
+    {
+      "id": "canonical-6",
+      "value": {
+        "s": "é"
+      },
+      "utf8_hex": "7b2273223a22c3a9227d",
+      "sha256": "86028b41ba792eaf82aa26a45b218f6734f7f1096a86f1746c8296e088a0ccb4"
+    }
+  ],
+  "decision_cases": [
+    {
+      "id": "actor-revoked",
+      "flow": "read",
+      "inputs": {
+        "active": false,
+        "scope": true
+      },
+      "expected_exit": 3,
+      "expected_outcome": "rejected"
+    },
+    {
+      "id": "query-scope-denied",
+      "flow": "read",
+      "inputs": {
+        "active": true,
+        "scope": false
+      },
+      "expected_exit": 3,
+      "expected_outcome": "rejected"
+    },
+    {
+      "id": "reader-only",
+      "flow": "read",
+      "inputs": {
+        "active": true,
+        "scope": true
+      },
+      "expected_exit": 0,
+      "expected_outcome": "read"
+    },
+    {
+      "id": "replay-read-no-write",
+      "flow": "replay",
+      "inputs": {
+        "active": true,
+        "scope": true,
+        "same_k": true,
+        "write_grant": false
+      },
+      "expected_exit": 0,
+      "expected_outcome": "replayed"
+    },
+    {
+      "id": "replay-without-read",
+      "flow": "replay",
+      "inputs": {
+        "active": true,
+        "scope": false,
+        "same_k": true,
+        "write_grant": true
+      },
+      "expected_exit": 3,
+      "expected_outcome": "rejected"
+    },
+    {
+      "id": "replay-revoked-run",
+      "flow": "replay",
+      "inputs": {
+        "active": false,
+        "scope": true,
+        "same_k": true,
+        "write_grant": true
+      },
+      "expected_exit": 3,
+      "expected_outcome": "rejected"
+    },
+    {
+      "id": "replay-mutated-k",
+      "flow": "replay",
+      "inputs": {
+        "active": true,
+        "scope": true,
+        "same_k": false,
+        "write_grant": false
+      },
+      "expected_exit": 5,
+      "expected_outcome": "rejected"
+    },
+    {
+      "id": "new-id-no-write",
+      "flow": "new-write",
+      "inputs": {
+        "active": true,
+        "write_grant": false,
+        "evaluate_only": true,
+        "ready": true
+      },
+      "expected_exit": 3,
+      "expected_outcome": "rejected"
+    },
+    {
+      "id": "new-limit-evaluate",
+      "flow": "new-write",
+      "inputs": {
+        "active": true,
+        "write_grant": true,
+        "evaluate_only": true,
+        "ready": false
+      },
+      "expected_exit": 0,
+      "expected_outcome": "blocked"
+    },
+    {
+      "id": "new-limit-complete",
+      "flow": "new-write",
+      "inputs": {
+        "active": true,
+        "write_grant": true,
+        "evaluate_only": false,
+        "ready": false
+      },
+      "expected_exit": 6,
+      "expected_outcome": "rejected"
+    },
+    {
+      "id": "first-start-ready",
+      "flow": "new-write",
+      "inputs": {
+        "active": true,
+        "write_grant": true,
+        "evaluate_only": true,
+        "ready": true
+      },
+      "expected_exit": 0,
+      "expected_outcome": "pass"
+    },
+    {
+      "id": "first-start-dependency-gap",
+      "flow": "new-write",
+      "inputs": {
+        "active": true,
+        "write_grant": true,
+        "evaluate_only": true,
+        "ready": false
+      },
+      "expected_exit": 0,
+      "expected_outcome": "blocked"
+    },
+    {
+      "id": "canceled-dependencies-work-begin",
+      "flow": "child-boundary",
+      "inputs": {
+        "field": "dependencies",
+        "op": "work.begin",
+        "child_canceled": true,
+        "already_consumed": false
+      },
+      "expected_exit": 6,
+      "expected_outcome": "rejected"
+    },
+    {
+      "id": "canceled-dependencies-task-complete",
+      "flow": "child-boundary",
+      "inputs": {
+        "field": "dependencies",
+        "op": "task.complete",
+        "child_canceled": true,
+        "already_consumed": false
+      },
+      "expected_exit": 6,
+      "expected_outcome": "rejected"
+    },
+    {
+      "id": "canceled-completion_children-work-begin",
+      "flow": "child-boundary",
+      "inputs": {
+        "field": "completion_children",
+        "op": "work.begin",
+        "child_canceled": true,
+        "already_consumed": false
+      },
+      "expected_exit": 0,
+      "expected_outcome": "active"
+    },
+    {
+      "id": "canceled-completion_children-task-complete",
+      "flow": "child-boundary",
+      "inputs": {
+        "field": "completion_children",
+        "op": "task.complete",
+        "child_canceled": true,
+        "already_consumed": false
+      },
+      "expected_exit": 6,
+      "expected_outcome": "rejected"
+    }
+  ],
+  "restriction_cases": [
+    {
+      "id": "two-deliveries-only-a1-cleared",
+      "paths": [
+        {
+          "origin": {
+            "task": "2",
+            "kind": "issue",
+            "restriction": "restriction-one",
+            "delivery": "delivery-a1"
+          },
+          "nodes": [
+            "2@delivery-a1",
+            "3@delivery-x",
+            "1@delivery-b",
+            "5@delivery-c"
+          ]
+        },
+        {
+          "origin": {
+            "task": "2",
+            "kind": "issue",
+            "restriction": "restriction-one",
+            "delivery": "delivery-a2"
+          },
+          "nodes": [
+            "2@delivery-a2",
+            "4@delivery-y",
+            "1@delivery-b",
+            "5@delivery-c"
+          ]
+        }
+      ],
+      "clearance": {
+        "origin": {
+          "task": "2",
+          "kind": "issue",
+          "restriction": "restriction-one",
+          "delivery": "delivery-a1"
+        },
+        "node": "1@delivery-b"
+      },
+      "remaining": [
+        {
+          "origin": {
+            "task": "2",
+            "kind": "issue",
+            "restriction": "restriction-one",
+            "delivery": "delivery-a2"
+          },
+          "nodes": [
+            "2@delivery-a2",
+            "4@delivery-y",
+            "1@delivery-b",
+            "5@delivery-c"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bypass-b-retains-origin",
+      "paths": [
+        {
+          "origin": {
+            "task": "2",
+            "kind": "issue",
+            "restriction": "restriction-one",
+            "delivery": "delivery-a1"
+          },
+          "nodes": [
+            "2@delivery-a1",
+            "3@delivery-x",
+            "1@delivery-b",
+            "5@delivery-c"
+          ]
+        },
+        {
+          "origin": {
+            "task": "2",
+            "kind": "issue",
+            "restriction": "restriction-one",
+            "delivery": "delivery-a1"
+          },
+          "nodes": [
+            "2@delivery-a1",
+            "6@delivery-z",
+            "5@delivery-c"
+          ]
+        }
+      ],
+      "clearance": {
+        "origin": {
+          "task": "2",
+          "kind": "issue",
+          "restriction": "restriction-one",
+          "delivery": "delivery-a1"
+        },
+        "node": "1@delivery-b"
+      },
+      "remaining": [
+        {
+          "origin": {
+            "task": "2",
+            "kind": "issue",
+            "restriction": "restriction-one",
+            "delivery": "delivery-a1"
+          },
+          "nodes": [
+            "2@delivery-a1",
+            "6@delivery-z",
+            "5@delivery-c"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "same-origin-two-paths-through-b",
+      "paths": [
+        {
+          "origin": {
+            "task": "2",
+            "kind": "issue",
+            "restriction": "restriction-one",
+            "delivery": "delivery-a1"
+          },
+          "nodes": [
+            "2@delivery-a1",
+            "3@delivery-x",
+            "1@delivery-b",
+            "5@delivery-c"
+          ]
+        },
+        {
+          "origin": {
+            "task": "2",
+            "kind": "issue",
+            "restriction": "restriction-one",
+            "delivery": "delivery-a1"
+          },
+          "nodes": [
+            "2@delivery-a1",
+            "4@delivery-y",
+            "1@delivery-b",
+            "5@delivery-c"
+          ]
+        }
+      ],
+      "clearance": {
+        "origin": {
+          "task": "2",
+          "kind": "issue",
+          "restriction": "restriction-one",
+          "delivery": "delivery-a1"
+        },
+        "node": "1@delivery-b"
+      },
+      "remaining": []
+    },
+    {
+      "id": "wrong-local-version-does-not-clear",
+      "paths": [
+        {
+          "origin": {
+            "task": "2",
+            "kind": "issue",
+            "restriction": "restriction-one",
+            "delivery": "delivery-a1"
+          },
+          "nodes": [
+            "2@delivery-a1",
+            "3@delivery-x",
+            "1@delivery-b",
+            "5@delivery-c"
+          ]
+        },
+        {
+          "origin": {
+            "task": "2",
+            "kind": "issue",
+            "restriction": "restriction-one",
+            "delivery": "delivery-a2"
+          },
+          "nodes": [
+            "2@delivery-a2",
+            "4@delivery-y",
+            "1@delivery-b",
+            "5@delivery-c"
+          ]
+        }
+      ],
+      "clearance": {
+        "origin": {
+          "task": "2",
+          "kind": "issue",
+          "restriction": "restriction-one",
+          "delivery": "delivery-a1"
+        },
+        "node": "1@delivery-other"
+      },
+      "remaining": [
+        {
+          "origin": {
+            "task": "2",
+            "kind": "issue",
+            "restriction": "restriction-one",
+            "delivery": "delivery-a1"
+          },
+          "nodes": [
+            "2@delivery-a1",
+            "3@delivery-x",
+            "1@delivery-b",
+            "5@delivery-c"
+          ]
+        },
+        {
+          "origin": {
+            "task": "2",
+            "kind": "issue",
+            "restriction": "restriction-one",
+            "delivery": "delivery-a2"
+          },
+          "nodes": [
+            "2@delivery-a2",
+            "4@delivery-y",
+            "1@delivery-b",
+            "5@delivery-c"
+          ]
+        }
+      ]
+    }
+  ],
+  "semantic_cases": [
+    {
+      "id": "normal-four-groups",
+      "group": "normal",
+      "preconditions": "固定默认与本轮授权；独立 checker；真实接受在第四组前发生",
+      "action": "依次处理正常示例四组",
+      "expected": "四次提交；active/verifying/verifying/done；12 事件；最终无缺口",
+      "invariant": "不预填接受，不重复人工写 current/INDEX",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "checker-unassigned",
+      "group": "normal",
+      "preconditions": "有固定候选，自验满足，无 checker 指派",
+      "action": "candidate.submit",
+      "expected": "退出0；verifying，owner 持续负责；前门 blocked",
+      "invariant": "缺检查人不丢候选，也不默认为通过",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "defaults-drift",
+      "group": "normal",
+      "preconditions": "约定引用 policy@p1，当前授权已是 p2",
+      "action": "追加进展并重新生成视图",
+      "expected": "默认仍从 p1；动作授权从 p2",
+      "invariant": "固定默认与当前权限不可混同",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "unauthorized-env-list",
+      "group": "authorization",
+      "preconditions": "共享 policy 未授该动作，进程环境声称角色已获权",
+      "action": "受限动作",
+      "expected": "退出3；无提交",
+      "invariant": "不回退进程名单",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "self-grant",
+      "group": "authorization",
+      "preconditions": "当前 actor 无维护权限，replacement 添加自己为维护者",
+      "action": "policy.update",
+      "expected": "退出3；无 policy 变化",
+      "invariant": "新权不能批准自身",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "policy-mixed-batch",
+      "group": "authorization",
+      "preconditions": "policy.update 与 task.open 混批",
+      "action": "apply",
+      "expected": "退出2；零写入",
+      "invariant": "授权快照边界不混用",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "missing-handoff",
+      "group": "takeover",
+      "preconditions": "owner 失联，旧进程/副本尚未确认隔离",
+      "action": "assignment.set 接管",
+      "expected": "退出6或隔离守卫10；无新受限写入",
+      "invariant": "超时不是停止证明；协调者跟进",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "takeover-confirmed",
+      "group": "takeover",
+      "preconditions": "协调者有权且隔离证据固定",
+      "action": "撤销修订1，set修订2，新运行accept",
+      "expected": "提交；新运行负责，旧运行不得当前写入",
+      "invariant": "新 owner 未接手前由协调者跟进",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "old-run-restored",
+      "group": "takeover",
+      "preconditions": "旧 run/指派已撤销，新 run 已接手",
+      "action": "旧 run candidate.submit",
+      "expected": "退出3；保持新候选",
+      "invariant": "提供旧 expected 不恢复权",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "historical-recorder",
+      "group": "takeover",
+      "preconditions": "有真实旧结果；当前有权代录者核对原报告/来源",
+      "action": "result.record-historical",
+      "expected": "提交旧对象历史；有未核实时当前门槛不通过",
+      "invariant": "保留实际来源，不给旧来源新权",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "parallel-results",
+      "group": "parallel",
+      "preconditions": "R/T 均合法检查 C1/Q1；R 已追加，task.seq已变",
+      "action": "T result.append",
+      "expected": "退出0；ER/ET均保留",
+      "invariant": "不比较整个任务seq",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "same-request-retry",
+      "group": "parallel",
+      "preconditions": "首次提交存在 receipt；同一请求 K 完全相同",
+      "action": "重送原request_id",
+      "expected": "退出0 replayed；新事件0；历史门槛",
+      "invariant": "不能把原绿灯当当前批准",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "same-request-mutated",
+      "group": "parallel",
+      "preconditions": "同 request_id 改 expected 或数组顺序",
+      "action": "重送",
+      "expected": "退出5；零新事件",
+      "invariant": "不能最后写入覆盖",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "same-result-new-request",
+      "group": "parallel",
+      "preconditions": "同 task/result ID、同K(result)，当前代录/检查权仍有效",
+      "action": "新request_id重送结果",
+      "expected": "退出0；结果事件0",
+      "invariant": "不把重试作为新检查",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "late-c1-result",
+      "group": "parallel",
+      "preconditions": "当前候选C2；原C1指派和授权仍允许报告历史",
+      "action": "追加C1结果",
+      "expected": "退出0；C1历史；C2前门不变",
+      "invariant": "禁止旧通过推进C2",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "candidate-cas",
+      "group": "parallel",
+      "preconditions": "两者读candidate_revision1；一方先提交C2令revision2",
+      "action": "第二方用expected1提交C3",
+      "expected": "退出4；保留C2",
+      "invariant": "无最后写入覆盖",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "append-and-blocked-gate",
+      "group": "parallel",
+      "preconditions": "真实结果可接收，但另一要求失败",
+      "action": "batch(result.append, gate.evaluate)",
+      "expected": "退出0 durable；事实保留；gates.blocked",
+      "invariant": "评估不通过不是事实接收失败",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "append-and-illegal-complete",
+      "group": "parallel",
+      "preconditions": "真实结果可接收但complete门槛失败",
+      "action": "batch(result.append, task.complete)",
+      "expected": "退出6；全批不提交；应先单独保存真实结果",
+      "invariant": "无部分写入；调用者可分组保事实",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "revocation-before-gate",
+      "group": "parallel",
+      "preconditions": "新request_id，锁前写grant已撤回，无可重放receipt",
+      "action": "gate.evaluate",
+      "expected": "退出3；无事实提交或推进",
+      "invariant": "授权准入失败不同于评估blocked",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "restriction-before-evaluation",
+      "group": "parallel",
+      "preconditions": "actor仍有权且修订一致，锁前新增相关限制",
+      "action": "gate.evaluate(advance=false)",
+      "expected": "退出0 committed；gates=blocked；无状态推进",
+      "invariant": "成功评估不等于门槛通过",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "restriction-before-complete",
+      "group": "parallel",
+      "preconditions": "actor仍有权且修订一致，锁前新增相关限制",
+      "action": "task.complete",
+      "expected": "退出6；整批无提交，不能done",
+      "invariant": "受限状态推进与事实接收分开",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "green-after-red",
+      "group": "evidence",
+      "preconditions": "同候选原fail未处置，后有pass",
+      "action": "评估前门",
+      "expected": "blocked；若需改产物回active，否则verifying",
+      "invariant": "不能取最后绿色；两事实都留",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "self-independent-check",
+      "group": "evidence",
+      "preconditions": "检查 run/identity 字符串不同，但实际为产物作者上下文",
+      "action": "独立 result.append",
+      "expected": "退出3或无法确认时门槛unknown",
+      "invariant": "字符串不同不证明独立",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "document-only-reuse",
+      "group": "evidence",
+      "preconditions": "新候选仅文档差异，实际读取原证据及差异",
+      "action": "独立 applicability.confirm(reuse)",
+      "expected": "可仅覆盖未受影响要求；文档准确性仍需证据",
+      "invariant": "沿用不是重新运行",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "new-test-not-old-run",
+      "group": "evidence",
+      "preconditions": "新候选新增测试，只有旧测试运行结果",
+      "action": "applicability.confirm(reuse)",
+      "expected": "不能填新测试要求；补检/重验后才通过",
+      "invariant": "不把新测试源文本当运行通过",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "requirement-order",
+      "group": "evidence",
+      "preconditions": "independent.after包含self，但报告无可核实的self前置结果",
+      "action": "追加独立结果并评估前门",
+      "expected": "可保存真实结果；不能满足带先后条件的要求，需补核/重验",
+      "invariant": "prerequisites必须指明实际前置证据；不按墙钟猜顺序",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "squash-mapping",
+      "group": "evidence",
+      "preconditions": "实际交付commit不同，原候选固定",
+      "action": "delivery.record + complete",
+      "expected": "保留映射，未核对差异/集成时complete退出6",
+      "invariant": "提交号变化不自动作废，也不自动沿用",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "no-acceptance-yet",
+      "group": "normal",
+      "preconditions": "独立检查通过，但用户尚未接受",
+      "action": "task.complete",
+      "expected": "退出6；不能done",
+      "invariant": "独立通过不等于接受",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "external-permission",
+      "group": "external",
+      "preconditions": "内部可核验PR实际合并，但无外部合并权",
+      "action": "delivery.record 已发生事实",
+      "expected": "可记录来源；不调用外部平台",
+      "invariant": "内部授权不能执行外部动作",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "post-deploy-unknown",
+      "group": "external",
+      "preconditions": "部署已发生，部署后验证无法运行",
+      "action": "记录unknown结果并评估完成",
+      "expected": "delivering，complete blocked；保留环境实际版本",
+      "invariant": "不因部署命令成功就完成",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "deployment-fails",
+      "group": "external",
+      "preconditions": "D1实际部署C1，验证失败且需改产物，任务未终态",
+      "action": "保留D1，修复准备C2",
+      "expected": "active；D1/C1仍为当前确认外部事实",
+      "invariant": "状态回退不是环境回滚",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "application-rollback",
+      "group": "external",
+      "preconditions": "应用已确认回C0，但C1执行过数据迁移",
+      "action": "delivery.reconcile 后评估 retry",
+      "expected": "迁移效果未知则retry blocked",
+      "invariant": "应用回退不证明数据回滚",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "unknown-prior-effects",
+      "group": "external",
+      "preconditions": "前次attempt实际效果未知",
+      "action": "准备第二次外部交付",
+      "expected": "retry blocked；允许隔离修复",
+      "invariant": "不能因未知默认可安全重试",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "parent-child-integration",
+      "group": "dependencies",
+      "preconditions": "父仅规划协调，两个子任务边界为集成接收，非父开工依赖",
+      "action": "父组织组合验证",
+      "expected": "父可集成；组合失败不接受子，成功后各自完成",
+      "invariant": "父子不是默认完成依赖，避免循环等待",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "canceled-dependency-start",
+      "group": "dependencies",
+      "preconditions": "dependencies=[child]，子已canceled，其他开工条件齐备",
+      "action": "work.begin",
+      "expected": "退出6；不开工",
+      "invariant": "普通dependencies要求正式执行前已有可消费成功交付",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "canceled-dependency-complete",
+      "group": "dependencies",
+      "preconditions": "dependencies=[child]，子已canceled且无成功交付，父尚未开工",
+      "action": "试图直接task.complete",
+      "expected": "退出6；无提交",
+      "invariant": "完成接口不能绕过生命周期和普通依赖；不假设done子可再取消",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "canceled-completion-child-start",
+      "group": "dependencies",
+      "preconditions": "dependencies=[]，completion_children=[child]；未消费该子，子已canceled，其他开工条件齐备",
+      "action": "work.begin",
+      "expected": "退出0；进入active，可规划/集成",
+      "invariant": "completion_children不约束父start",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "canceled-completion-child-complete",
+      "group": "dependencies",
+      "preconditions": "父已delivering，completion_children=[child]，子已canceled且无成功交付",
+      "action": "task.complete",
+      "expected": "退出6；需替代或真实约定变更",
+      "invariant": "取消不满足父完成，但不倒推禁止其开工",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "a-b-c-correction",
+      "group": "correction",
+      "preconditions": "A@a完成，B@b消费A且完成，C准备消费B；A关键证据失效",
+      "action": "登记问题，C申请work.begin",
+      "expected": "A/B终态保留；B待复核；C退出6",
+      "invariant": "历史完成和可依赖性分开",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "source-specific-cut",
+      "group": "correction",
+      "preconditions": "B@b仅一条来源限制，合格检查证明不受影响",
+      "action": "dependency.clearance",
+      "expected": "可截断该来源经B路径；其他路径仍遍历",
+      "invariant": "按具体版本/来源排除",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "second-restriction",
+      "group": "correction",
+      "preconditions": "B@b来源X已排除，来源Y仍未解",
+      "action": "C开工",
+      "expected": "退出6",
+      "invariant": "解除一项不清空另一项",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "same-issue-two-deliveries",
+      "group": "correction",
+      "preconditions": "A同一issue r限制a1/a2，分别经X/Y汇入B@b",
+      "action": "在B@b仅clearance完整来源(A,issue,r,a1)",
+      "expected": "仅a1经B路径被截断；a2仍阻断C",
+      "invariant": "不得按A/r/b合并两个来源交付",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "same-origin-bypass",
+      "group": "correction",
+      "preconditions": "同一A@a1限制经B@b与Z@z两路到C",
+      "action": "仅在B@b合格clearance",
+      "expected": "B路径截断，Z路径仍阻断C",
+      "invariant": "不能先全局去重后漏掉绕行路径",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "partial-origin-proof",
+      "group": "correction",
+      "preconditions": "同A@a1两路经X/Y进入B@b，报告仅检查X一路",
+      "action": "请求节点级clearance",
+      "expected": "退出6；不解除B上该完整来源键",
+      "invariant": "全部已知输入影响须覆盖；不能以附件替代结构键",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "correction-cycle",
+      "group": "correction",
+      "preconditions": "图有循环/缺任务/解析失败",
+      "action": "计算可依赖性",
+      "expected": "unknown/blocked，不放行",
+      "invariant": "visited防循环不产生usable",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "notification-unhandled",
+      "group": "correction",
+      "preconditions": "已报告限制，owner无人响应",
+      "action": "再次门槛判断",
+      "expected": "保持blocked；协调者接管跟进",
+      "invariant": "通知/超时不解除限制",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "done-late-failure",
+      "group": "correction",
+      "preconditions": "任务done/归档后迟到可信fail",
+      "action": "追加结果/issue",
+      "expected": "保留终态和结果，交付受限，另建补救",
+      "invariant": "不拒收失败保绿色，不重开原任务",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "lexical-duplicates",
+      "group": "format",
+      "preconditions": "JSON出现完全重复键或不同大小写控制键",
+      "action": "严格解析",
+      "expected": "退出2；在普通dict覆盖发生前拒绝",
+      "invariant": "Schema通过不替代词法",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "invalid-calendar",
+      "group": "format",
+      "preconditions": "known时间2026-02-31",
+      "action": "语义校验",
+      "expected": "退出2",
+      "invariant": "正则通过不等于有效日期",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "unsafe-path",
+      "group": "format",
+      "preconditions": "../outside、重解析越界或等价大小写冲突",
+      "action": "恢复/迁移预检",
+      "expected": "退出2或11；不访问越界写目标",
+      "invariant": "先解析最终白名单目标",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "missing-dependency",
+      "group": "runtime",
+      "preconditions": "缺Python或jsonschema或锁版本不符",
+      "action": "apply",
+      "expected": "退出8；doctor只读诊断",
+      "invariant": "不得运行时联网安装/静默降级",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "old-normal-writer",
+      "group": "compatibility",
+      "preconditions": "现行tool1/schema2遇新标记",
+      "action": "普通写入口",
+      "expected": "应拒写；D双端验证",
+      "invariant": "不能伪装schema2",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "old-recover-exception",
+      "group": "compatibility",
+      "preconditions": "旧recover可能绕过普通version_check",
+      "action": "迁移隔离预检",
+      "expected": "必须先处置旧事务并停用旧入口，否则不apply",
+      "invariant": "版本标记不能证明所有旧入口安全",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "new-on-old",
+      "group": "compatibility",
+      "preconditions": "新工具读旧Markdown/schema2",
+      "action": "普通apply",
+      "expected": "退出7；只读识别迁移入口",
+      "invariant": "旧done不重解释为新版交付",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "migration-id-conflict",
+      "group": "migration",
+      "preconditions": "源库存在001和1等价编号",
+      "action": "preview",
+      "expected": "issues阻断，禁止apply",
+      "invariant": "编号不重用，不择一覆盖",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "legacy-done",
+      "group": "migration",
+      "preconditions": "原done无现代检查/交付",
+      "action": "preview导入legacy",
+      "expected": "保留done；可依赖性unknown；不造检查或delivery",
+      "invariant": "历史与新门槛分开",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "migration-no-isolation",
+      "group": "migration",
+      "preconditions": "计划看似完整但旧写者未隔离/备份不完整",
+      "action": "迁移apply",
+      "expected": "拒绝；源资产/数据不变",
+      "invariant": "不边迁移边放行旧写者",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "prepared-crash",
+      "group": "recovery",
+      "preconditions": "journal prepared，ref仍base，无new提交",
+      "action": "恢复preview/apply中止",
+      "expected": "只清理本事务隔离资料；源树不变",
+      "invariant": "不执行外部补偿或重试",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "ref-crash-window",
+      "group": "recovery",
+      "preconditions": "journal objects-ready但ref=new，receipt/hash有效",
+      "action": "恢复",
+      "expected": "视为已提交，只补物化；不重放动作",
+      "invariant": "不能只信journal state回滚",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "response-lost",
+      "group": "recovery",
+      "preconditions": "已提交但response写失败/进程退出",
+      "action": "原ID重试",
+      "expected": "replayed，事件0，历史门槛",
+      "invariant": "不换ID重做交付",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "unexpected-ref-or-dirty",
+      "group": "recovery",
+      "preconditions": "ref第三值、对象缺失、用户不同改动或hash矛盾",
+      "action": "恢复",
+      "expected": "退出11；保留资料停写",
+      "invariant": "不reset覆盖用户工作",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "migration-post-facts",
+      "group": "migration",
+      "preconditions": "已迁移后又有新业务事实，欲恢复备份",
+      "action": "恢复旧格式",
+      "expected": "不自动覆盖，需单独补偿/反向迁移设计与授权",
+      "invariant": "备份恢复不能丢后继事实",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "pre-candidate-start-ready",
+      "group": "start",
+      "preconditions": "当前todo，约定1、owner接手1、candidate=null，依赖为空",
+      "action": "gate.evaluate(start,target={contract_revision:1,binding:owner@1},expected={contract:1,assignment:1})",
+      "expected": "退出0 committed；start=pass，仍todo，candidate=null",
+      "invariant": "评估不需候选、不直接开工",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "pre-candidate-start-dependency-gap",
+      "group": "start",
+      "preconditions": "同上但dependencies上游无成功交付/消费",
+      "action": "gate.evaluate(start,advance=false)",
+      "expected": "退出0 committed；start=blocked，仍todo",
+      "invariant": "work.begin才在缺条件时退出6",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "reader-without-writer",
+      "group": "read",
+      "preconditions": "identity/run active，task1有task.read/gate.read，无任何写grant",
+      "action": "query task.read / gate.read(start)",
+      "expected": "退出0 read；只读数据/准备结果，无新receipt",
+      "invariant": "读能力不隐含写能力",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "read-outside-scope",
+      "group": "read",
+      "preconditions": "只有task1读grant，无task2读grant",
+      "action": "query task.read(task2)",
+      "expected": "退出3；data=null，不返回task2存在性",
+      "invariant": "任务范围逐项校验",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "read-dependency-outside-scope",
+      "group": "read",
+      "preconditions": "有task1 gate.read，关联task2无task.read",
+      "action": "query gate.read(task1)",
+      "expected": "退出3；无部分gates，不泄露task2内容",
+      "invariant": "查询闭包不能越过读范围",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "checker-handoff-and-gate",
+      "group": "read",
+      "preconditions": "独立checker已获task1的task.handoff/gate.read，全部关联task.read已满足",
+      "action": "query task.handoff及gate.read",
+      "expected": "退出0 read；不要求owner或写gate权限",
+      "invariant": "检查指派与读grant分别校验",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "write-revoked-receipt-replay",
+      "group": "read",
+      "preconditions": "原actor/run仍active，原请求已提交，写grant撤回，全部receipt.read保留",
+      "action": "原ID同K apply",
+      "expected": "退出0 replayed；历史结果，零新事件",
+      "invariant": "重放不重新检查旧写grant或旧CAS",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "write-revoked-new-id",
+      "group": "read",
+      "preconditions": "同上但更换request_id，无已有receipt",
+      "action": "apply新ID",
+      "expected": "退出3；无新事件",
+      "invariant": "读权/历史绿灯不能执行新写",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "receipt-read-revoked",
+      "group": "read",
+      "preconditions": "写权可能仍有，但receipt.read已撤回",
+      "action": "原ID同K apply或query receipt.read",
+      "expected": "退出3；不返回历史事实",
+      "invariant": "无本人历史隐式读权",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "identity-run-revoked-read",
+      "group": "read",
+      "preconditions": "identity或run任一revoked，即使读grant尚在",
+      "action": "query或apply重放",
+      "expected": "退出3；无数据/事件",
+      "invariant": "active来源校验优先",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "new-run-history-query",
+      "group": "read",
+      "preconditions": "原run已撤销，新run登记active且有全部receipt.read",
+      "action": "新run query receipt.read",
+      "expected": "退出0 read；原actor仍保留，gates历史",
+      "invariant": "换run不伪造原请求K或恢复旧写权",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "multi-task-receipt-scope",
+      "group": "read",
+      "preconditions": "receipt涉及task1/task2，调用者只读task1 receipt",
+      "action": "query receipt.read",
+      "expected": "退出3；不部分展示",
+      "invariant": "以receipt实际目标而非请求new别名定scope",
+      "verification": "static-design-walkthrough; not runtime proof"
+    },
+    {
+      "id": "policy-receipt-scope",
+      "group": "read",
+      "preconditions": "policy-only receipt；调用者无policy.read或无全局receipt.read",
+      "action": "query receipt.read",
+      "expected": "退出3；无数据",
+      "invariant": "配置事务需两项全局读能力",
+      "verification": "static-design-walkthrough; not runtime proof"
+    }
+  ]
+}

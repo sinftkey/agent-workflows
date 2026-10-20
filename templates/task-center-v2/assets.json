@@ -1,0 +1,17 @@
+{
+  "LICENSE": "f1755466f0cc7ba1905f10c075526983ac2b3203e8cd96fad1c7ee9c2159842d",
+  "protocol.schema.json": "91b3e6fbe4290abc29d79643091d6f25e5e4efc335b7115b805942f9420cc255",
+  "scripts/task.ps1": "9d59b6625307731b47f972d0348e22e49c929b88be6367422a673f985a6353ad",
+  "scripts/task.py": "54fbbaaf7128aee55923e7ac3a4587f190f4b461019be97996e1e085cadfc017",
+  "scripts/task.sh": "5adc06c0b38820d52b31ebeffaf4fb94bbcff927851dd1e4733f681bad2a07ce",
+  "scripts/taskcore/__init__.py": "94fec67c004aa62b17549c8995bc5ed5484637fc758aec0eb0c84da9018d9dd1",
+  "scripts/taskcore/auth.py": "f00b0b34528de250154ad2bfb85a43dd68e20fd97616a34016cf9ea6fa71da43",
+  "scripts/taskcore/cli.py": "3fce159a54186a07206cd752f023c340ab10a026f54823e90ece253a2675af56",
+  "scripts/taskcore/codec.py": "d596d7675845553d02d5371b07e983023bfef4eccce21e5c1699014c85f8f856",
+  "scripts/taskcore/engine.py": "4b2074677b60202b28523d5a28ffaddfff21d33a4422455da2ebaeb2fdadb60a",
+  "scripts/taskcore/install.py": "88649df6d3bd0f88afe5f9f83854030d2d1f068ae5df82563363edc8b81c7019",
+  "scripts/taskcore/model.py": "4e56f8896ebe763311baeffeb17799c57d90ba3f6b241a1bef50fcb917b1d1f2",
+  "scripts/taskcore/store.py": "8ae6c8eb63f1f047ff3cf33db625f64505a2ad0e732f8e695682246c89e6be1b",
+  "scripts/taskcore/validation.py": "be23a0b1b6c176acd785511103c55803f8514f6b70ab7896864165a61b771522",
+  "TASK-CENTER.md": "b1c0a0038656b6aa6f08c464341f530b1b7977346edc7e507401501f38d1e5d5"
+}
